@@ -11,8 +11,10 @@ public class Player
     public Action<int> OnPlayerDisconnect;
 
     public bool IsConnected { get { return client.Connected; } }
+    public bool DataAvailable { get { return stream.DataAvailable; } }
 
     public int ID { get; set; }
+    public float Angle { get; set; }
     public bool IsAlive { get; set; }
     public PlayerTeam Team { get; set; }
     public PlayerTeam Type { get; set; }
@@ -62,5 +64,12 @@ public class Player
         catch (Exception) { OnPlayerDisconnect(ID); }
 
         return data;
+    }
+
+    public override string ToString()
+    {
+        return ID + " " + (int)Type + " " + (int)Team + " " + 
+            Convert.ToInt32(IsAlive) + base.ToString() + " " +
+            Angle.ToString("0.#");
     }
 }

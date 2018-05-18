@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 
 public struct Hitbox
 {
@@ -23,23 +24,26 @@ public class Map
     public static uint Width;
     public static uint Height;
 
-    private List<Hitbox> hitboxes;
-    private List<SpawnPoint> blueSpawnPoints;
-    private List<SpawnPoint> redSpawnPoints;
+    public string Seed { get { return seed; } }
+    public Hitbox[] hitboxes { get; set; }
+    public SpawnPoint[] blueSpawnPoints { get; set; } 
+    public SpawnPoint[] redSpawnPoints { get; set; }
+
+    private string seed;
 
     public Map()
     {
         Width = 0;
         Height = 0;
-        hitboxes = new List<Hitbox>();
-        blueSpawnPoints = new List<SpawnPoint>();
-        redSpawnPoints = new List<SpawnPoint>();
     }
 
     //Creates the map or returns false if it fails
     public bool Create(string path)
     {
-        hitboxes = new List<Hitbox>();
+        seed = "";
+        List<Hitbox> hitbox = new List<Hitbox>();
+        List<SpawnPoint> blueSpawn = new List<SpawnPoint>();
+        List<SpawnPoint> redSpawn = new List<SpawnPoint>();
 
         if (File.Exists(path))
         {
@@ -49,6 +53,8 @@ public class Map
                 {
                     //Save the width and height
                     string size = readFile.ReadLine();
+                    seed += size + "-";
+
                     string[] sizeParts = size.Split();
                     Width = ushort.Parse(sizeParts[0]);
                     Height = ushort.Parse(sizeParts[1]);
@@ -57,6 +63,7 @@ public class Map
                     string mapLine = readFile.ReadLine();
                     while(mapLine != null)
                     {
+                        seed += mapLine + "-";
                         string[] mapParts = mapLine.Split();
 
                         for(int posX = 0;posX < mapParts.Length; posX++)
@@ -68,20 +75,20 @@ public class Map
                                 case "H2":
                                 case "H3":
                                 case "H4":
-                                    hitboxes.Add
+                                    hitbox.Add
                                         (new Hitbox((uint)posX * Hitbox.WIDTH
                                         , (uint)posY * Hitbox.HEIGHT));
                                     break;
                                 //Blue spawnpoint
                                 case "BS":
-                                    blueSpawnPoints.Add
+                                    blueSpawn.Add
                                         (new SpawnPoint(
                                         (uint)posX * Hitbox.WIDTH,
                                         (uint)posY * Hitbox.HEIGHT));
                                     break;
                                 //Red spawnpoint
                                 case "RS":
-                                    redSpawnPoints.Add
+                                    redSpawn.Add
                                         (new SpawnPoint(
                                         (uint)posX * Hitbox.WIDTH,
                                         (uint)posY * Hitbox.HEIGHT));
@@ -93,6 +100,11 @@ public class Map
                         posY++;
                     }
                 }
+
+                seed = seed.Remove(seed.Length - 1);
+                hitboxes = hitbox.ToArray();
+                blueSpawnPoints = blueSpawn.ToArray();
+                redSpawnPoints = redSpawn.ToArray();
 
                 return true;
             }
@@ -117,7 +129,7 @@ public class Map
                 {
                     string[] sizeParts = readFile.ReadLine().Split();
 
-                    //If the first line is not two integers then return false
+                    //If the first line is not the size then return false
                     if (!uint.TryParse(sizeParts[0], out uint width))
                         return false;
                     if (!uint.TryParse(sizeParts[1], out uint height))

@@ -5,14 +5,15 @@ namespace RoombaWarfareServer
 {
     public partial class ServerForm : Form
     {
-        private ServerSettingsForm options;
+        private ServerSettingsForm settings;
         private Server server;
         private string mapPath;
 
         public ServerForm()
         {
             InitializeComponent();
-            options = new ServerSettingsForm();
+            settings = new ServerSettingsForm();
+            server = new Server();
             mapPath = "";
         }
         
@@ -24,8 +25,27 @@ namespace RoombaWarfareServer
         //Starts the server
         private void btnStart_Click(object sender, System.EventArgs e)
         {
-            btnStop.Visible = true;
-            btnStart.Enabled = false;
+            if(mapPath != "")
+            {
+                btnStop.Visible = true;
+                btnStart.Enabled = false;
+
+                server.MapPath = mapPath;
+                server.Port = settings.Port;
+                if (settings.MaxPlayers != "Limitless")
+                    server.MaxPlayers = ushort.Parse(settings.MaxPlayers);
+                else
+                    server.MaxPlayers = 0;
+                server.Rounds = settings.NumRounds;
+                server.TickRate = settings.TickRate;
+
+                server.Start();
+            }
+            else
+            {
+                MessageBox.Show("Map not loaded", "Error"
+                        , MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         //Stops the server
@@ -51,9 +71,10 @@ namespace RoombaWarfareServer
             }
         }
 
+        //Opens the settings 
         private void toolStripOptions_Click(object sender, System.EventArgs e)
         {
-            options.ShowDialog();
+            settings.ShowDialog();
         }
     }
 }

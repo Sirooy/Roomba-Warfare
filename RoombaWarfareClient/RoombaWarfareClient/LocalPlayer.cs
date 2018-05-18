@@ -76,4 +76,9 @@ public class LocalPlayer : Player
     {
         //TO DO
     }
+
+    public void TakeDamage(ushort amount)
+    {
+        currentHealth -= amount;
+    }
 }

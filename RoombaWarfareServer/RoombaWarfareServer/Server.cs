@@ -13,10 +13,12 @@ public class Server
     public byte TickRate { get; set; }
     public ushort MaxPlayers { get; set; }
     public ushort Rounds { get; set; }
+    public string MapPath { get; set; }
 
     private TcpListener listener;
     private PlayerCollection players;
     private BulletCollection bullets;
+    private Map map;
     private ushort currentRound;
     private ushort currentID;
     private string gameState;
@@ -26,10 +28,13 @@ public class Server
     private Task broadcast;
 
     private object lockGameState = new object();
-    
+    private object lockMessageQueue = new object();
+
+
     public Server()
     {
         messageQueue = new Queue<string>();
+        map = new Map();
         players = new PlayerCollection();
         bullets = new BulletCollection();
         physics = new Task(PhysicsLoop);
@@ -41,6 +46,8 @@ public class Server
     {
         try
         {
+            map.Create(MapPath);
+
             IPEndPoint address = new IPEndPoint(IPAddress.Any, Port);
             listener = new TcpListener(address);
 
@@ -58,7 +65,7 @@ public class Server
     }
 
     //Broadcast the game state to all players at fixed rate
-    public void BroadcastGameStateLoop()
+    private void BroadcastGameStateLoop()
     {
         float maxFrameRate = (1f / TickRate) * 1000f;
 
@@ -77,7 +84,7 @@ public class Server
 
     //Updates the physics of the game at 60 frames per second
     //and 
-    public void PhysicsLoop()
+    private void PhysicsLoop()
     {
         float maxFrameRate = (1f / 60f) * 1000f;
 
@@ -95,7 +102,7 @@ public class Server
     }
 
     //Accept clients asynchronously
-    public async void AcceptClients()
+    private async void AcceptClients()
     {
         while (IsOpen)
         {
@@ -113,8 +120,9 @@ public class Server
                 //Add the player to the server list
                 else
                 {
-                    //TO DO
-                    Task listen = Task.Run(() => ListenClient(newPlayer));
+                    newPlayer.ID = currentID;
+                    Task listen = Task.Run(() => 
+                        ListenClient(newPlayer));
                     currentID++;
                 }
                 
@@ -123,16 +131,56 @@ public class Server
         }
     }
 
-    public void ListenClient(Player player)
+    //Receives all the data send by a client
+    private void ListenClient(Player player)
     {
-        //TO DO (Send the initial data to the client)
-        while (IsOpen)
+        try
         {
-            while (player.IsConnected)
-            {
+            player.Send(map.Seed);
+            player.Send(GetInitialData());
+            PlayerType type = (PlayerType)int.Parse(player.Receive());
 
+            //Once we send all the data and receive the player type
+            //Add the player to the list and send the data to the others
+            lock (lockGameState)
+            {
+                gameState += players.Add(player.ID, player);
+            }
+
+            while (IsOpen)
+            {
+                while (player.IsConnected)
+                {
+                    if (player.DataAvailable)
+                    {
+                        string data = player.Receive();
+
+                        lock (lockMessageQueue)
+                        {
+                            messageQueue.Enqueue(data);
+                        }
+                    }
+                }
             }
         }
+        catch (Exception){ }
+    }
+
+    //Returns the data of all the entities
+    private string GetInitialData()
+    {
+        string data = "";
+
+        //Get all the players state as if they were new
+        foreach(Player player in players)
+        {
+            data += (int)ServerMessage.NewPlayer +
+                player.ToString() + ":";
+        }
+
+        //TO DO bullets
+
+        return data;
     }
 
     //Close the server

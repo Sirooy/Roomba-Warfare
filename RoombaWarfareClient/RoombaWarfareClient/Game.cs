@@ -38,7 +38,7 @@ public class Game
     public void Run()
     {
         Cursor cursor = new Cursor(@"resources\images\crosshair.png");
-        ScreenType currentScreen = ScreenType.End; //Change later to main
+        ScreenType currentScreen = ScreenType.SetAddress; //Change later to main
 
         while(currentScreen != ScreenType.Exit)
         {
