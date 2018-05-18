@@ -1,26 +1,71 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Sockets;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public class SocketClient
 {
+    public event Action OnDisconnectionEvent;
+
     private TcpClient client;
     private NetworkStream stream;
+    private BinaryFormatter serializer;
 
-    //TO DO
-
-    public void Connect()
+    public SocketClient()
     {
-        //TO DO
+        client = new TcpClient();
+        serializer = new BinaryFormatter();
     }
 
+    //Connects to the server or returns false if it fails
+    public bool Connect()
+    {
+        try
+        {
+            string[] addressParts = Game.ServerAddress.Split('-');
+            IPAddress ip;
+            IPAddress.TryParse(addressParts[0], out ip);
+            ushort port = ushort.Parse(addressParts[1]);
+
+            client.Connect(ip, port);
+
+            if (client.Connected)
+            {
+                stream = client.GetStream();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
+
+    //Send a message to the server
     public void Send(string data)
     {
-        //TO DO
+        try
+        {
+            serializer.Serialize(stream, data);
+        }
+        catch (Exception) { OnDisconnectionEvent(); }
     }
 
+    //Receives a message from the server
     public string Receive()
     {
-        //TO DO
-        return "";
+        string ret = "";
+
+        try
+        {
+            ret = (string)serializer.Deserialize(stream);
+        }
+        catch (Exception) { OnDisconnectionEvent(); }
+
+        return ret;
     }
 }

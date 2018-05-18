@@ -19,6 +19,7 @@ public class Server
     private PlayerCollection players;
     private BulletCollection bullets;
     private Map map;
+
     private ushort currentRound;
     private ushort currentID;
     private string gameState;

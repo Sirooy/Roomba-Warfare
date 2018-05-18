@@ -5,6 +5,7 @@ public class Game
     public static string ServerAddress;
     public static PlayerType PlayerSelectedType;
     public static string EndMessage;
+    public static SocketClient GameSocket;
 
     public Game()
     {

@@ -6,6 +6,9 @@ public class PlayerCollection : IEnumerable<Player>
 {
     public int Count { get { return players.Count; } }
     public int RedPlayersCount { get; }
+    public int BluePlayersCount { get; }
+    public int RedAlivePlayersCount { get; }
+    public int BlueAlivePlayersCount { get; }
 
     private Dictionary<int,Player> players;
 
@@ -14,6 +17,7 @@ public class PlayerCollection : IEnumerable<Player>
         players = new Dictionary<int, Player>();
     }
 
+    //Adds a player to the list
     public string Add(int id,Player player)
     {
         players.Add(id, player);
@@ -34,5 +38,7 @@ public class PlayerCollection : IEnumerable<Player>
     {
         return GetEnumerator();
     }
+
+    //TO DO
 }
 
