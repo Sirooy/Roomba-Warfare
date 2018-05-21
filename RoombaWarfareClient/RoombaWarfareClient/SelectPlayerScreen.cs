@@ -44,7 +44,7 @@ public class SelectPlayerScreen : IScreen
             System.Threading.Thread.Sleep(16);
         } while (NextScreen == ScreenType.None);
 
-        return ScreenType.Exit;
+        return NextScreen;
     }
 
     

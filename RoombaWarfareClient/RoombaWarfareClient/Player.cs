@@ -48,8 +48,14 @@ public class Player : DynamicEntity
         }
     }
 
+    public void SetTeam(PlayerTeam team)
+    {
+        //TO DO Change the sprite
+        Team = team;
+    }
+
     //Renders the player with the given angle
-    public void Render(float camX,float camY)
+    public void Render(Camera camera)
     {
         SDL.SDL_Point center = new SDL.SDL_Point
         {
@@ -58,7 +64,7 @@ public class Player : DynamicEntity
         };
 
         Hardware.RenderAdvancedDynamic(SpriteSheet.Texture,
-            camX,camY,PosX,PosY,SPRITE_WIDTH,SPRITE_HEIGHT,
+            camera.X, camera.Y, PosX,PosY,SPRITE_WIDTH,SPRITE_HEIGHT,
             spriteX,spriteY,Angle,center,SDL.SDL_RendererFlip.SDL_FLIP_NONE);
     }
 }

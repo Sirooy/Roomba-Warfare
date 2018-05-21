@@ -6,6 +6,13 @@ public enum ButtonType : byte
      , SelectAssaultPlayer, SelectCommanderPlayer
      , SelectRusherPlayer, SelectTankPlayer }
 
+public enum ButtonState : byte
+{
+    Normal,
+    MouseOver,
+    Clicked
+}
+
 public class Button : StaticEntity
 {
     public static readonly byte SPRITE_WIDTH = 200;
@@ -13,42 +20,73 @@ public class Button : StaticEntity
 
     public bool IsClicked { get; set; }
 
+    private ButtonState currentState;
+    private ushort[] spritesX;
+    private ushort[] spritesY;
+
     public Button(ButtonType type)
     {
         IsClicked = false;
+        spritesX = new ushort[3];
+        spritesY = new ushort[3];
+        currentState = 0;
 
         //Assings the texture of the button depending on the type
         switch (type)
         {
             //TO DO (Set the sprite positions)
             case ButtonType.StartButton:
-                spriteX = 0;
-                spriteY = 0;
+                spritesX[(byte)ButtonState.Normal] = 0;
+                spritesY[(byte)ButtonState.Normal] = 128;
+                spritesX[(byte)ButtonState.MouseOver] = 0;
+                spritesY[(byte)ButtonState.MouseOver] = 228;
+                spritesX[(byte)ButtonState.Clicked] = 0;
+                spritesY[(byte)ButtonState.Clicked] = 328;
                 break;
 
             case ButtonType.ExitButton:
-                spriteX = 0;
-                spriteY = 0;
+                spritesX[(byte)ButtonState.Normal] = 0;
+                spritesY[(byte)ButtonState.Normal] = 128;
+                spritesX[(byte)ButtonState.MouseOver] = 0;
+                spritesY[(byte)ButtonState.MouseOver] = 228;
+                spritesX[(byte)ButtonState.Clicked] = 0;
+                spritesY[(byte)ButtonState.Clicked] = 328;
                 break;
 
             case ButtonType.SelectAssaultPlayer:
-                spriteX = 0;
-                spriteY = 0;
+                spritesX[(byte)ButtonState.Normal] = 0;
+                spritesY[(byte)ButtonState.Normal] = 128;
+                spritesX[(byte)ButtonState.MouseOver] = 0;
+                spritesY[(byte)ButtonState.MouseOver] = 228;
+                spritesX[(byte)ButtonState.Clicked] = 0;
+                spritesY[(byte)ButtonState.Clicked] = 328;
                 break;
 
             case ButtonType.SelectCommanderPlayer:
-                spriteX = 0;
-                spriteY = 0;
+                spritesX[(byte)ButtonState.Normal] = 0;
+                spritesY[(byte)ButtonState.Normal] = 128;
+                spritesX[(byte)ButtonState.MouseOver] = 0;
+                spritesY[(byte)ButtonState.MouseOver] = 228;
+                spritesX[(byte)ButtonState.Clicked] = 0;
+                spritesY[(byte)ButtonState.Clicked] = 328;
                 break;
 
             case ButtonType.SelectRusherPlayer:
-                spriteX = 0;
-                spriteY = 0;
+                spritesX[(byte)ButtonState.Normal] = 0;
+                spritesY[(byte)ButtonState.Normal] = 128;
+                spritesX[(byte)ButtonState.MouseOver] = 0;
+                spritesY[(byte)ButtonState.MouseOver] = 228;
+                spritesX[(byte)ButtonState.Clicked] = 0;
+                spritesY[(byte)ButtonState.Clicked] = 328;
                 break;
 
             case ButtonType.SelectTankPlayer:
-                spriteX = 0;
-                spriteY = 0;
+                spritesX[(byte)ButtonState.Normal] = 0;
+                spritesY[(byte)ButtonState.Normal] = 128;
+                spritesX[(byte)ButtonState.MouseOver] = 0;
+                spritesY[(byte)ButtonState.MouseOver] = 228;
+                spritesX[(byte)ButtonState.Clicked] = 0;
+                spritesY[(byte)ButtonState.Clicked] = 328;
                 break;
         }
     }
@@ -65,20 +103,44 @@ public class Button : StaticEntity
         //Checks if the mouse is inside the button when we move 
         //or click with the mouse
         if(e.type == SDL.SDL_EventType.SDL_MOUSEMOTION ||
-            e.type == SDL.SDL_EventType.SDL_MOUSEBUTTONDOWN)
+            e.type == SDL.SDL_EventType.SDL_MOUSEBUTTONDOWN ||
+            e.type == SDL.SDL_EventType.SDL_MOUSEBUTTONUP)
         {
             if (mouseX >= PosX && mouseX <= PosX + SPRITE_WIDTH
                 && mouseY >= PosY && mouseY <= PosY + SPRITE_HEIGHT)
                 mouseInside = true;
         }
 
-        if (mouseInside && e.type == SDL.SDL_EventType.SDL_MOUSEBUTTONDOWN)
-            IsClicked = true;
+        if (!mouseInside)
+        {
+            currentState = ButtonState.Normal;
+        }
+        else
+        {
+            switch (e.type)
+            {
+                case SDL.SDL_EventType.SDL_MOUSEMOTION:
+                    if(currentState != ButtonState.Clicked)
+                        currentState = ButtonState.MouseOver;
+                    break;
+
+                case SDL.SDL_EventType.SDL_MOUSEBUTTONDOWN:
+                    currentState = ButtonState.Clicked;
+                    break;
+
+                case SDL.SDL_EventType.SDL_MOUSEBUTTONUP:
+                    currentState = ButtonState.Normal;
+                    IsClicked = true;
+                    break;
+            }
+        }
     }
 
     //Renders the button
     public void Render()
     {
+        spriteX = spritesX[(byte)currentState];
+        spriteY = spritesY[(byte)currentState];
         RenderStatic(SpriteSheet.Texture, SPRITE_WIDTH, SPRITE_HEIGHT);
     }
 }

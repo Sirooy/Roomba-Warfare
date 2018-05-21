@@ -1,34 +1,39 @@
-﻿
+﻿using SDL2;
+
 public class EndScreen : IScreen
 {
     public ScreenType NextScreen { get; set; }
+
     private static Image background =
-        new Image(@"resources\images\backgrounds\bck_test.png",
-        (ushort)Hardware.ScreenWidth, (ushort)Hardware.ScreenHeight);
+        new Image(@"resources\images\backgrounds\bck_test.png", 640, 480);
+
     private Font font;
-    private Text endText;
+    private Text text;
 
     public EndScreen()
     {
-        font = new Font(@"resources\fonts\RWFont.ttf", 24);
-        endText = new Text(font, Game.EndMessage, 0, 255, 0);
+        NextScreen = ScreenType.None;
+        font = new Font(@"resources\fonts\RWFont.ttf", 16);
+        text = new Text(font, Game.EndMessage, 0, 255, 0);
     }
 
     public ScreenType Run()
     {
-        //TO DO
+        Hardware.ClearScreen();
+        Hardware.RenderBackground(background);
+        text.Render(Hardware.ScreenWidth / 2 - text.Width / 2,
+             Hardware.ScreenHeight / 2 - text.Height / 2);
+        Hardware.UpdateScreen();
+
         do
         {
-            Hardware.ClearScreen();
-            Hardware.RenderBackground(background);
+            SDL.SDL_Keycode key = Hardware.KeyPressed();
+            if (key == SDL.SDL_Keycode.SDLK_RETURN)
+                NextScreen = ScreenType.SetAddress; //Change it to main later.
 
-            endText.Render(Hardware.ScreenWidth - endText.Width,
-             Hardware.ScreenHeight - endText.Height);
-
-            Hardware.UpdateScreen();
             System.Threading.Thread.Sleep(16);
         } while (NextScreen == ScreenType.None);
 
-        return ScreenType.Exit;
+        return NextScreen;
     }
 }

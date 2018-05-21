@@ -4,6 +4,15 @@ public class Camera
     public int X { get; set; }
     public int Y { get; set; }
 
+    public ushort Width { get; set; }
+    public ushort Height { get; set; }
+
+    public Camera(ushort width, ushort height)
+    {
+        Width = width;
+        Height = height;
+    }
+
     public void SetPos(Entity entity
         ,ushort entityWidth,ushort entityHeight)
     {

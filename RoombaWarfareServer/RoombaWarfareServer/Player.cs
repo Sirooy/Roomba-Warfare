@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
 
@@ -8,7 +7,7 @@ public enum PlayerType { Assault, Commander, Rusher, Tank }
 
 public class Player
 {
-    public Action<int> OnPlayerDisconnect;
+    public Action<int> OnPlayerDisconnectEvent;
 
     public bool IsConnected { get { return client.Connected; } }
     public bool DataAvailable { get { return stream.DataAvailable; } }
@@ -46,7 +45,7 @@ public class Player
                 serializer.Serialize(stream, data);
             }
         }
-        catch (Exception) { OnPlayerDisconnect(ID); }
+        catch (Exception) { OnPlayerDisconnectEvent(ID); }
     }
 
     //Receive the data sent by the player (Blocks)
@@ -61,7 +60,7 @@ public class Player
                 data = (string)serializer.Deserialize(stream);
             }
         }
-        catch (Exception) { OnPlayerDisconnect(ID); }
+        catch (Exception) { OnPlayerDisconnectEvent(ID); }
 
         return data;
     }

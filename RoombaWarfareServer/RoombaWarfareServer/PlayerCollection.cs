@@ -5,12 +5,19 @@ using System.Collections.Generic;
 public class PlayerCollection : IEnumerable<Player>
 {
     public int Count { get { return players.Count; } }
-    public int RedPlayersCount { get; }
-    public int BluePlayersCount { get; }
-    public int RedAlivePlayersCount { get; }
-    public int BlueAlivePlayersCount { get; }
+    public int RedPlayersCount { get { return redPlayers; } }
+    public int BluePlayersCount { get { return bluePlayers; } }
+    public int RedAlivePlayersCount { get { return redAlivePlayers; } }
+    public int BlueAlivePlayersCount { get { return blueAlivePlayers; } }
+
+    private int redPlayers;
+    private int bluePlayers;
+    private int redAlivePlayers;
+    private int blueAlivePlayers;
 
     private Dictionary<int,Player> players;
+
+    //TO DO
 
     public PlayerCollection()
     {

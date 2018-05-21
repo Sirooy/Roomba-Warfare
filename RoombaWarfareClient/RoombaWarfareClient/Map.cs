@@ -95,16 +95,16 @@ public class Map
     }
 
     //Renders all the tiles.
-    public void Render(float camX,float camY)
+    public void Render(Camera camera)
     {
         foreach (Tile tile in Tiles)
         {
             //Only render the ones that the player can see
-            if (tile.PosX + Tile.SPRITE_WIDTH > camX
-                && tile.PosX < camX + Hardware.ScreenWidth
-                && tile.PosY + Tile.SPRITE_HEIGHT > camY
-                && tile.PosY < camY + Hardware.ScreenHeight)
-                tile.Render(camX,camY);
+            if (tile.PosX + Tile.SPRITE_WIDTH > camera.X
+                && tile.PosX < camera.X + camera.Width
+                && tile.PosY + Tile.SPRITE_HEIGHT > camera.Y
+                && tile.PosY < camera.Y + camera.Height)
+                tile.Render(camera.X, camera.Y);
         }
     }
 }

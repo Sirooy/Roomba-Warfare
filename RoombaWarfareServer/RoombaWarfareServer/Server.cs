@@ -139,36 +139,30 @@ public class Server
     //Receives all the data send by a client
     private void ListenClient(Player player)
     {
-        try
+        System.Diagnostics.Debug.WriteLine("Client connected"); //
+        player.Send(map.Seed);
+        player.Send(GetInitialData());
+        PlayerType type = (PlayerType)int.Parse(player.Receive());
+
+        //Once we send all the data and receive the player type
+        //Add the player to the list and send the data to the others
+        lock (lockGameState)
         {
-            player.Send(map.Seed);
-            player.Send(GetInitialData());
-            PlayerType type = (PlayerType)int.Parse(player.Receive());
+            gameState += players.Add(player.ID, player);
+        }
 
-            //Once we send all the data and receive the player type
-            //Add the player to the list and send the data to the others
-            lock (lockGameState)
+        while (IsOpen)
+        {
+            while (player.IsConnected)
             {
-                gameState += players.Add(player.ID, player);
-            }
+                string data = player.Receive();
 
-            while (IsOpen)
-            {
-                while (player.IsConnected)
+                lock (lockMessageQueue)
                 {
-                    if (player.DataAvailable)
-                    {
-                        string data = player.Receive();
-
-                        lock (lockMessageQueue)
-                        {
-                            messageQueue.Enqueue(data);
-                        }
-                    }
+                    messageQueue.Enqueue(data);
                 }
             }
         }
-        catch (Exception){ }
     }
 
     //Returns the data of all the entities
