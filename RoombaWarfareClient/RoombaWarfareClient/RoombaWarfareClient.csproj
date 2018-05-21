@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Block.cs" />
+    <Compile Include="Tile.cs" />
     <Compile Include="Bullet.cs" />
     <Compile Include="BulletCollection.cs" />
     <Compile Include="Button.cs" />
@@ -75,6 +75,7 @@
     <Compile Include="SocketClient.cs" />
     <Compile Include="StaticEntity.cs" />
     <Compile Include="Text.cs" />
+    <Compile Include="Weapon.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

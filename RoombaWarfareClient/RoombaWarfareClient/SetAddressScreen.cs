@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
-using SDL2;
 
+//This screens allows the user to change the ip-port of the server
 public class SetAddressScreen : IScreen
 {
     private static Image background =
@@ -16,8 +16,8 @@ public class SetAddressScreen : IScreen
         font = new Font(@"resources\fonts\RWFont.ttf", 25);
 
         keyboard = new Keyboard();
-        keyboard.OnSummit += ValidateIPAddress;
-        keyboard.OnTextChanged += RenderTextChanged;
+        keyboard.OnSummitEvent += ValidateIPAddress;
+        keyboard.OnTextChangedEvent += RenderTextChanged;
     }
 
     public ScreenType Run()
@@ -60,7 +60,7 @@ public class SetAddressScreen : IScreen
         Hardware.RenderBackground(background);
         //Renders the text on the middle of the screen
         ipText.Render(Hardware.ScreenWidth / 2 - ipText.Width / 2,
-            Hardware.ScreenHeigth / 2 - ipText.Height / 2);
+            Hardware.ScreenHeight / 2 - ipText.Height / 2);
         Hardware.UpdateScreen();
     }
 }

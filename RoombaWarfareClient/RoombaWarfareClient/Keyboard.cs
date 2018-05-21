@@ -3,8 +3,8 @@ using SDL2;
 
 public class Keyboard
 {
-    public event Action<string> OnTextChanged;
-    public event Action<string> OnSummit;
+    public event Action<string> OnTextChangedEvent;
+    public event Action<string> OnSummitEvent;
 
     private string text { get; set; }
 
@@ -38,7 +38,7 @@ public class Keyboard
                 if (text.Length > 0)
                     text = text.Remove(text.Length - 1);
                 break;
-            case SDL.SDL_Keycode.SDLK_RETURN: OnSummit(text); break;
+            case SDL.SDL_Keycode.SDLK_RETURN: OnSummitEvent(text); break;
         }
         
         //Remove the last character to make it shorter than 21
@@ -46,6 +46,6 @@ public class Keyboard
             text = text.Remove(text.Length - 1);
 
         if (text != lastTest)
-            OnTextChanged(text);
+            OnTextChangedEvent(text);
     }
 }

@@ -22,6 +22,10 @@ namespace RoombaWarfareServer
             InitializeComponent();
             cmbTickRate.Text = "20";
             cmbMaxPlayers.Text = "8";
+            MaxPlayers = "8";
+            NumRounds = 15;
+            Port = 23000;
+            TickRate = 20;
         }
 
         private void btnGeneratePort_Click(object sender, EventArgs e)

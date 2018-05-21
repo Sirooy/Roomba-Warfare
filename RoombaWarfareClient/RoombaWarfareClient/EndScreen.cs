@@ -4,7 +4,7 @@ public class EndScreen : IScreen
     public ScreenType NextScreen { get; set; }
     private static Image background =
         new Image(@"resources\images\backgrounds\bck_test.png",
-        (ushort)Hardware.ScreenWidth, (ushort)Hardware.ScreenHeigth);
+        (ushort)Hardware.ScreenWidth, (ushort)Hardware.ScreenHeight);
     private Font font;
     private Text endText;
 
@@ -23,7 +23,7 @@ public class EndScreen : IScreen
             Hardware.RenderBackground(background);
 
             endText.Render(Hardware.ScreenWidth - endText.Width,
-             Hardware.ScreenHeigth - endText.Height);
+             Hardware.ScreenHeight - endText.Height);
 
             Hardware.UpdateScreen();
             System.Threading.Thread.Sleep(16);

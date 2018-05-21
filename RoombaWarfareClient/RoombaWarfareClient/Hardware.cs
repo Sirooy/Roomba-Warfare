@@ -4,7 +4,7 @@ using SDL2;
 public static class Hardware
 {
     public static int ScreenWidth;
-    public static int ScreenHeigth;
+    public static int ScreenHeight;
     public static IntPtr Renderer;
     private static IntPtr screen;
 
@@ -47,7 +47,7 @@ public static class Hardware
             w,h,screenFlags);
 
         //Get the window size (In case we active Fullscreen)
-        SDL.SDL_GetWindowSize(screen, out ScreenWidth, out ScreenHeigth);
+        SDL.SDL_GetWindowSize(screen, out ScreenWidth, out ScreenHeight);
 
         if(screen == null)
         {
@@ -169,7 +169,7 @@ public static class Hardware
             x = 0,
             y = 0,
             w = ScreenWidth,
-            h = ScreenHeigth
+            h = ScreenHeight
         };
 
         SDL.SDL_RenderCopy(Renderer, background.Texture,ref source,ref target);

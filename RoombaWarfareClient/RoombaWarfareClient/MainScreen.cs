@@ -16,14 +16,14 @@ public class MainScreen : IScreen
         buttons[0].SetPos(0, 0);
         buttons[1] = new Button(ButtonType.ExitButton);
         buttons[1].SetPos
-            (0, Hardware.ScreenHeigth - Button.SPRITE_HEIGHT);
+            (0, Hardware.ScreenHeight - Button.SPRITE_HEIGHT);
         buttons[2] = new Button(ButtonType.SelectRusherPlayer);
         buttons[2].SetPos
             (Hardware.ScreenWidth - Button.SPRITE_WIDTH, 0);
         buttons[3] = new Button(ButtonType.SelectTankPlayer);
         buttons[3].SetPos
             (Hardware.ScreenWidth - Button.SPRITE_WIDTH,
-            Hardware.ScreenHeigth - Button.SPRITE_HEIGHT);
+            Hardware.ScreenHeight - Button.SPRITE_HEIGHT);
     }
 
     public ScreenType Run()

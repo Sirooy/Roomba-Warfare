@@ -69,7 +69,7 @@ public class Player
     public override string ToString()
     {
         return ID + " " + (int)Type + " " + (int)Team + " " + 
-            Convert.ToInt32(IsAlive) + base.ToString() + " " +
+            Convert.ToInt32(IsAlive) + " " + base.ToString() + " " +
             Angle.ToString("0.#");
     }
 }

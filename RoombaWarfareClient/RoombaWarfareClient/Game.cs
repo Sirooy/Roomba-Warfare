@@ -12,6 +12,7 @@ public class Game
         Hardware.Init();
         ServerAddress = "";
         EndMessage = "";
+        GameSocket = new SocketClient();
     }
 
     //Creates the next screen 

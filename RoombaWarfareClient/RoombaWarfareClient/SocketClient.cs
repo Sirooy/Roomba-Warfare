@@ -68,4 +68,11 @@ public class SocketClient
 
         return ret;
     }
+
+    //Disconnects the client
+    public void Disconnect()
+    {
+        client.Client.Close();
+        stream.Close();
+    }
 }

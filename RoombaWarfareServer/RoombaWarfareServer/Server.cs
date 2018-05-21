@@ -30,6 +30,8 @@ public class Server
 
     private object lockGameState = new object();
     private object lockMessageQueue = new object();
+    private object lockBullets = new object();
+    private object lockPlayers = new object();
 
 
     public Server()
@@ -47,6 +49,8 @@ public class Server
     {
         try
         {
+            IsOpen = true; 
+
             map.Create(MapPath);
 
             IPEndPoint address = new IPEndPoint(IPAddress.Any, Port);
@@ -173,14 +177,25 @@ public class Server
         string data = "";
 
         //Get all the players state as if they were new
-        foreach(Player player in players)
+        lock (lockPlayers)
         {
-            data += (int)ServerMessage.NewPlayer +
-                player.ToString() + ":";
+            foreach (Player player in players)
+            {
+                data += (int)ServerMessage.NewPlayer +
+                    player.ToString() + ":";
+            }
         }
 
         //TO DO bullets
-
+        lock (lockBullets)
+        {
+            foreach (Bullet bullet in bullets)
+            {
+                data += (int)ServerMessage.NewBullet +
+                    bullet.ToString() + ":";
+            }
+        }
+        
         return data;
     }
 
