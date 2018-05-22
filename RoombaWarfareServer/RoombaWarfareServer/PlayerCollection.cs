@@ -17,7 +17,7 @@ public class PlayerCollection : IEnumerable<Player>
 
     private Dictionary<int,Player> players;
 
-    //TO DO
+    private object lockPlayers = new object();
 
     public PlayerCollection()
     {
@@ -27,17 +27,36 @@ public class PlayerCollection : IEnumerable<Player>
     //Adds a player to the list
     public string Add(int id,Player player)
     {
-        players.Add(id, player);
-
+        lock (lockPlayers)
+        {
+            players.Add(id, player);
+        }
+        
         return (int)ServerMessage.NewPlayer + " " +
             player.ToString() + ":";
     }
 
+    //Sends a message to all players
+    public void Broadcast(string gameState)
+    {
+        lock (lockPlayers)
+        {
+            foreach(KeyValuePair<int,Player> player in players)
+            {
+                string onwStatus = player.Value.Status;
+                player.Value.Send(onwStatus + gameState);
+            }
+        }
+    }
+
     public IEnumerator<Player> GetEnumerator()
     {
-        foreach(KeyValuePair<int,Player> player in players)
+        lock (lockPlayers)
         {
-            yield return player.Value; 
+            foreach (KeyValuePair<int, Player> player in players)
+            {
+                yield return player.Value;
+            }
         }
     }
 

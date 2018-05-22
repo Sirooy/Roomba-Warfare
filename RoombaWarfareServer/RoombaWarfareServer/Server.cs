@@ -73,12 +73,32 @@ public class Server
     private void BroadcastGameStateLoop()
     {
         float maxFrameRate = (1f / TickRate) * 1000f;
+        string state = "";
 
         while (IsOpen)
         {
             int startTime = Environment.TickCount;
 
-            //TO DO
+            lock (gameState)
+            {
+                if(gameState != "")
+                {
+                    state = gameState;
+                    gameState = "";
+                }
+            }
+
+            //Get all the players last positions and angles
+            foreach(Player player in players)
+            {
+                state += player.GetMovementStatus();
+            }
+
+            //Remove the last :
+            state = state.Remove(state.Length - 1);
+
+            //Send the data
+            players.Broadcast(gameState);
 
             //Sleep the thread if the frame rate is higher than the max frame rate
             int frameTime = Environment.TickCount - startTime;
@@ -141,8 +161,9 @@ public class Server
     {
         System.Diagnostics.Debug.WriteLine("Client connected"); //
         player.Send(map.Seed);
-        player.Send(GetInitialData());
+        player.Send(GetInitialData(player.ID));
         PlayerType type = (PlayerType)int.Parse(player.Receive());
+        player.Type = type;
 
         //Once we send all the data and receive the player type
         //Add the player to the list and send the data to the others
@@ -166,9 +187,9 @@ public class Server
     }
 
     //Returns the data of all the entities
-    private string GetInitialData()
+    private string GetInitialData(int id)
     {
-        string data = "";
+        string data = (int)ServerMessage.SetID + " " + id + ":";
 
         //Get all the players state as if they were new
         lock (lockPlayers)
@@ -180,7 +201,6 @@ public class Server
             }
         }
 
-        //TO DO bullets
         lock (lockBullets)
         {
             foreach (Bullet bullet in bullets)

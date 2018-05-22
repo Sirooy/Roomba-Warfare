@@ -102,10 +102,10 @@
     <Content Include="resources\images\crosshair.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\images\spritesheet_test1.png">
+    <Content Include="resources\images\dynamic_entity_sprite_sheet.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\images\sprite_sheet_test.png">
+    <Content Include="resources\images\spritesheet_test1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="SDL2.dll">

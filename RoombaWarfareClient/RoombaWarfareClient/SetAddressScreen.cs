@@ -46,7 +46,7 @@ public class SetAddressScreen : IScreen
             if(ushort.TryParse(port,out ushort result))
             {
                 Game.ServerAddress = address;
-                NextScreen = ScreenType.SelectPlayer; //Change this when the menu is implemented
+                NextScreen = ScreenType.Main;
             }
         }
     }

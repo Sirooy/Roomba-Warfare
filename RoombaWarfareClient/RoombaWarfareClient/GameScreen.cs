@@ -23,6 +23,43 @@ public class GameScreen : IScreen
         map = new Map();
     }
 
+    public void TranslateData(string[] allCommands)
+    {
+        foreach(string command in allCommands)
+        {
+            string[] commandParts = command.Split();
+
+            switch ((ServerMessage)int.Parse(commandParts[0]))
+            {
+                case ServerMessage.SetPlayerAngle:
+                    break;
+
+                case ServerMessage.SetPlayerPosition:
+                    break;
+
+                case ServerMessage.SetPlayerTeam:
+                    break;
+
+                case ServerMessage.SetID:
+                    localPlayer.ID = int.Parse(commandParts[1]);
+                    break;
+
+                case ServerMessage.Disconnect:
+
+                    break;
+            }
+        }
+    }
+
+    public void Receive()
+    {
+        if (Game.GameSocket.DataAvailable)
+        {
+            string data = Game.GameSocket.Receive();
+            TranslateData(data.Split(':'));
+        }
+    }
+
     public ScreenType Run()
     {
         string mapSeed = Game.GameSocket.Receive();

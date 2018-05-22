@@ -35,7 +35,7 @@ public static class Hardware
     }
 
     //Creates the screen and renderer or exits the aplication if it fails
-    public static void Init(int w = 640,int h = 480,bool fullScreen = false)
+    public static void Init(int w = 800,int h = 600,bool fullScreen = false)
     {
         //Flags for the screen
         SDL.SDL_WindowFlags screenFlags = SDL.SDL_WindowFlags.SDL_WINDOW_SHOWN;

@@ -1,8 +1,8 @@
 ﻿using SDL2;
 
 public enum ButtonType : byte
-     {  StartButton,ExitButton
-     , BlueTeamButton, RedTeamButton
+     {  StartButton, ExitButton , SetAddressButton
+     , BlueTeamButton, RedTeamButton , SpectatorTeamButton
      , SelectAssaultPlayer, SelectCommanderPlayer
      , SelectRusherPlayer, SelectTankPlayer }
 
@@ -36,6 +36,15 @@ public class Button : StaticEntity
         {
             //TO DO (Set the sprite positions)
             case ButtonType.StartButton:
+                spritesX[(byte)ButtonState.Normal] = 0;
+                spritesY[(byte)ButtonState.Normal] = 128;
+                spritesX[(byte)ButtonState.MouseOver] = 0;
+                spritesY[(byte)ButtonState.MouseOver] = 228;
+                spritesX[(byte)ButtonState.Clicked] = 0;
+                spritesY[(byte)ButtonState.Clicked] = 328;
+                break;
+
+            case ButtonType.SetAddressButton:
                 spritesX[(byte)ButtonState.Normal] = 0;
                 spritesY[(byte)ButtonState.Normal] = 128;
                 spritesX[(byte)ButtonState.MouseOver] = 0;
@@ -81,6 +90,33 @@ public class Button : StaticEntity
                 break;
 
             case ButtonType.SelectTankPlayer:
+                spritesX[(byte)ButtonState.Normal] = 0;
+                spritesY[(byte)ButtonState.Normal] = 128;
+                spritesX[(byte)ButtonState.MouseOver] = 0;
+                spritesY[(byte)ButtonState.MouseOver] = 228;
+                spritesX[(byte)ButtonState.Clicked] = 0;
+                spritesY[(byte)ButtonState.Clicked] = 328;
+                break;
+
+            case ButtonType.SpectatorTeamButton:
+                spritesX[(byte)ButtonState.Normal] = 0;
+                spritesY[(byte)ButtonState.Normal] = 128;
+                spritesX[(byte)ButtonState.MouseOver] = 0;
+                spritesY[(byte)ButtonState.MouseOver] = 228;
+                spritesX[(byte)ButtonState.Clicked] = 0;
+                spritesY[(byte)ButtonState.Clicked] = 328;
+                break;
+
+            case ButtonType.BlueTeamButton:
+                spritesX[(byte)ButtonState.Normal] = 0;
+                spritesY[(byte)ButtonState.Normal] = 128;
+                spritesX[(byte)ButtonState.MouseOver] = 0;
+                spritesY[(byte)ButtonState.MouseOver] = 228;
+                spritesX[(byte)ButtonState.Clicked] = 0;
+                spritesY[(byte)ButtonState.Clicked] = 328;
+                break;
+
+            case ButtonType.RedTeamButton:
                 spritesX[(byte)ButtonState.Normal] = 0;
                 spritesY[(byte)ButtonState.Normal] = 128;
                 spritesX[(byte)ButtonState.MouseOver] = 0;

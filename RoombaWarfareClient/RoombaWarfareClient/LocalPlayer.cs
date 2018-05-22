@@ -8,7 +8,7 @@ public class LocalPlayer : Player
     private float velX;
     private float velY;
     private readonly short maxHealth;
-    private ushort currentHealth;
+    private short currentHealth;
 
     public LocalPlayer(PlayerType type) : base(type)
     {
@@ -72,12 +72,18 @@ public class LocalPlayer : Player
         PosY += (velY * deltaTime);
     }
 
+    public override void Respawn(float posX, float posY)
+    {
+        base.Respawn(posX, posY);
+        currentHealth = maxHealth;
+    }
+
     public void CheckCollisions()
     {
         //TO DO
     }
 
-    public void TakeDamage(ushort amount)
+    public void TakeDamage(short amount)
     {
         currentHealth -= amount;
     }

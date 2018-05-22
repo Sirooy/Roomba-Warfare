@@ -10,7 +10,7 @@ public class Game
     public Game()
     {
         Hardware.Init();
-        ServerAddress = "";
+        ServerAddress = "127.0.0.1-23000";
         EndMessage = "";
         GameSocket = new SocketClient();
     }
@@ -40,7 +40,7 @@ public class Game
     public void Run()
     {
         Cursor cursor = new Cursor(@"resources\images\crosshair.png");
-        ScreenType currentScreen = ScreenType.SetAddress; //Change later to main
+        ScreenType currentScreen = ScreenType.Main; 
 
         while(currentScreen != ScreenType.Exit)
         {

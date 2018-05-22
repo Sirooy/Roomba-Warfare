@@ -7,6 +7,8 @@ public class SocketClient
 {
     public event Action OnDisconnectionEvent;
 
+    public bool DataAvailable { get { return stream.DataAvailable; } }
+
     private TcpClient client;
     private NetworkStream stream;
     private BinaryFormatter serializer;

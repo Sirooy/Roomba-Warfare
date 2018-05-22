@@ -8,14 +8,16 @@ public class Player : DynamicEntity
     public static readonly byte SPRITE_WIDTH = 64;
     public static readonly byte SPRITE_HEIGHT = 64;
 
-    public static Image SpriteSheed =
-        new Image("resources/images/sprite_sheet_test.png", 64, 96);
+    public static Image SpriteSheet =
+        new Image("resources/images/dynamic_entity_sprite_sheet.png", 64, 96);
 
     public int ID { get; set; }
     public float Angle { get; set; }
     public bool IsAlive { get; set; }
     public PlayerTeam Team { get; set; }
     public PlayerType Type { get; set; }
+
+    private ushort damage;
 
     public Player(PlayerType type)
     {
@@ -24,34 +26,51 @@ public class Player : DynamicEntity
         IsAlive = false;
         Team = PlayerTeam.Spectator;
         Type = type;
+        spriteY = 0;
 
         //Assings the sprite coordinates and speed of the player
         switch (type)
         {
             case PlayerType.Assault:
-                speed = 2.5f;
+                speed = 3.5f;
+                damage = 25;
                 spriteX = 0;
-                spriteY = 0;
                 break;
 
             case PlayerType.Commander:
-                //TO DO
+                speed = 2.5f;
+                damage = 100;
+                spriteX = 64;
                 break;
 
             case PlayerType.Rusher:
-                //TO DO
+                damage = 15;
+                speed = 4.5f;
+                spriteX = 128;
                 break;
 
             case PlayerType.Tank:
-                //TO DO
+                damage = 40;
+                speed = 1.5f;
+                spriteX = 192;
                 break;
         }
     }
 
     public void SetTeam(PlayerTeam team)
     {
-        //TO DO Change the sprite
         Team = team;
+
+        if (Team == PlayerTeam.Red)
+            spriteY = 0;
+        else if (Team == PlayerTeam.Blue)
+            spriteY = 64;
+    }
+
+    public virtual void Respawn(float posX,float posY)
+    {
+        SetPos(posX, posY);
+        IsAlive = true;
     }
 
     //Renders the player with the given angle

@@ -4,6 +4,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public enum PlayerTeam { Red, Blue, Spectator }
 public enum PlayerType { Assault, Commander, Rusher, Tank }
+public enum PlayerState { Position, Angle }
 
 public class Player
 {
@@ -16,7 +17,20 @@ public class Player
     public float Angle { get; set; }
     public bool IsAlive { get; set; }
     public PlayerTeam Team { get; set; }
-    public PlayerTeam Type { get; set; }
+    public PlayerType Type { get; set; }
+    //
+    public string[] MovementStatus { get; set; }
+    //Saves the commands that only need to be send to one player
+    public string Status
+    {
+        get
+        {
+            string status = Status;
+            Status = "";
+            return status;
+        }
+        set { Status = value; }
+    }
 
     private readonly short maxHealth;
     private ushort currentHealth;
@@ -33,6 +47,8 @@ public class Player
         this.client = client;
         stream = client.GetStream();
         serializer = new BinaryFormatter();
+        Status = "";
+        MovementStatus = new string[2];
     }
 
     //Sends the given data to the player (Works Non-blocking)
@@ -63,6 +79,22 @@ public class Player
         catch (Exception) { OnPlayerDisconnectEvent(ID); }
 
         return data;
+    }
+
+    public string GetMovementStatus()
+    {
+        string status = "";
+
+        for(int i=0;i < MovementStatus.Length; i++)
+        {
+            if(MovementStatus[i] != "")
+            {
+                status += MovementStatus[i];
+                MovementStatus[i] = "";
+            }
+        }
+
+        return status;
     }
 
     public override string ToString()
