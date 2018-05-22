@@ -42,6 +42,7 @@ public class Server
         bullets = new BulletCollection();
         physics = new Task(PhysicsLoop);
         broadcast = new Task(BroadcastGameStateLoop);
+        gameState = "";
     }
 
     //Starts all the server loops
@@ -72,7 +73,7 @@ public class Server
     //Broadcast the game state to all players at fixed rate
     private void BroadcastGameStateLoop()
     {
-        float maxFrameRate = (1f / TickRate) * 1000f;
+        float maxFrameRate = (1f / TickRate * 1000f);
         string state = "";
 
         while (IsOpen)
@@ -95,7 +96,8 @@ public class Server
             }
 
             //Remove the last :
-            state = state.Remove(state.Length - 1);
+            if(state.Length > 0)
+                state = state.Remove(state.Length - 1);
 
             //Send the data
             players.Broadcast(gameState);
@@ -111,7 +113,7 @@ public class Server
     //and 
     private void PhysicsLoop()
     {
-        float maxFrameRate = (1f / 60f) * 1000f;
+        float maxFrameRate = (1f / 60f * 1000f);
 
         while (IsOpen)
         {
@@ -140,7 +142,8 @@ public class Server
                 //Send a disconnection message.
                 if(MaxPlayers != 0 && players.Count == MaxPlayers)
                 {
-                    newPlayer.Send((int)ServerMessage.Disconnect + "");
+                    newPlayer.Send((int)ServerMessage.Disconnect + " "
+                        + "Server is full!");
                 }
                 //Add the player to the server list
                 else

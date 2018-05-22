@@ -21,16 +21,7 @@ public class Player
     //
     public string[] MovementStatus { get; set; }
     //Saves the commands that only need to be send to one player
-    public string Status
-    {
-        get
-        {
-            string status = Status;
-            Status = "";
-            return status;
-        }
-        set { Status = value; }
-    }
+    public string Status { get; set; }
 
     private readonly short maxHealth;
     private ushort currentHealth;
@@ -92,8 +83,16 @@ public class Player
                 status += MovementStatus[i];
                 MovementStatus[i] = "";
             }
+            
         }
 
+        return status;
+    }
+
+    public string GetStatus()
+    {
+        string status = Status;
+        Status = "";
         return status;
     }
 

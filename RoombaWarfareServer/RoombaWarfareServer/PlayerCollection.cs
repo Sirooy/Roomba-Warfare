@@ -43,7 +43,7 @@ public class PlayerCollection : IEnumerable<Player>
         {
             foreach(KeyValuePair<int,Player> player in players)
             {
-                string onwStatus = player.Value.Status;
+                string onwStatus = player.Value.GetStatus();
                 player.Value.Send(onwStatus + gameState);
             }
         }

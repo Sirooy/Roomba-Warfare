@@ -57,8 +57,18 @@ public class Player : DynamicEntity
         }
     }
 
-    public void SetTeam(PlayerTeam team)
+    //Changes the position of a player
+    public void SetPos(string[] parts)
     {
+        float posX = float.Parse(parts[2]);
+        float posY = float.Parse(parts[3]);
+        SetPos(posX, posY);
+    }
+
+    //Changes the team of a player and its sprite
+    public void SetTeam(string[] parts)
+    {
+        PlayerTeam team = (PlayerTeam)int.Parse(parts[2]);
         Team = team;
 
         if (Team == PlayerTeam.Red)
@@ -67,8 +77,16 @@ public class Player : DynamicEntity
             spriteY = 64;
     }
 
-    public virtual void Respawn(float posX,float posY)
+    public virtual void Kill()
     {
+        IsAlive = false;
+    }
+
+    //Respawns a player
+    public virtual void Respawn(string[] parts)
+    {
+        float posX = float.Parse(parts[2]);
+        float posY = float.Parse(parts[3]);
         SetPos(posX, posY);
         IsAlive = true;
     }

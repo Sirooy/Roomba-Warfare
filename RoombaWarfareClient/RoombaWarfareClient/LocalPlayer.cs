@@ -72,10 +72,22 @@ public class LocalPlayer : Player
         PosY += (velY * deltaTime);
     }
 
-    public override void Respawn(float posX, float posY)
+    public override void Respawn(string[] parts)
     {
-        base.Respawn(posX, posY);
+        base.Respawn(parts);
         currentHealth = maxHealth;
+    }
+
+    public override void Kill()
+    {
+        base.Kill();
+        currentHealth = 0;
+    }
+
+    //TO DO
+    public void Reconcile()
+    {
+
     }
 
     public void CheckCollisions()

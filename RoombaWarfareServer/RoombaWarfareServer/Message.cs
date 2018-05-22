@@ -9,13 +9,11 @@ public enum ServerMessage : byte
     SetPlayerPosition,
     SetPlayerAngle,
     SetPlayerTeam,
-    SetPlayerType,
     RemovePlayer,
     KillPlayer,
     NewBullet,
     RemoveBullet,
     Respawn,
-    Map
 }
 
 //Type of messages that the client sends to the server

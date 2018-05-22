@@ -1,5 +1,11 @@
-﻿
+﻿using System.Collections.Generic;
+
 public class BulletCollection
 {
-    //TO DO
+    private List<Bullet> bullets;
+
+    public BulletCollection()
+    {
+        bullets = new List<Bullet>();
+    }
 }

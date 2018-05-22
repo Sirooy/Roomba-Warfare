@@ -27,30 +27,35 @@ public class PlayerCollection
 
     public void Remove(int id)
     {
-        //TO DO
+        players.Remove(id);
     }
 
+    public void Kill(int id)
+    {
+        players[id].Kill();
+    }
+
+    //Change this function later to interpolate the players positions
     public void SetPosition(int id, string[] parts)
     {
-        //TO DO
+        players[id].SetPos(parts);
     }
 
+    //Sets the angle of a player
     public void SetAngle(int id, string[] parts)
     {
         players[id].Angle = float.Parse(parts[2]);
     }
 
+    //Sets the team of a player
     public void SetTeam(int id, string[] parts)
     {
-        players[id].SetTeam((PlayerTeam)int.Parse(parts[2]));
+        players[id].SetTeam(parts);
     }
 
     public void Respawn(int id, string[] parts)
     {
-        float posX = float.Parse(parts[2]);
-        float posY = float.Parse(parts[3]);
-        players[id].IsAlive = true;
-        players[id].SetPos(posX, posY);
+        players[id].Respawn(parts);
     }
 
     //Renders all the players
