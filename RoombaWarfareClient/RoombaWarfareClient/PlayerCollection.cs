@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 //
 public class PlayerCollection
 {
+    public int Count { get { return players.Count; } }
+
     private Dictionary<int, ServerPlayer> players;
 
     public PlayerCollection()
@@ -15,7 +18,7 @@ public class PlayerCollection
     {
         PlayerType type = (PlayerType)int.Parse(parts[2]);
         PlayerTeam team = (PlayerTeam)int.Parse(parts[3]);
-        bool isAlive = bool.Parse(parts[4]);
+        bool isAlive = Convert.ToBoolean(int.Parse(parts[4]));
         float posX = float.Parse(parts[4]);
         float posY = float.Parse(parts[5]);
         float angle = float.Parse(parts[6]);

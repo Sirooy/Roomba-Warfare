@@ -20,7 +20,7 @@ public class Server
     private BulletCollection bullets;
     private Map map;
 
-    private ushort currentRound;
+    private int currentRound;
     private ushort currentID;
     private string gameState;
 
@@ -85,7 +85,6 @@ public class Server
                 if(gameState != "")
                 {
                     state += gameState;
-                    System.Diagnostics.Debug.WriteLine("State 1:" + state);
                     gameState = "";
                 }
             }
@@ -94,14 +93,12 @@ public class Server
             foreach(Player player in players)
             {
                 state += player.GetMovementStatus();
-                System.Diagnostics.Debug.WriteLine("State 2:"  + state);
             }
 
             //Remove the last : and send the data
             if(state.Length > 0)
             {
                 state = state.Remove(state.Length - 1);
-                System.Diagnostics.Debug.WriteLine("State 3(Send): " + state); //Remove later
                 players.Broadcast(state);
                 state = "";
             }
@@ -110,6 +107,31 @@ public class Server
             int frameTime = Environment.TickCount - startTime;
             if (frameTime < maxFrameRate)
                 Thread.Sleep((int)(maxFrameRate - frameTime));
+        }
+    }
+
+    private void ResetRound()
+    {
+        System.Diagnostics.Debug.WriteLine("Reseting round...");
+
+        string state = players.GlobalRespawn(map);
+
+        Interlocked.Increment(ref currentRound);
+
+        lock (lockGameState)
+        {
+            gameState += state;
+        }
+    }
+
+    private void CheckRoundStatus()
+    {
+        if (players.RedAlivePlayersCount == 0 ||
+            players.BlueAlivePlayersCount == 0)
+        {
+            if (players.RedPlayersCount > 0 &&
+                players.BluePlayersCount > 0)
+                ResetRound();
         }
     }
 
@@ -128,6 +150,7 @@ public class Server
                         {
                             gameState += state;
                         }
+                        CheckRoundStatus();
                         break;
                     }
 
@@ -233,7 +256,6 @@ public class Server
 
                 lock (lockMessageQueue)
                 {
-                    System.Diagnostics.Debug.WriteLine("Received: " + data); //Remove later
                     messageQueue.Enqueue(data);
                 }
             }
@@ -250,7 +272,7 @@ public class Server
         {
             foreach (Player player in players)
             {
-                data += (int)ServerMessage.NewPlayer +
+                data += (int)ServerMessage.NewPlayer + " " +
                     player.ToString() + ":";
             }
         }
@@ -259,10 +281,12 @@ public class Server
         {
             foreach (Bullet bullet in bullets)
             {
-                data += (int)ServerMessage.NewBullet +
+                data += (int)ServerMessage.NewBullet + " " +
                     bullet.ToString() + ":";
             }
         }
+
+        data = data.Remove(data.Length - 1);
         
         return data;
     }

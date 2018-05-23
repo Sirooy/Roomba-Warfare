@@ -23,10 +23,10 @@ public class Camera
             X = 0;
         if (Y < 0)
             Y = 0;
-        if (X > Map.Width - Hardware.ScreenWidth)
-            X = (int)Map.Width - Hardware.ScreenWidth;
-        if( Y > Map.Height - Hardware.ScreenHeight)
-            X = (int)Map.Height - Hardware.ScreenHeight;
+        if (X > Map.Width - Width)
+            X = (int)Map.Width - Width;
+        if( Y > Map.Height - Height)
+            Y = (int)Map.Height - Height;
     }
 }
 

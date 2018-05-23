@@ -35,7 +35,7 @@ public class LocalPlayer : Player
 
     public void HandleEvents(SDL.SDL_Event e)
     {
-        if(e.type == SDL.SDL_EventType.SDL_KEYDOWN)
+        if(e.type == SDL.SDL_EventType.SDL_KEYDOWN && e.key.repeat == 0)
         {
             switch (e.key.keysym.sym)
             {
@@ -45,7 +45,7 @@ public class LocalPlayer : Player
                 case SDL.SDL_Keycode.SDLK_a: velX -= speed; break;
             }
         }
-        if(e.type == SDL.SDL_EventType.SDL_KEYUP)
+        if(e.type == SDL.SDL_EventType.SDL_KEYUP && e.key.repeat == 0)
         {
             switch (e.key.keysym.sym)
             {
@@ -61,8 +61,8 @@ public class LocalPlayer : Player
     public void SetAngle(Camera camera)
     {
         SDL.SDL_GetMouseState(out int mouseX, out int mouseY);
-        Angle = (float)(Math.Atan2(mouseY + camera.Y - (PosY - SPRITE_HEIGHT / 2),
-                 mouseX + camera.X - (PosX - SPRITE_WIDTH / 2))
+        Angle = (float)(Math.Atan2(mouseY + camera.Y - (PosY + SPRITE_HEIGHT / 2),
+                 mouseX + camera.X - (PosX + SPRITE_WIDTH / 2))
                  * 180 / Math.PI);
     }
 

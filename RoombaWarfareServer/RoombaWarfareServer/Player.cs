@@ -24,21 +24,23 @@ public class Player : Entity
     public string Status { get; set; }
 
     private readonly short maxHealth;
-    private ushort currentHealth;
+    private short currentHealth;
 
     private TcpClient client;
     private NetworkStream stream;
-    private BinaryFormatter serializer;
-
-    private object lockSerializer = new object();
+    private BinaryFormatter sendSerializer;
+    private BinaryFormatter receiveSerializer;
 
     public Player(TcpClient client)
     {
         ID = 0;
         this.client = client;
         stream = client.GetStream();
-        serializer = new BinaryFormatter();
+        client.NoDelay = true;
+        sendSerializer = new BinaryFormatter();
+        receiveSerializer = new BinaryFormatter();
         Status = "";
+        IsAlive = false;
         MovementStatus = new string[2];
         MovementStatus[(byte)PlayerState.Position] = "";
         MovementStatus[(byte)PlayerState.Angle] = "";
@@ -49,10 +51,7 @@ public class Player : Entity
     {
         try
         {
-            lock (lockSerializer)
-            {
-                serializer.Serialize(stream, data);
-            }
+            sendSerializer.Serialize(stream, data);
         }
         catch (Exception) { OnPlayerDisconnectEvent(ID); }
     }
@@ -64,14 +63,19 @@ public class Player : Entity
 
         try
         {
-            lock (lockSerializer)
-            {
-                data = (string)serializer.Deserialize(stream);
-            }
+            data = (string)receiveSerializer.Deserialize(stream);
         }
         catch (Exception) { OnPlayerDisconnectEvent(ID); }
 
         return data;
+    }
+
+    public void Respawn(float posX, float posY)
+    {
+        IsAlive = true;
+        currentHealth = maxHealth;
+        PosX = posX;
+        PosY = posY;
     }
 
     public string GetMovementStatus()

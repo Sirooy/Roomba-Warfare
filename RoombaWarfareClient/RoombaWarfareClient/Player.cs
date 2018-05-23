@@ -91,14 +91,17 @@ public class Player : DynamicEntity
     //Renders the player with the given angle
     public void Render(Camera camera)
     {
-        SDL.SDL_Point center = new SDL.SDL_Point
+        if (IsAlive)
         {
-            x = SPRITE_WIDTH / 2,
-            y = SPRITE_HEIGHT / 2
-        };
+            SDL.SDL_Point center = new SDL.SDL_Point
+            {
+                x = SPRITE_WIDTH / 2,
+                y = SPRITE_HEIGHT / 2
+            };
 
-        Hardware.RenderAdvancedDynamic(SpriteSheet.Texture,
-            camera.X, camera.Y, PosX,PosY,SPRITE_WIDTH,SPRITE_HEIGHT,
-            spriteX,spriteY,Angle,center,SDL.SDL_RendererFlip.SDL_FLIP_NONE);
+            Hardware.RenderAdvancedDynamic(SpriteSheet.Texture,
+                camera.X, camera.Y, PosX, PosY, SPRITE_WIDTH, SPRITE_HEIGHT,
+                spriteX, spriteY, Angle, center, SDL.SDL_RendererFlip.SDL_FLIP_NONE);
+        }
     }
 }

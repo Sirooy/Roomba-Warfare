@@ -140,6 +140,14 @@ public class GameScreen : IScreen
                     }
                     break;
 
+                case ServerMessage.NewPlayer:
+                    {
+                        int id = int.Parse(commandParts[1]);
+                        if (id != localPlayer.ID)
+                            players.Add(id, commandParts);
+                        break;
+                    }
+
                 //Removes a player
                 case ServerMessage.RemovePlayer:
                     {
@@ -178,8 +186,9 @@ public class GameScreen : IScreen
         string mapSeed = Game.GameSocket.Receive();
         map.Create(mapSeed);
         string initialData = Game.GameSocket.Receive();
+        TranslateData(initialData.Split(':'));
+        Console.WriteLine("Initial data: " + initialData);
         Game.GameSocket.Send(Convert.ToString((int)Game.PlayerSelectedType));
-
         GameLoop();
 
         return NextScreen;
@@ -187,7 +196,7 @@ public class GameScreen : IScreen
 
     public void GameLoop()
     {
-        float maxFrameRate = (1f / 60f * 1000f);
+        float maxFrameRate = (1f / 60f) * 1000f;
 
         do
         {
@@ -208,6 +217,7 @@ public class GameScreen : IScreen
             }
             //Get the time total time of the frame
             deltaTime = (Environment.TickCount - time) / 10;
+            Console.WriteLine(1 / (deltaTime / 100));
         } while (NextScreen == ScreenType.None);
     }
 
@@ -231,8 +241,9 @@ public class GameScreen : IScreen
             localPlayer.HandleEvents(e);
         }
         //Update the players and bullet positions
-        localPlayer.Update(deltaTime);
         localPlayer.SetAngle(camera);
+        localPlayer.Update(deltaTime);
+        camera.SetPos(localPlayer, Player.SPRITE_WIDTH, Player.SPRITE_HEIGHT);
         players.Update(deltaTime);
         bullets.Update(deltaTime);
     }
@@ -317,6 +328,7 @@ public class GameScreen : IScreen
     public void RenderGameAlive()
     {
         RenderBasics();
+        localPlayer.Render(camera);
     }
 }
 

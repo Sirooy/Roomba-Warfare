@@ -34,6 +34,8 @@ public class SocketClient
             if (client.Connected)
             {
                 stream = client.GetStream();
+                client.Client.NoDelay = true;
+                
                 return true;
             }
             else
