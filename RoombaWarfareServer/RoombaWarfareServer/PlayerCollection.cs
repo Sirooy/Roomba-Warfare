@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class PlayerCollection : IEnumerable<Player>
 {
@@ -31,16 +32,41 @@ public class PlayerCollection : IEnumerable<Player>
         {
             players.Add(id, player);
         }
-        
+
         return (int)ServerMessage.NewPlayer + " " +
             player.ToString() + ":";
     }
 
     public string ChangeTeam(string[] commandParts)
     {
-        string ret = "";
+        int id = int.Parse(commandParts[1]);
+        PlayerTeam team = (PlayerTeam)int.Parse(commandParts[2]);
 
-        return ret;
+        lock (lockPlayers)
+        {
+            players[id].Team = team;
+        }
+
+        redPlayers = (from player in players.Values
+                      where player.Team == PlayerTeam.Red
+                      select player).Count();
+
+        bluePlayers = (from player in players.Values
+                      where player.Team == PlayerTeam.Blue
+                      select player).Count();
+
+        redAlivePlayers = (from player in players.Values
+                           where player.Team == PlayerTeam.Red
+                           && player.IsAlive
+                           select player).Count();
+
+        blueAlivePlayers = (from player in players.Values
+                           where player.Team == PlayerTeam.Red
+                           && player.IsAlive
+                           select player).Count();
+
+        return (int)ServerMessage.SetPlayerTeam + " " + id +
+            " " + (int)team + ":";
     }
 
     //Sends a message to all players

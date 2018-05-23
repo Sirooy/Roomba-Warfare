@@ -2,11 +2,11 @@
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
 
-public enum PlayerTeam { Red, Blue, Spectator }
-public enum PlayerType { Assault, Commander, Rusher, Tank }
-public enum PlayerState { Position, Angle }
+public enum PlayerTeam : byte { Red, Blue, Spectator }
+public enum PlayerType : byte { Assault, Commander, Rusher, Tank }
+public enum PlayerState : byte { Position, Angle }
 
-public class Player
+public class Player : Entity
 {
     public Action<int> OnPlayerDisconnectEvent;
 
@@ -40,6 +40,8 @@ public class Player
         serializer = new BinaryFormatter();
         Status = "";
         MovementStatus = new string[2];
+        MovementStatus[(byte)PlayerState.Position] = "";
+        MovementStatus[(byte)PlayerState.Angle] = "";
     }
 
     //Sends the given data to the player (Works Non-blocking)

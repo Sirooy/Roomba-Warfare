@@ -84,7 +84,8 @@ public class Server
             {
                 if(gameState != "")
                 {
-                    state = gameState;
+                    state += gameState;
+                    System.Diagnostics.Debug.WriteLine("State 1:" + state);
                     gameState = "";
                 }
             }
@@ -93,15 +94,18 @@ public class Server
             foreach(Player player in players)
             {
                 state += player.GetMovementStatus();
+                System.Diagnostics.Debug.WriteLine("State 2:"  + state);
             }
 
-            //Remove the last :
+            //Remove the last : and send the data
             if(state.Length > 0)
+            {
                 state = state.Remove(state.Length - 1);
-
-            //Send the data
-            players.Broadcast(gameState);
-
+                System.Diagnostics.Debug.WriteLine("State 3(Send): " + state); //Remove later
+                players.Broadcast(state);
+                state = "";
+            }
+                
             //Sleep the thread if the frame rate is higher than the max frame rate
             int frameTime = Environment.TickCount - startTime;
             if (frameTime < maxFrameRate)
@@ -118,8 +122,19 @@ public class Server
             switch ((ClientMessage)int.Parse(commandParts[0]))
             {
                 case ClientMessage.ChangeTeam:
+                    {
+                        string state = players.ChangeTeam(commandParts);
+                        lock (lockGameState)
+                        {
+                            gameState += state;
+                        }
+                        break;
+                    }
 
-                    break;
+                case ClientMessage.NewPos:
+                    {
+                        break;
+                    }
             }
         }
     }
@@ -139,8 +154,7 @@ public class Server
         while(commands.Count > 0)
         {
             string allCommands = commands.Dequeue();
-            System.Diagnostics.Debug.WriteLine(allCommands); // Remove later
-            string singleCommands = allCommands.Split(':');
+            string[] singleCommands = allCommands.Split(':');
             TranslateCommands(singleCommands);
         }
     }
@@ -154,7 +168,7 @@ public class Server
         {
             int startTime = Environment.TickCount;
 
-            //TO DO
+            DequeueCommands();
 
             //Sleep the thread if the frame rate is higher than the max frame rate
             int frameTime = Environment.TickCount - startTime;
@@ -197,9 +211,10 @@ public class Server
     //Receives all the data send by a client
     private void ListenClient(Player player)
     {
-        System.Diagnostics.Debug.WriteLine("Client connected"); //
+        System.Diagnostics.Debug.WriteLine("Client connected"); //Remove Later
         player.Send(map.Seed);
-        player.Send(GetInitialData(player.ID));
+        string initialData = GetInitialData(player.ID);
+        player.Send(initialData);
         PlayerType type = (PlayerType)int.Parse(player.Receive());
         player.Type = type;
 
@@ -218,6 +233,7 @@ public class Server
 
                 lock (lockMessageQueue)
                 {
+                    System.Diagnostics.Debug.WriteLine("Received: " + data); //Remove later
                     messageQueue.Enqueue(data);
                 }
             }

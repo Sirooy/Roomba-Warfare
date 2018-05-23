@@ -167,6 +167,7 @@ public class GameScreen : IScreen
         if (Game.GameSocket.DataAvailable)
         {
             string data = Game.GameSocket.Receive();
+            Console.WriteLine("Message received: " + data); //Remove later.
             TranslateData(data.Split(':'));
         }
     }
@@ -192,13 +193,12 @@ public class GameScreen : IScreen
         {
             int time = Environment.TickCount;
 
-            Hardware.ClearScreen();
             ReceiveData();
+            Hardware.ClearScreen();
             CurrentUpdateGameFunction();
             CurrentRenderGameFunction();
             Hardware.UpdateScreen();
-
-            Console.WriteLine(localPlayer.Team);
+            SendData();
 
             //Cap the frame rate to 60 fps
             int frameTime = (Environment.TickCount - time);
@@ -217,6 +217,7 @@ public class GameScreen : IScreen
         {
             //Remove the last :
             messageBuffer = messageBuffer.Remove(messageBuffer.Length - 1);
+            Console.WriteLine("Message sent: " + messageBuffer); //Remove this
             Game.GameSocket.Send(messageBuffer);
             messageBuffer = "";
         }
