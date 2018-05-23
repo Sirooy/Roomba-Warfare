@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using SDL2;
 
 //This screen controls the game loop
@@ -18,36 +19,39 @@ public class GameScreen : IScreen
     private LocalPlayer localPlayer;
     private PlayerCollection players;
     private BulletCollection bullets;
-    private Button[] buttons;
+    private Button[] teamButtons;
     private Camera camera;
 
     private float deltaTime;
     private bool isChangingTeam;
+    private string messageBuffer;
 
     public GameScreen()
     {
         NextScreen = ScreenType.None;
         map = new Map();
         localPlayer = new LocalPlayer(Game.PlayerSelectedType);
+        bullets = new BulletCollection();
         players = new PlayerCollection();
         camera = new Camera((ushort)Hardware.ScreenWidth, 
             (ushort)Hardware.ScreenHeight);
 
-        buttons = new Button[3];
-        buttons[RED_TEAM_BUTTON] = new Button(ButtonType.RedTeamButton);
-        buttons[SPECTATOR_TEAM_BUTTON] = new Button(ButtonType.SpectatorTeamButton);
-        buttons[BLUE_TEAM_BUTTON] = new Button(ButtonType.BlueTeamButton);
+        teamButtons = new Button[3];
+        teamButtons[RED_TEAM_BUTTON] = new Button(ButtonType.RedTeamButton);
+        teamButtons[SPECTATOR_TEAM_BUTTON] = new Button(ButtonType.SpectatorTeamButton);
+        teamButtons[BLUE_TEAM_BUTTON] = new Button(ButtonType.BlueTeamButton);
         //Sets the positions of the buttons to change the team
-        buttons[RED_TEAM_BUTTON].SetPos(100,
+        teamButtons[RED_TEAM_BUTTON].SetPos(100,
             Hardware.ScreenHeight / 2 - Button.SPRITE_HEIGHT / 2);
-        buttons[SPECTATOR_TEAM_BUTTON].SetPos
+        teamButtons[SPECTATOR_TEAM_BUTTON].SetPos
             (Hardware.ScreenWidth / 2 - Button.SPRITE_WIDTH / 2,
             Hardware.ScreenHeight / 2 - Button.SPRITE_HEIGHT / 2);
-        buttons[BLUE_TEAM_BUTTON].SetPos
+        teamButtons[BLUE_TEAM_BUTTON].SetPos
             (Hardware.ScreenWidth - Button.SPRITE_WIDTH - 100,
             Hardware.ScreenHeight / 2 - Button.SPRITE_HEIGHT / 2);
 
         isChangingTeam = true;
+        messageBuffer = "";
         CurrentUpdateGameFunction = UpdateGameStateDead;
         CurrentRenderGameFunction = RenderGameDead;
     }
@@ -132,9 +136,6 @@ public class GameScreen : IScreen
                         else
                         {
                             localPlayer.SetTeam(commandParts);
-                            if ((PlayerTeam)(int.Parse(commandParts[2]))
-                                == PlayerTeam.Spectator)
-                                CurrentUpdateGameFunction = UpdateGameStateSpectator;
                         }
                     }
                     break;
@@ -172,6 +173,7 @@ public class GameScreen : IScreen
 
     public ScreenType Run()
     {
+        //Get all the data sent by the server and send the player type
         string mapSeed = Game.GameSocket.Receive();
         map.Create(mapSeed);
         string initialData = Game.GameSocket.Receive();
@@ -188,25 +190,35 @@ public class GameScreen : IScreen
 
         do
         {
+            int time = Environment.TickCount;
+
             Hardware.ClearScreen();
             ReceiveData();
             CurrentUpdateGameFunction();
             CurrentRenderGameFunction();
             Hardware.UpdateScreen();
+
+            Console.WriteLine(localPlayer.Team);
+
+            //Cap the frame rate to 60 fps
+            int frameTime = (Environment.TickCount - time);
+            if(frameTime < maxFrameRate)
+            {
+                Thread.Sleep((int)(maxFrameRate - frameTime));
+            }
+            //Get the time total time of the frame
+            deltaTime = (Environment.TickCount - time) / 10;
         } while (NextScreen == ScreenType.None);
     }
 
     public void SendData()
     {
-
-    }
-
-    //Updates the game when the player is in spectator team.
-    public void UpdateGameStateSpectator()
-    {
-        while (SDL.SDL_PollEvent(out SDL.SDL_Event e) != 0)
+        if(messageBuffer != "")
         {
-            //TO DO
+            //Remove the last :
+            messageBuffer = messageBuffer.Remove(messageBuffer.Length - 1);
+            Game.GameSocket.Send(messageBuffer);
+            messageBuffer = "";
         }
     }
 
@@ -215,17 +227,67 @@ public class GameScreen : IScreen
     {
         while (SDL.SDL_PollEvent(out SDL.SDL_Event e) != 0)
         {
-            //TO DO
+            localPlayer.HandleEvents(e);
         }
+        //Update the players and bullet positions
+        localPlayer.Update(deltaTime);
+        localPlayer.SetAngle(camera);
+        players.Update(deltaTime);
+        bullets.Update(deltaTime);
     }
 
-    //Updates the game when the player is dead.
+    //Updates the game when the player is dead or in spectate mode.
     public void UpdateGameStateDead()
     {
         while (SDL.SDL_PollEvent(out SDL.SDL_Event e) != 0)
         {
-            //TO DO
+            if (Hardware.IsKeyPressed(SDL.SDL_Keycode.SDLK_m, e))
+                isChangingTeam = !isChangingTeam;
+
+            if (isChangingTeam)
+            {
+                foreach(Button button in teamButtons)
+                {
+                    button.HandleEvents(e);
+                }
+            }
         }
+
+        //When the player press a team button sends to the server a change
+        //team request or nothing if it tries to change to its current team
+        if (isChangingTeam)
+        {
+            if (teamButtons[SPECTATOR_TEAM_BUTTON].IsClicked)
+            {
+                if(localPlayer.Team != PlayerTeam.Spectator)
+                {
+                    messageBuffer += (int)ClientMessage.ChangeTeam + " " +
+                        localPlayer.ID + " " + (int)PlayerTeam.Spectator + ":";
+                }
+                isChangingTeam = false;
+            }
+            else if (teamButtons[RED_TEAM_BUTTON].IsClicked)
+            {
+                if (localPlayer.Team != PlayerTeam.Red)
+                {
+                    messageBuffer += (int)ClientMessage.ChangeTeam + " " +
+                        localPlayer.ID + " " + (int)PlayerTeam.Red + ":";
+                }
+                isChangingTeam = false;
+            }
+            else if (teamButtons[BLUE_TEAM_BUTTON].IsClicked)
+            {
+                if (localPlayer.Team != PlayerTeam.Blue)
+                {
+                    messageBuffer += (int)ClientMessage.ChangeTeam + " " +
+                        localPlayer.ID + " " + (int)PlayerTeam.Blue + ":";
+                }
+                isChangingTeam = false;
+            }
+        }
+
+        players.Update(deltaTime);
+        bullets.Update(deltaTime);
     }
 
     //Render all the things that a player can see either if it is alive or dead
@@ -233,20 +295,27 @@ public class GameScreen : IScreen
     {
         map.Render(camera);
         players.Render(camera);
+        bullets.Render(camera);
     }
 
     //Renders all the necessary things for a dead player
     public void RenderGameDead()
     {
         RenderBasics();
-        //TO DO
+
+        if (isChangingTeam)
+        {
+            foreach(Button button in teamButtons)
+            {
+                button.Render();
+            }
+        }
     }
 
     //Renders all the necessary things for an alive player
     public void RenderGameAlive()
     {
         RenderBasics();
-        //TO DO
     }
 }
 

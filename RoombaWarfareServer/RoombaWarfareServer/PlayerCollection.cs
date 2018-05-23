@@ -36,6 +36,13 @@ public class PlayerCollection : IEnumerable<Player>
             player.ToString() + ":";
     }
 
+    public string ChangeTeam(string[] commandParts)
+    {
+        string ret = "";
+
+        return ret;
+    }
+
     //Sends a message to all players
     public void Broadcast(string gameState)
     {

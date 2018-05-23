@@ -8,9 +8,6 @@ public class Player : DynamicEntity
     public static readonly byte SPRITE_WIDTH = 64;
     public static readonly byte SPRITE_HEIGHT = 64;
 
-    public static Image SpriteSheet =
-        new Image("resources/images/dynamic_entity_sprite_sheet.png", 64, 96);
-
     public int ID { get; set; }
     public float Angle { get; set; }
     public bool IsAlive { get; set; }

@@ -57,12 +57,12 @@ public class LocalPlayer : Player
         }
     }
 
-    //Sets the angle of the player based on the mouse position
-    public void SetAngle(float camX, float camY)
+    //Sets the angle of the player based on the mouse position and the camera coords
+    public void SetAngle(Camera camera)
     {
         SDL.SDL_GetMouseState(out int mouseX, out int mouseY);
-        Angle = (float)(Math.Atan2(mouseY + camY - (PosY - SPRITE_HEIGHT / 2),
-                 mouseX + camX - (PosX - SPRITE_WIDTH / 2))
+        Angle = (float)(Math.Atan2(mouseY + camera.Y - (PosY - SPRITE_HEIGHT / 2),
+                 mouseX + camera.X - (PosX - SPRITE_WIDTH / 2))
                  * 180 / Math.PI);
     }
 

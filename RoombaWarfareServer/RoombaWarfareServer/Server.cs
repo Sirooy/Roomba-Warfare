@@ -109,8 +109,43 @@ public class Server
         }
     }
 
+    private void TranslateCommands(string[] commands)
+    {
+        foreach(string command in commands)
+        {
+            string[] commandParts = command.Split();
+
+            switch ((ClientMessage)int.Parse(commandParts[0]))
+            {
+                case ClientMessage.ChangeTeam:
+
+                    break;
+            }
+        }
+    }
+
+    private void DequeueCommands()
+    {
+        Queue<string> commands = new Queue<string>();
+        lock (messageQueue)
+        {
+            if(messageQueue.Count > 0)
+            {
+                commands = new Queue<string>(messageQueue);
+                messageQueue.Clear();
+            }
+        }
+
+        while(commands.Count > 0)
+        {
+            string allCommands = commands.Dequeue();
+            System.Diagnostics.Debug.WriteLine(allCommands); // Remove later
+            string singleCommands = allCommands.Split(':');
+            TranslateCommands(singleCommands);
+        }
+    }
+
     //Updates the physics of the game at 60 frames per second
-    //and 
     private void PhysicsLoop()
     {
         float maxFrameRate = (1f / 60f * 1000f);

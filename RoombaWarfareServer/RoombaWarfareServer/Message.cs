@@ -19,5 +19,8 @@ public enum ServerMessage : byte
 //Type of messages that the client sends to the server
 public enum ClientMessage : byte
 {
-    //TO DO
+    Disconnect,
+    NewPos,
+    NewAngle,
+    ChangeTeam,
 }
