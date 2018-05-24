@@ -7,6 +7,8 @@ public class ConnectScreen : IScreen
 
     public ScreenType Run()
     {
+        Game.GameSocket = new SocketClient();
+
         if (Game.GameSocket.Connect())
         {
             NextScreen = ScreenType.Game;

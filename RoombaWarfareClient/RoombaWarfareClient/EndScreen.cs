@@ -29,7 +29,7 @@ public class EndScreen : IScreen
         {
             SDL.SDL_Keycode key = Hardware.KeyPressed();
             if (key == SDL.SDL_Keycode.SDLK_RETURN)
-                NextScreen = ScreenType.SetAddress; //Change it to main later.
+                NextScreen = ScreenType.Main; 
 
             System.Threading.Thread.Sleep(16);
         } while (NextScreen == ScreenType.None);

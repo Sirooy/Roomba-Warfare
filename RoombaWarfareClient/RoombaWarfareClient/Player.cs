@@ -5,6 +5,7 @@ public enum PlayerType : byte { Assault, Commander, Rusher, Tank }
 
 public class Player : DynamicEntity
 {
+    public static readonly byte RADIUS = 24;
     public static readonly byte SPRITE_WIDTH = 64;
     public static readonly byte SPRITE_HEIGHT = 64;
 

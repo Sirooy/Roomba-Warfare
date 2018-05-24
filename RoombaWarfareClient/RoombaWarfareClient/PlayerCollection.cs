@@ -61,12 +61,16 @@ public class PlayerCollection
         players[id].Respawn(parts);
     }
 
-    //Renders all the players
+    //Renders the players
     public void Render(Camera camera)
     {
         foreach (KeyValuePair<int, ServerPlayer> player in players)
         {
-            player.Value.Render(camera);
+            //Render only the ones that are in the camera bounds
+            if (CollisionHandler.CollidesWith
+                (camera, player.Value, Player.SPRITE_WIDTH,
+                Player.SPRITE_HEIGHT))
+                player.Value.Render(camera);
         }
     }
 

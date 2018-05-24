@@ -76,7 +76,8 @@ public class SocketClient
     //Disconnects the client
     public void Disconnect()
     {
-        client.Client.Close();
+        client.Close();
         stream.Close();
+        OnDisconnectionEvent = null;
     }
 }

@@ -21,6 +21,8 @@ public class Server
     private Map map;
 
     private int currentRound;
+    private int redPlayersWonRounds;
+    private int bluePlayersWonRounds;
     private ushort currentID;
     private string gameState;
 
@@ -39,6 +41,7 @@ public class Server
         messageQueue = new Queue<string>();
         map = new Map();
         players = new PlayerCollection();
+        players.OnPlayerDisconnectEvent += DisconnectPlayer;
         bullets = new BulletCollection();
         physics = new Task(PhysicsLoop);
         broadcast = new Task(BroadcastGameStateLoop);
@@ -53,6 +56,9 @@ public class Server
             IsOpen = true; 
 
             map.Create(MapPath);
+
+            redPlayersWonRounds = 0;
+            bluePlayersWonRounds = 0;
 
             IPEndPoint address = new IPEndPoint(IPAddress.Any, Port);
             listener = new TcpListener(address);
@@ -110,13 +116,23 @@ public class Server
         }
     }
 
+    //Resets the round and adds a point to the winner
     private void ResetRound()
     {
         System.Diagnostics.Debug.WriteLine("Reseting round...");
 
+        if (players.RedAlivePlayersCount != 0)
+        {
+            Interlocked.Increment(ref currentRound);
+            Interlocked.Increment(ref redPlayersWonRounds);
+        }
+        else if (players.BlueAlivePlayersCount != 0)
+        {
+            Interlocked.Increment(ref currentRound);
+            Interlocked.Increment(ref bluePlayersWonRounds);
+        }
+            
         string state = players.GlobalRespawn(map);
-
-        Interlocked.Increment(ref currentRound);
 
         lock (lockGameState)
         {
@@ -124,17 +140,20 @@ public class Server
         }
     }
 
+    //Checks if a round has ended
     private void CheckRoundStatus()
     {
         if (players.RedAlivePlayersCount == 0 ||
             players.BlueAlivePlayersCount == 0)
         {
+            System.Diagnostics.Debug.WriteLine("0 players alive");
             if (players.RedPlayersCount > 0 &&
                 players.BluePlayersCount > 0)
                 ResetRound();
         }
     }
 
+    //Translate the client commands.
     private void TranslateCommands(string[] commands)
     {
         foreach(string command in commands)
@@ -143,6 +162,18 @@ public class Server
 
             switch ((ClientMessage)int.Parse(commandParts[0]))
             {
+                case ClientMessage.NewAngle:
+                    {
+                        players.SetAngle(commandParts);
+                        break;
+                    }
+
+                case ClientMessage.NewPos:
+                    {
+                        players.SetPosition(commandParts);
+                        break;
+                    }
+
                 case ClientMessage.ChangeTeam:
                     {
                         string state = players.ChangeTeam(commandParts);
@@ -153,33 +184,34 @@ public class Server
                         CheckRoundStatus();
                         break;
                     }
-
-                case ClientMessage.NewPos:
-                    {
-                        break;
-                    }
             }
         }
     }
 
+    
     private void DequeueCommands()
     {
-        Queue<string> commands = new Queue<string>();
+        /*Queue<string> commands = new Queue<string>();
         lock (messageQueue)
         {
             if(messageQueue.Count > 0)
             {
+                //Crashes here
                 commands = new Queue<string>(messageQueue);
                 messageQueue.Clear();
             }
-        }
+        }*/
 
-        while(commands.Count > 0)
+        lock (messageQueue)
         {
-            string allCommands = commands.Dequeue();
-            string[] singleCommands = allCommands.Split(':');
-            TranslateCommands(singleCommands);
+            while (messageQueue.Count > 0)
+            {
+                string allCommands = messageQueue.Dequeue();
+                string[] singleCommands = allCommands.Split(':');
+                TranslateCommands(singleCommands);
+            }
         }
+         
     }
 
     //Updates the physics of the game at 60 frames per second
@@ -231,6 +263,18 @@ public class Server
         }
     }
 
+    //Disconects a player and sends the info to the others
+    public void DisconnectPlayer(int id)
+    {
+        string state = players.Remove(id);
+        System.Diagnostics.Debug.WriteLine("Client disconnected " + state); //Remove Later
+
+        lock (lockGameState)
+        {
+            gameState += state;
+        }
+    }
+
     //Receives all the data send by a client
     private void ListenClient(Player player)
     {
@@ -248,12 +292,12 @@ public class Server
             gameState += players.Add(player.ID, player);
         }
 
-        while (IsOpen)
+        while (IsOpen && player.IsConnected)
         {
-            while (player.IsConnected)
+            string data = player.Receive();
+            
+            if(data != "")
             {
-                string data = player.Receive();
-
                 lock (lockMessageQueue)
                 {
                     messageQueue.Enqueue(data);

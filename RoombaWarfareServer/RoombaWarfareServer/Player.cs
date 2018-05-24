@@ -108,4 +108,10 @@ public class Player : Entity
             Convert.ToInt32(IsAlive) + " " + base.ToString() + " " +
             Angle.ToString("0.#");
     }
+
+    public void EndConnection()
+    {
+        client.Close();
+        stream.Close();
+    }
 }

@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
+    <Compile Include="CollisionHandler.cs" />
     <Compile Include="Gun.cs" />
     <Compile Include="MachineGun.cs" />
     <Compile Include="Tile.cs" />

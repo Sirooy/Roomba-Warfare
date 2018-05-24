@@ -94,16 +94,14 @@ public class Map
         Hitboxes = mapHitboxes.ToArray();
     }
 
-    //Renders all the tiles.
+    //Renders the tiles.
     public void Render(Camera camera)
     {
         foreach (Tile tile in Tiles)
         {
-            //Only render the ones that the player can see
-            if (tile.PosX + Tile.SPRITE_WIDTH > camera.X
-                && tile.PosX < camera.X + camera.Width
-                && tile.PosY + Tile.SPRITE_HEIGHT > camera.Y
-                && tile.PosY < camera.Y + camera.Height)
+            //Only render the ones that are in the camera bounds
+            if(CollisionHandler.CollidesWith
+                (camera,tile,Tile.SPRITE_WIDTH,Tile.SPRITE_HEIGHT))
                 tile.Render(camera.X, camera.Y);
         }
     }

@@ -28,6 +28,8 @@ public class GameScreen : IScreen
 
     public GameScreen()
     {
+        Game.GameSocket.OnDisconnectionEvent += Disconnect;
+
         NextScreen = ScreenType.None;
         map = new Map();
         localPlayer = new LocalPlayer(Game.PlayerSelectedType);
@@ -54,6 +56,7 @@ public class GameScreen : IScreen
         messageBuffer = "";
         CurrentUpdateGameFunction = UpdateGameStateDead;
         CurrentRenderGameFunction = RenderGameDead;
+        deltaTime = 1;
     }
 
     //Translate all the data send by the server
@@ -175,7 +178,6 @@ public class GameScreen : IScreen
         if (Game.GameSocket.DataAvailable)
         {
             string data = Game.GameSocket.Receive();
-            Console.WriteLine("Message received: " + data); //Remove later.
             TranslateData(data.Split(':'));
         }
     }
@@ -187,7 +189,6 @@ public class GameScreen : IScreen
         map.Create(mapSeed);
         string initialData = Game.GameSocket.Receive();
         TranslateData(initialData.Split(':'));
-        Console.WriteLine("Initial data: " + initialData);
         Game.GameSocket.Send(Convert.ToString((int)Game.PlayerSelectedType));
         GameLoop();
 
@@ -210,24 +211,26 @@ public class GameScreen : IScreen
             SendData();
 
             //Cap the frame rate to 60 fps
-            int frameTime = (Environment.TickCount - time);
+            /*int frameTime = (Environment.TickCount - time);
             if(frameTime < maxFrameRate)
             {
                 Thread.Sleep((int)(maxFrameRate - frameTime));
             }
             //Get the time total time of the frame
             deltaTime = (Environment.TickCount - time) / 10;
-            Console.WriteLine(1 / (deltaTime / 100));
+            Console.WriteLine(1 / (deltaTime / 100));*/
         } while (NextScreen == ScreenType.None);
     }
 
     public void SendData()
     {
+        messageBuffer += localPlayer.GetMessage();
+
         if(messageBuffer != "")
         {
             //Remove the last :
             messageBuffer = messageBuffer.Remove(messageBuffer.Length - 1);
-            Console.WriteLine("Message sent: " + messageBuffer); //Remove this
+            Console.WriteLine("Message sent: " + messageBuffer); //Remove later
             Game.GameSocket.Send(messageBuffer);
             messageBuffer = "";
         }
@@ -243,6 +246,7 @@ public class GameScreen : IScreen
         //Update the players and bullet positions
         localPlayer.SetAngle(camera);
         localPlayer.Update(deltaTime);
+        localPlayer.CheckCollisions(map.Hitboxes);
         camera.SetPos(localPlayer, Player.SPRITE_WIDTH, Player.SPRITE_HEIGHT);
         players.Update(deltaTime);
         bullets.Update(deltaTime);
@@ -329,6 +333,14 @@ public class GameScreen : IScreen
     {
         RenderBasics();
         localPlayer.Render(camera);
+    }
+
+    //Disconnects the player from the server when an error occurs
+    public void Disconnect()
+    {
+        Game.EndMessage = "Connection lost.";
+        Game.GameSocket.Disconnect();
+        NextScreen = ScreenType.End;
     }
 }
 

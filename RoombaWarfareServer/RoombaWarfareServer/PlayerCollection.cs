@@ -5,6 +5,8 @@ using System.Linq;
 
 public class PlayerCollection : IEnumerable<Player>
 {
+    public event Action<int> OnPlayerDisconnectEvent;
+
     public int Count { get { return players.Count; } }
     public int RedPlayersCount { get { return redPlayers; } }
     public int BluePlayersCount { get { return bluePlayers; } }
@@ -31,10 +33,66 @@ public class PlayerCollection : IEnumerable<Player>
         lock (lockPlayers)
         {
             players.Add(id, player);
+            players[id].OnPlayerDisconnectEvent += DisconnectPlayer;
         }
 
         return (int)ServerMessage.NewPlayer + " " +
             player.ToString() + ":";
+    }
+
+    //Removes a player
+    public string Remove(int id)
+    {
+        lock (lockPlayers)
+        {
+            players.Remove(id);
+        }
+
+        return (int)ServerMessage.RemovePlayer + " " +
+            id + ":";
+    }
+
+    //Disconnects a player
+    public void DisconnectPlayer(int id)
+    {
+        lock (lockPlayers)
+        {
+            players[id].EndConnection();
+        }
+        
+        OnPlayerDisconnectEvent(id);
+    }
+
+    //Sets the position of a player
+    public void SetPosition(string[] commandParts)
+    {
+        int id = int.Parse(commandParts[1]);
+        float posX = float.Parse(commandParts[2]);
+        float posY = float.Parse(commandParts[3]);
+
+        lock (lockPlayers)
+        {
+            players[id].SetPos(posX, posY);
+            players[id].MovementStatus[(byte)PlayerState.Position] =
+                (int)ServerMessage.SetPlayerPosition + " " + id
+                + " " + posX.ToString("0.#") + " " + posY.ToString("0.#") 
+                + ":";
+        }
+    }
+
+    //Sets the angle of a player
+    public void SetAngle(string[] commandParts)
+    {
+        int id = int.Parse(commandParts[1]);
+        float angle = float.Parse(commandParts[2]);
+
+        lock (lockPlayers)
+        {
+            players[id].Angle = angle;
+            players[id].MovementStatus[(byte)PlayerState.Angle] =
+                (int)ServerMessage.SetPlayerAngle + " " + id 
+                + " " + angle + ":";
+        }
     }
 
     public string ChangeTeam(string[] commandParts)
