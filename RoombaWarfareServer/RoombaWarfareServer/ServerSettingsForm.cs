@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace RoombaWarfareServer
@@ -48,6 +41,10 @@ namespace RoombaWarfareServer
             }
             else
             {
+                Port = ushort.Parse(txtbPort.Text);
+                TickRate = byte.Parse(cmbTickRate.Text);
+                MaxPlayers = cmbMaxPlayers.Text;
+                NumRounds = Convert.ToUInt16(numericNumRounds.Value);
                 Close();
             }
         }
@@ -65,6 +62,10 @@ namespace RoombaWarfareServer
             {
                 Port = ushort.Parse(txtbPort.Text);
             }
+
+            TickRate = byte.Parse(cmbTickRate.Text);
+            MaxPlayers = cmbMaxPlayers.Text;
+            NumRounds = Convert.ToUInt16(numericNumRounds.Value);
         }
     }
 }

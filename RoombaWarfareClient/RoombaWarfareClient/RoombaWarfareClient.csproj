@@ -49,6 +49,7 @@
     <Compile Include="CollisionHandler.cs" />
     <Compile Include="Gun.cs" />
     <Compile Include="MachineGun.cs" />
+    <Compile Include="StatusBar.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="Bullet.cs" />
     <Compile Include="BulletCollection.cs" />
@@ -95,6 +96,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\images\backgrounds\bck_test.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\images\backgrounds\bck_test2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\images\backgrounds\bck_test3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\images\backgrounds\death_bck_test.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\images\button_play.png">

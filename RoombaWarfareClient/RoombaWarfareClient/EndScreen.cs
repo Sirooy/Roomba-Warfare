@@ -5,7 +5,7 @@ public class EndScreen : IScreen
     public ScreenType NextScreen { get; set; }
 
     private static Image background =
-        new Image(@"resources\images\backgrounds\bck_test.png", 640, 480);
+        new Image(@"resources\images\backgrounds\bck_test2.png", 640, 480);
 
     private Font font;
     private Text text;

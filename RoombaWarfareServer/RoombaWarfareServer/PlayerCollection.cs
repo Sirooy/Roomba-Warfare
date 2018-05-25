@@ -7,11 +7,16 @@ public class PlayerCollection : IEnumerable<Player>
 {
     public event Action<int> OnPlayerDisconnectEvent;
 
-    public int Count { get { return players.Count; } }
-    public int RedPlayersCount { get { return redPlayers; } }
-    public int BluePlayersCount { get { return bluePlayers; } }
-    public int RedAlivePlayersCount { get { return redAlivePlayers; } }
-    public int BlueAlivePlayersCount { get { return blueAlivePlayers; } }
+    public int Count
+        { get { lock(lockPlayers) return players.Count; } }
+    public int RedPlayersCount
+        { get { lock (lockPlayers) return redPlayers; } }
+    public int BluePlayersCount
+        { get { lock (lockPlayers) return bluePlayers; } }
+    public int RedAlivePlayersCount
+        { get { lock (lockPlayers) return redAlivePlayers; } }
+    public int BlueAlivePlayersCount
+        { get { lock (lockPlayers) return blueAlivePlayers; } }
 
     private int redPlayers;
     private int bluePlayers;
@@ -69,14 +74,15 @@ public class PlayerCollection : IEnumerable<Player>
         int id = int.Parse(commandParts[1]);
         float posX = float.Parse(commandParts[2]);
         float posY = float.Parse(commandParts[3]);
+        uint commandNum = uint.Parse(commandParts[4]);
 
         lock (lockPlayers)
         {
             players[id].SetPos(posX, posY);
-            players[id].MovementStatus[(byte)PlayerState.Position] =
-                (int)ServerMessage.SetPlayerPosition + " " + id
-                + " " + posX.ToString("0.#") + " " + posY.ToString("0.#") 
-                + ":";
+            players[id].SetMovementStatus((int)ServerMessage.SetPlayerPosition
+                + " " + id + " " + posX.ToString("0.#") + " "
+                + posY.ToString("0.#") + ":", PlayerState.Position);
+            players[id].SetLastProcessedCommand(commandNum); 
         }
     }
 
@@ -89,9 +95,8 @@ public class PlayerCollection : IEnumerable<Player>
         lock (lockPlayers)
         {
             players[id].Angle = angle;
-            players[id].MovementStatus[(byte)PlayerState.Angle] =
-                (int)ServerMessage.SetPlayerAngle + " " + id 
-                + " " + angle + ":";
+            players[id].SetMovementStatus((int)ServerMessage.SetPlayerAngle 
+                + " " + id + " " + angle + ":", PlayerState.Angle);
         }
     }
 
@@ -105,26 +110,36 @@ public class PlayerCollection : IEnumerable<Player>
             players[id].Team = team;
         }
 
-        redPlayers = (from player in players.Values
-                      where player.Team == PlayerTeam.Red
-                      select player).Count();
-
-        bluePlayers = (from player in players.Values
-                      where player.Team == PlayerTeam.Blue
-                      select player).Count();
-
-        redAlivePlayers = (from player in players.Values
-                           where player.Team == PlayerTeam.Red
-                           && player.IsAlive
-                           select player).Count();
-
-        blueAlivePlayers = (from player in players.Values
-                           where player.Team == PlayerTeam.Red
-                           && player.IsAlive
-                           select player).Count();
+        //Recalculate the players
+        CalculatePlayers();
 
         return (int)ServerMessage.SetPlayerTeam + " " + id +
             " " + (int)team + ":";
+    }
+
+    //Calculates the players that are in every team
+    public void CalculatePlayers()
+    {
+        lock (lockPlayers)
+        {
+            redPlayers = (from player in players.Values
+                          where player.Team == PlayerTeam.Red
+                          select player).Count();
+
+            bluePlayers = (from player in players.Values
+                           where player.Team == PlayerTeam.Blue
+                           select player).Count();
+
+            redAlivePlayers = (from player in players.Values
+                               where player.Team == PlayerTeam.Red
+                               && player.IsAlive
+                               select player).Count();
+
+            blueAlivePlayers = (from player in players.Values
+                                where player.Team == PlayerTeam.Blue
+                                && player.IsAlive
+                                select player).Count();
+        }
     }
 
     //Respawns all the players in the map spawnpoints
@@ -174,7 +189,7 @@ public class PlayerCollection : IEnumerable<Player>
         {
             foreach(KeyValuePair<int,Player> player in players)
             {
-                string onwStatus = player.Value.GetStatus();
+                string onwStatus = player.Value.GetOwnStatus();
                 player.Value.Send(onwStatus + gameState);
             }
         }

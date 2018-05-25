@@ -18,10 +18,12 @@ public class Player : Entity
     public bool IsAlive { get; set; }
     public PlayerTeam Team { get; set; }
     public PlayerType Type { get; set; }
-    //
-    public string[] MovementStatus { get; set; }
+
+    //Saves the last movement status of the player(Angle and position)
+    private string[] movementStatus;
     //Saves the commands that only need to be send to one player
-    public string Status { get; set; }
+    private string ownStatus;
+    private string lastProcessedCommand;
 
     private readonly short maxHealth;
     private short currentHealth;
@@ -31,6 +33,58 @@ public class Player : Entity
     private BinaryFormatter sendSerializer;
     private BinaryFormatter receiveSerializer;
 
+    //Sets the last processed movement command of the player
+    public void SetLastProcessedCommand(uint newLastProcessedCommand)
+    {
+        lastProcessedCommand = (int)(ServerMessage.LastCommandProcessed)
+            + " " + newLastProcessedCommand + ":";
+    }
+
+    //Gets the last processed movement command of the player and clears it
+    public string getLastProcessedCommand()
+    {
+        string lastCommand = lastProcessedCommand;
+        lastProcessedCommand = "";
+        return lastCommand;
+    }
+
+    public void SetMovementStatus(string command, PlayerState type)
+    {
+        movementStatus[(byte)type] = command;
+    }
+
+    //Get the last movement status of the player and clears it
+    public string GetMovementStatus()
+    {
+        string status = "";
+
+        for (int i = 0; i < movementStatus.Length; i++)
+        {
+            if (movementStatus[i] != "")
+            {
+                status += movementStatus[i];
+                movementStatus[i] = "";
+            }
+
+        }
+
+        return status;
+    }
+
+    //Adds a command to its personal status
+    public void AddOwnStatus(string addition)
+    {
+        ownStatus += addition;
+    }
+
+    //Returns the player status and clears it
+    public string GetOwnStatus()
+    {
+        string status = ownStatus;
+        ownStatus = "";
+        return status;
+    }
+
     public Player(TcpClient client)
     {
         ID = 0;
@@ -39,11 +93,11 @@ public class Player : Entity
         client.NoDelay = true;
         sendSerializer = new BinaryFormatter();
         receiveSerializer = new BinaryFormatter();
-        Status = "";
         IsAlive = false;
-        MovementStatus = new string[2];
-        MovementStatus[(byte)PlayerState.Position] = "";
-        MovementStatus[(byte)PlayerState.Angle] = "";
+        ownStatus = "";
+        movementStatus = new string[2];
+        movementStatus[(byte)PlayerState.Position] = "";
+        movementStatus[(byte)PlayerState.Angle] = "";
     }
 
     //Sends the given data to the player (Works Non-blocking)
@@ -78,29 +132,7 @@ public class Player : Entity
         PosY = posY;
     }
 
-    public string GetMovementStatus()
-    {
-        string status = "";
-
-        for(int i=0;i < MovementStatus.Length; i++)
-        {
-            if(MovementStatus[i] != "")
-            {
-                status += MovementStatus[i];
-                MovementStatus[i] = "";
-            }
-            
-        }
-
-        return status;
-    }
-
-    public string GetStatus()
-    {
-        string status = Status;
-        Status = "";
-        return status;
-    }
+    
 
     public override string ToString()
     {

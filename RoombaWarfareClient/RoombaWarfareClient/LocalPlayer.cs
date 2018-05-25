@@ -1,5 +1,6 @@
 ﻿using System;
 using SDL2;
+using System.Collections.Generic;
 
 public class LocalPlayer : Player
 {
@@ -11,33 +12,56 @@ public class LocalPlayer : Player
     private float centerY;
     private float lastPosX;
     private float lastPosY;
+
     private readonly short maxHealth;
     private short currentHealth;
 
+    private StatusBar healthBar;
+    private StatusBar ammoBar;
+
     private string messageBuffer;
+    private Queue<string> pendingCommands;
+    private uint lastCommandSent;
 
     public LocalPlayer(PlayerType type) : base(type)
     {
         messageBuffer = "";
+        pendingCommands = new Queue<string>();
+        lastCommandSent = 0;
+
+        healthBar = new StatusBar(StatusBarType.Health);
+        healthBar.SetPos
+            (0, Hardware.ScreenHeight - StatusBar.SPRITE_HEIGHT * 2);
+        ammoBar = new StatusBar(StatusBarType.Ammo);
+        ammoBar.SetPos
+            (0, Hardware.ScreenHeight - StatusBar.SPRITE_HEIGHT);
         //Asings the type of weapon the player will have
         switch (type)
         {
             case PlayerType.Assault:
                 //TO DO
+                maxHealth = 125;
                 break;
 
             case PlayerType.Commander:
                 //TO DO
+                maxHealth = 150;
                 break;
 
             case PlayerType.Rusher:
                 //TO DO
+                maxHealth = 75;
                 break;
 
             case PlayerType.Tank:
                 //TO DO
+                maxHealth = 175;
                 break;
         }
+
+        currentHealth = maxHealth;
+        healthBar.Resize(currentHealth, maxHealth);
+        ammoBar.Resize(10, 10);
     }
 
     public void HandleEvents(SDL.SDL_Event e)
@@ -100,10 +124,19 @@ public class LocalPlayer : Player
         currentHealth = 0;
     }
 
-    //TO DO
+    //Reconciles the player position with the server
     public void Reconcile()
     {
+        while (pendingCommands.Count > (LastCommandProccesed - lastCommandSent))
+            pendingCommands.Dequeue();
 
+        foreach (string command in pendingCommands)
+        {
+            string[] parts = command.Split();
+            float posX = float.Parse(parts[0]);
+            float posY = float.Parse(parts[1]);
+            SetPos(posX, posY);
+        }
     }
 
     public void CheckCollisions(Hitbox[] hitboxes)
@@ -126,7 +159,11 @@ public class LocalPlayer : Player
         if (velX != 0 || velY != 0)
         {
             messageBuffer += (int)ClientMessage.NewPos + " " + ID + " " +
-                PosX.ToString("0.#") + " " + PosY.ToString("0.#") + ":";
+                PosX.ToString("0.#") + " " + PosY.ToString("0.#") + " " +
+                lastCommandSent + ":";
+            lastCommandSent++;
+            pendingCommands.Enqueue
+                (PosX.ToString("0.#") + " " + PosY.ToString("0.#"));
         }
     }
 
@@ -136,6 +173,13 @@ public class LocalPlayer : Player
         string ret = messageBuffer;
         messageBuffer = "";
         return ret;
+    }
+
+    public override void Render(Camera camera)
+    {
+        base.Render(camera);
+        healthBar.Render();
+        ammoBar.Render();
     }
 
     public void TakeDamage(short amount)

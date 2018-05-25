@@ -15,8 +15,6 @@ public class Player : DynamicEntity
     public PlayerTeam Team { get; set; }
     public PlayerType Type { get; set; }
 
-    private ushort damage;
-
     public Player(PlayerType type)
     {
         ID = 0;
@@ -31,24 +29,20 @@ public class Player : DynamicEntity
         {
             case PlayerType.Assault:
                 speed = 3.5f;
-                damage = 25;
                 spriteX = 0;
                 break;
 
             case PlayerType.Commander:
                 speed = 2.5f;
-                damage = 100;
                 spriteX = 64;
                 break;
 
             case PlayerType.Rusher:
-                damage = 15;
                 speed = 4.5f;
                 spriteX = 128;
                 break;
 
             case PlayerType.Tank:
-                damage = 40;
                 speed = 1.5f;
                 spriteX = 192;
                 break;
@@ -90,7 +84,7 @@ public class Player : DynamicEntity
     }
 
     //Renders the player with the given angle
-    public void Render(Camera camera)
+    public virtual void Render(Camera camera)
     {
         if (IsAlive)
         {

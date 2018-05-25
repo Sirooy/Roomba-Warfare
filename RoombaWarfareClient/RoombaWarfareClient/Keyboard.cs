@@ -8,9 +8,9 @@ public class Keyboard
 
     private string text { get; set; }
 
-    public Keyboard()
+    public Keyboard(string text)
     {
-        text = "";
+        this.text = text;
     }
 
     //Checks the number pressed and adds it to the text

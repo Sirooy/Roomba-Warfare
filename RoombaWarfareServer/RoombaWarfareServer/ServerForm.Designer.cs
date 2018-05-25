@@ -33,10 +33,10 @@
             this.toolStripLoadMap = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripExit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripOptions = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.btnStart = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.openFileMap = new System.Windows.Forms.OpenFileDialog();
+            this.rtxtbLog = new System.Windows.Forms.RichTextBox();
             this.mnstripOptions.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -44,8 +44,7 @@
             // 
             this.mnstripOptions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripFile,
-            this.toolStripOptions,
-            this.toolStripHelp});
+            this.toolStripOptions});
             this.mnstripOptions.Location = new System.Drawing.Point(0, 0);
             this.mnstripOptions.Name = "mnstripOptions";
             this.mnstripOptions.Size = new System.Drawing.Size(257, 24);
@@ -64,14 +63,14 @@
             // toolStripLoadMap
             // 
             this.toolStripLoadMap.Name = "toolStripLoadMap";
-            this.toolStripLoadMap.Size = new System.Drawing.Size(127, 22);
+            this.toolStripLoadMap.Size = new System.Drawing.Size(152, 22);
             this.toolStripLoadMap.Text = "Load map";
             this.toolStripLoadMap.Click += new System.EventHandler(this.toolStripLoadMap_Click);
             // 
             // toolStripExit
             // 
             this.toolStripExit.Name = "toolStripExit";
-            this.toolStripExit.Size = new System.Drawing.Size(127, 22);
+            this.toolStripExit.Size = new System.Drawing.Size(152, 22);
             this.toolStripExit.Text = "Exit";
             this.toolStripExit.Click += new System.EventHandler(this.toolStripExit_Click);
             // 
@@ -81,12 +80,6 @@
             this.toolStripOptions.Size = new System.Drawing.Size(61, 20);
             this.toolStripOptions.Text = "Settings";
             this.toolStripOptions.Click += new System.EventHandler(this.toolStripOptions_Click);
-            // 
-            // toolStripHelp
-            // 
-            this.toolStripHelp.Name = "toolStripHelp";
-            this.toolStripHelp.Size = new System.Drawing.Size(44, 20);
-            this.toolStripHelp.Text = "Help";
             // 
             // btnStart
             // 
@@ -115,11 +108,21 @@
             // 
             this.openFileMap.Filter = "(*.map)|*.map";
             // 
+            // rtxtbLog
+            // 
+            this.rtxtbLog.Location = new System.Drawing.Point(12, 27);
+            this.rtxtbLog.Name = "rtxtbLog";
+            this.rtxtbLog.ReadOnly = true;
+            this.rtxtbLog.Size = new System.Drawing.Size(233, 151);
+            this.rtxtbLog.TabIndex = 3;
+            this.rtxtbLog.Text = "";
+            // 
             // ServerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(257, 261);
+            this.Controls.Add(this.rtxtbLog);
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.btnStart);
             this.Controls.Add(this.mnstripOptions);
@@ -138,12 +141,12 @@
         private System.Windows.Forms.MenuStrip mnstripOptions;
         private System.Windows.Forms.ToolStripMenuItem toolStripFile;
         private System.Windows.Forms.ToolStripMenuItem toolStripOptions;
-        private System.Windows.Forms.ToolStripMenuItem toolStripHelp;
         private System.Windows.Forms.ToolStripMenuItem toolStripLoadMap;
         private System.Windows.Forms.ToolStripMenuItem toolStripExit;
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.OpenFileDialog openFileMap;
+        private System.Windows.Forms.RichTextBox rtxtbLog;
     }
 }
 

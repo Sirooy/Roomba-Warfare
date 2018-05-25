@@ -9,7 +9,7 @@ public class SelectPlayerScreen : IScreen
     private const byte TANK_PLAYER = 3;
 
     private static Image background =
-        new Image(@"resources\images\backgrounds\bck_test.png", 640, 480);
+        new Image(@"resources\images\backgrounds\bck_test3.png", 640, 480);
 
     public ScreenType NextScreen { get; set; }
 

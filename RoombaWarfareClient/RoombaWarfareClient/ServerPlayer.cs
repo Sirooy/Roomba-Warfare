@@ -11,6 +11,11 @@ public class ServerPlayer : Player
         PosX = posX;
         PosY = posY;
         Angle = angle;
+
+        if (Team == PlayerTeam.Red)
+            spriteY = 0;
+        else if (Team == PlayerTeam.Blue)
+            spriteY = 64;
     }
 
     public override void Update(float deltaTime)

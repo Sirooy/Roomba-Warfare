@@ -6,6 +6,9 @@ using SDL2;
 
 public class GameScreen : IScreen
 {
+    private static Image deathBackground = new Image
+        (@"resources\images\backgrounds\death_bck_test.png", 640, 480);
+
     private const byte RED_TEAM_BUTTON = 0;
     private const byte SPECTATOR_TEAM_BUTTON = 1;
     private const byte BLUE_TEAM_BUTTON = 2;
@@ -25,6 +28,10 @@ public class GameScreen : IScreen
     private float deltaTime;
     private bool isChangingTeam;
     private string messageBuffer;
+
+    //REMOVE LATER
+    private Bullet redBullet;
+    private Bullet blueBullet;
 
     public GameScreen()
     {
@@ -57,6 +64,12 @@ public class GameScreen : IScreen
         CurrentUpdateGameFunction = UpdateGameStateDead;
         CurrentRenderGameFunction = RenderGameDead;
         deltaTime = 1;
+
+        //REMOVE LATER
+        redBullet = new Bullet(PlayerTeam.Red);
+        redBullet.SetPos(0, 0);
+        blueBullet = new Bullet(PlayerTeam.Blue);
+        blueBullet.SetPos(0, 32);
     }
 
     //Translate all the data send by the server
@@ -142,7 +155,8 @@ public class GameScreen : IScreen
                         }
                     }
                     break;
-
+                
+                //Creates a new player
                 case ServerMessage.NewPlayer:
                     {
                         int id = int.Parse(commandParts[1]);
@@ -185,12 +199,17 @@ public class GameScreen : IScreen
     public ScreenType Run()
     {
         //Get all the data sent by the server and send the player type
-        string mapSeed = Game.GameSocket.Receive();
-        map.Create(mapSeed);
         string initialData = Game.GameSocket.Receive();
         TranslateData(initialData.Split(':'));
-        Game.GameSocket.Send(Convert.ToString((int)Game.PlayerSelectedType));
-        GameLoop();
+
+        if (NextScreen != ScreenType.End)
+        {
+            string mapSeed = Game.GameSocket.Receive();
+            map.Create(mapSeed);
+
+            Game.GameSocket.Send(Convert.ToString((int)Game.PlayerSelectedType));
+            GameLoop();
+        }
 
         return NextScreen;
     }
@@ -201,7 +220,7 @@ public class GameScreen : IScreen
 
         do
         {
-            int time = Environment.TickCount;
+            uint time = SDL.SDL_GetTicks();
 
             ReceiveData();
             Hardware.ClearScreen();
@@ -211,14 +230,13 @@ public class GameScreen : IScreen
             SendData();
 
             //Cap the frame rate to 60 fps
-            /*int frameTime = (Environment.TickCount - time);
+            uint frameTime = (SDL.SDL_GetTicks() - time);
             if(frameTime < maxFrameRate)
             {
                 Thread.Sleep((int)(maxFrameRate - frameTime));
             }
-            //Get the time total time of the frame
-            deltaTime = (Environment.TickCount - time) / 10;
-            Console.WriteLine(1 / (deltaTime / 100));*/
+            //Get the total time of the frame
+            deltaTime = (SDL.SDL_GetTicks() - time) / 10;
         } while (NextScreen == ScreenType.None);
     }
 
@@ -312,6 +330,10 @@ public class GameScreen : IScreen
         map.Render(camera);
         players.Render(camera);
         bullets.Render(camera);
+
+        //REMOVE LATER
+        blueBullet.Render(camera);
+        redBullet.Render(camera);
     }
 
     //Renders all the necessary things for a dead player
@@ -326,6 +348,8 @@ public class GameScreen : IScreen
                 button.Render();
             }
         }
+
+        Hardware.RenderBackground(deathBackground);
     }
 
     //Renders all the necessary things for an alive player

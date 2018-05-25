@@ -162,18 +162,21 @@ public class Server
 
             switch ((ClientMessage)int.Parse(commandParts[0]))
             {
+                //Sets the angle of a player
                 case ClientMessage.NewAngle:
                     {
                         players.SetAngle(commandParts);
                         break;
                     }
 
+                //Sets the position of a player
                 case ClientMessage.NewPos:
                     {
                         players.SetPosition(commandParts);
                         break;
                     }
 
+                //Changes the team of a player
                 case ClientMessage.ChangeTeam:
                     {
                         string state = players.ChangeTeam(commandParts);
@@ -188,20 +191,9 @@ public class Server
         }
     }
 
-    
+    //Dequeues all the commands from the messageQueue to translate then
     private void DequeueCommands()
     {
-        /*Queue<string> commands = new Queue<string>();
-        lock (messageQueue)
-        {
-            if(messageQueue.Count > 0)
-            {
-                //Crashes here
-                commands = new Queue<string>(messageQueue);
-                messageQueue.Clear();
-            }
-        }*/
-
         lock (messageQueue)
         {
             while (messageQueue.Count > 0)
@@ -247,7 +239,7 @@ public class Server
                 if(MaxPlayers != 0 && players.Count == MaxPlayers)
                 {
                     newPlayer.Send((int)ServerMessage.Disconnect + " "
-                        + "Server is full!");
+                        + "Server-is-full!");
                 }
                 //Add the player to the server list
                 else
@@ -273,15 +265,18 @@ public class Server
         {
             gameState += state;
         }
+
+        players.CalculatePlayers();
+        CheckRoundStatus();
     }
 
     //Receives all the data send by a client
     private void ListenClient(Player player)
     {
         System.Diagnostics.Debug.WriteLine("Client connected"); //Remove Later
-        player.Send(map.Seed);
         string initialData = GetInitialData(player.ID);
         player.Send(initialData);
+        player.Send(map.Seed);
         PlayerType type = (PlayerType)int.Parse(player.Receive());
         player.Type = type;
 
@@ -312,22 +307,16 @@ public class Server
         string data = (int)ServerMessage.SetID + " " + id + ":";
 
         //Get all the players state as if they were new
-        lock (lockPlayers)
+        foreach (Player player in players)
         {
-            foreach (Player player in players)
-            {
-                data += (int)ServerMessage.NewPlayer + " " +
-                    player.ToString() + ":";
-            }
+            data += (int)ServerMessage.NewPlayer + " " +
+                player.ToString() + ":";
         }
 
-        lock (lockBullets)
+        foreach (Bullet bullet in bullets)
         {
-            foreach (Bullet bullet in bullets)
-            {
-                data += (int)ServerMessage.NewBullet + " " +
-                    bullet.ToString() + ":";
-            }
+            data += (int)ServerMessage.NewBullet + " " +
+                bullet.ToString() + ":";
         }
 
         data = data.Remove(data.Length - 1);
