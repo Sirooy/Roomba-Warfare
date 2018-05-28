@@ -14,11 +14,11 @@ public class StatusBar : StaticEntity
         switch (type)
         {
             case StatusBarType.Health:
-                spriteY = 428;
+                spriteY = 628;
                 totalWidth = 640;
                 break;
             case StatusBarType.Ammo:
-                spriteY = 444;
+                spriteY = 644;
                 totalWidth = 384;
                 break;
         }

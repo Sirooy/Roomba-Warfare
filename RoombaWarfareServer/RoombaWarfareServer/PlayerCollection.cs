@@ -69,7 +69,7 @@ public class PlayerCollection : IEnumerable<Player>
     }
 
     //Sets the position of a player
-    public void SetPosition(string[] commandParts)
+    public void SetPosition(string[] commandParts,Hitbox[] hitboxes)
     {
         int id = int.Parse(commandParts[1]);
         float PosXIncrement = float.Parse(commandParts[2]);
@@ -78,13 +78,13 @@ public class PlayerCollection : IEnumerable<Player>
 
         lock (lockPlayers)
         {
-            players[id].Update(PosXIncrement, PosYIncrement);
+            //Increments the x and the y axis of the player
+            players[id].Update(PosXIncrement, PosYIncrement, hitboxes);
+            //Saves the last position of the player
             players[id].SetMovementStatus((int)ServerMessage.SetPlayerPosition
                 + " " + id + " " + players[id].PosX.ToString("0.#") + " "
                 + players[id].PosY.ToString("0.#") + ":",PlayerState.Position);
             players[id].SetLastProcessedCommand(commandNum);
-            System.Diagnostics.Debug.WriteLine(players[id].PosX.ToString("0.#") + " " //Remove later
-                + players[id].PosY.ToString("0.#"));
         }
     }
 

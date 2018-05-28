@@ -10,6 +10,10 @@ public class Player : Entity
 {
     public Action<int> OnPlayerDisconnectEvent;
 
+    public static readonly byte RADIUS = 24;
+    public static readonly byte WIDTH = 64;
+    public static readonly byte HEIGHT = 64;
+
     public bool IsConnected { get { return client.Connected; } }
     public bool DataAvailable { get { return stream.DataAvailable; } }
 
@@ -128,12 +132,50 @@ public class Player : Entity
     }
 
     //Updates the player position
-    public void Update(float posXIncrement, float posYIncrement)
+    public void Update(float posXIncrement, float posYIncrement
+        ,Hitbox[] hitboxes)
     {
         lastPosX = PosX;
         lastPosY = PosY;
         PosX += posXIncrement;
         PosY += posYIncrement;
+
+        if (CheckCollisions(hitboxes))
+        {
+            PosX = lastPosX;
+            PosY = lastPosY;
+        }
+    }
+
+    //Checks if the players collides with any block
+    public bool CheckCollisions(Hitbox[] hitboxes)
+    {
+        int centerX = (int)PosX + WIDTH / 2;
+        int centerY = (int)PosY + HEIGHT / 2;
+
+        foreach (Hitbox hitbox in hitboxes)
+        {
+            if (CollidesWith(hitbox, centerX, centerY))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    //Check if the player collides with a block
+    public bool CollidesWith(Hitbox hitbox,int centerX, int centerY)
+    {
+        int closestX = Math.Max((int)hitbox.x,
+            Math.Min((int)hitbox.x + Hitbox.WIDTH, centerX));
+        int closestY = Math.Max((int)hitbox.y,
+            Math.Min((int)hitbox.y + Hitbox.HEIGHT, centerY));
+
+        int distanceX = (centerX - closestX) * (centerX - closestX);
+        int distanceY = (centerY - closestY) * (centerY - closestY);
+
+        return (distanceX + distanceY) < (RADIUS * RADIUS);
     }
 
     //Respawns the player in the given position
@@ -144,7 +186,6 @@ public class Player : Entity
         PosX = posX;
         PosY = posY;
     }
-
     
 
     public override string ToString()

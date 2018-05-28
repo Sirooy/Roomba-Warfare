@@ -55,18 +55,22 @@ public class Server
         }
     }
 
+    //Writes a message in the log file
     public void WriteLog(string logText)
     {
         lock (lockStreamWriter)
         {
-            try
+            if (File.Exists(logFileName))
             {
-                using (StreamWriter writeFile = File.AppendText(logFileName))
+                try
                 {
-                    writeFile.WriteLine(DateTime.Now + " - " + logText);
+                    using (StreamWriter writeFile = File.AppendText(logFileName))
+                    {
+                        writeFile.WriteLine(DateTime.Now + " - " + logText);
+                    }
                 }
+                catch (Exception) { }
             }
-            catch (Exception) { }
         }
     }
 
@@ -194,7 +198,7 @@ public class Server
                 //Sets the position of a player
                 case ClientMessage.NewPos:
                     {
-                        players.SetPosition(commandParts);
+                        players.SetPosition(commandParts, map.hitboxes);
                         break;
                     }
 
@@ -267,7 +271,8 @@ public class Server
                 else
                 {
                     newPlayer.ID = currentID;
-                    WriteLog("Client connected : " + newClient.Client.LocalEndPoint);
+                    WriteLog("Client connected - ID : " + currentID 
+                        + " : " + newClient.Client.LocalEndPoint);
                     Task listen = Task.Run(() => 
                         ListenClient(newPlayer));
                     currentID++;
@@ -281,6 +286,7 @@ public class Server
     //Disconects a player and sends the info to the others
     public void DisconnectPlayer(int id)
     {
+        WriteLog("Cliend disconnected - ID : " + id);
         string state = players.Remove(id);
         System.Diagnostics.Debug.WriteLine("Client disconnected " + state); //Remove Later
 

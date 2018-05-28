@@ -67,34 +67,34 @@ public class Button : StaticEntity
                 spritesY[(byte)ButtonState.Normal] = 428;
                 spritesX[(byte)ButtonState.MouseOver] = 0;
                 spritesY[(byte)ButtonState.MouseOver] = 528;
-                spritesX[(byte)ButtonState.Clicked] = 0;
+                spritesX[(byte)ButtonState.Clicked] = 800;
                 spritesY[(byte)ButtonState.Clicked] = 328;
                 break;
 
             case ButtonType.SelectCommanderPlayer:
-                spritesX[(byte)ButtonState.Normal] = 0;
-                spritesY[(byte)ButtonState.Normal] = 128;
-                spritesX[(byte)ButtonState.MouseOver] = 0;
-                spritesY[(byte)ButtonState.MouseOver] = 228;
-                spritesX[(byte)ButtonState.Clicked] = 0;
+                spritesX[(byte)ButtonState.Normal] = 200;
+                spritesY[(byte)ButtonState.Normal] = 428;
+                spritesX[(byte)ButtonState.MouseOver] = 200;
+                spritesY[(byte)ButtonState.MouseOver] = 528;
+                spritesX[(byte)ButtonState.Clicked] = 800;
                 spritesY[(byte)ButtonState.Clicked] = 328;
                 break;
 
             case ButtonType.SelectRusherPlayer:
-                spritesX[(byte)ButtonState.Normal] = 0;
-                spritesY[(byte)ButtonState.Normal] = 128;
-                spritesX[(byte)ButtonState.MouseOver] = 0;
-                spritesY[(byte)ButtonState.MouseOver] = 228;
-                spritesX[(byte)ButtonState.Clicked] = 0;
+                spritesX[(byte)ButtonState.Normal] = 400;
+                spritesY[(byte)ButtonState.Normal] = 428;
+                spritesX[(byte)ButtonState.MouseOver] = 400;
+                spritesY[(byte)ButtonState.MouseOver] = 528;
+                spritesX[(byte)ButtonState.Clicked] = 800;
                 spritesY[(byte)ButtonState.Clicked] = 328;
                 break;
 
             case ButtonType.SelectTankPlayer:
-                spritesX[(byte)ButtonState.Normal] = 0;
-                spritesY[(byte)ButtonState.Normal] = 128;
-                spritesX[(byte)ButtonState.MouseOver] = 0;
-                spritesY[(byte)ButtonState.MouseOver] = 228;
-                spritesX[(byte)ButtonState.Clicked] = 0;
+                spritesX[(byte)ButtonState.Normal] = 600;
+                spritesY[(byte)ButtonState.Normal] = 428;
+                spritesX[(byte)ButtonState.MouseOver] = 600;
+                spritesY[(byte)ButtonState.MouseOver] = 528;
+                spritesX[(byte)ButtonState.Clicked] = 800;
                 spritesY[(byte)ButtonState.Clicked] = 328;
                 break;
 
@@ -108,20 +108,20 @@ public class Button : StaticEntity
                 break;
 
             case ButtonType.BlueTeamButton:
-                spritesX[(byte)ButtonState.Normal] = 0;
+                spritesX[(byte)ButtonState.Normal] = 400;
                 spritesY[(byte)ButtonState.Normal] = 128;
-                spritesX[(byte)ButtonState.MouseOver] = 0;
+                spritesX[(byte)ButtonState.MouseOver] = 400;
                 spritesY[(byte)ButtonState.MouseOver] = 228;
-                spritesX[(byte)ButtonState.Clicked] = 0;
+                spritesX[(byte)ButtonState.Clicked] = 400;
                 spritesY[(byte)ButtonState.Clicked] = 328;
                 break;
 
             case ButtonType.RedTeamButton:
-                spritesX[(byte)ButtonState.Normal] = 0;
+                spritesX[(byte)ButtonState.Normal] = 200;
                 spritesY[(byte)ButtonState.Normal] = 128;
-                spritesX[(byte)ButtonState.MouseOver] = 0;
+                spritesX[(byte)ButtonState.MouseOver] = 200;
                 spritesY[(byte)ButtonState.MouseOver] = 228;
-                spritesX[(byte)ButtonState.Clicked] = 0;
+                spritesX[(byte)ButtonState.Clicked] = 200;
                 spritesY[(byte)ButtonState.Clicked] = 328;
                 break;
         }

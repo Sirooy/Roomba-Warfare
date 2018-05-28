@@ -70,15 +70,6 @@ public class Map
                         {
                             switch (mapParts[posX])
                             {
-                                //Any block that has an H is a hitbox
-                                case "H1":
-                                case "H2":
-                                case "H3":
-                                case "H4":
-                                    hitbox.Add
-                                        (new Hitbox((uint)posX * Hitbox.WIDTH
-                                        , (uint)posY * Hitbox.HEIGHT));
-                                    break;
                                 //Blue spawnpoint
                                 case "BS":
                                     blueSpawn.Add
@@ -92,6 +83,16 @@ public class Map
                                         (new SpawnPoint(
                                         (uint)posX * Hitbox.WIDTH,
                                         (uint)posY * Hitbox.HEIGHT));
+                                    break;
+
+                                default:
+                                    //Any block that has an H is a hitbox
+                                    if (mapParts[posX].Contains("H"))
+                                    {
+                                        hitbox.Add
+                                        (new Hitbox((uint)posX * Hitbox.WIDTH
+                                        , (uint)posY * Hitbox.HEIGHT));
+                                    }
                                     break;
                             }
                         }

@@ -5,6 +5,7 @@ public enum TileType
     Ground2,
     Ground3,
     Ground4,
+    Ground5,
     Hitbox1,
     Hitbox2,
     Hitbox3,
@@ -31,12 +32,13 @@ public class Tile : StaticEntity
             case TileType.Ground2: spriteX = 64; spriteY = 0; break;
             case TileType.Ground3: spriteX = 128; spriteY = 0; break;
             case TileType.Ground4: spriteX = 192; spriteY = 0; break;
+            case TileType.Ground5: spriteX = 320; spriteY = 0; break;
             case TileType.Hitbox1: spriteX = 0; spriteY = 64; break;
             case TileType.Hitbox2: spriteX = 64; spriteY = 64; break;
             case TileType.Hitbox3: spriteX = 128; spriteY = 64; break;
             case TileType.Hitbox4: spriteX = 192; spriteY = 64; break;
-            case TileType.BlueSpawnPoint: spriteX = 192; spriteY = 64; break;
-            case TileType.RedSpawnPoint: spriteX = 192; spriteY = 64; break;
+            case TileType.BlueSpawnPoint: spriteX = 320; spriteY = 0; break;
+            case TileType.RedSpawnPoint: spriteX = 256; spriteY = 0; break;
             case TileType.MissingTexture: spriteX = 256; spriteY = 64; break;
         }
     }

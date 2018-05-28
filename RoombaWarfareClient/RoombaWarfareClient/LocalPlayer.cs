@@ -13,7 +13,6 @@ public class LocalPlayer : Player
     private short currentHealth;
 
     private StatusBar healthBar;
-    private StatusBar ammoBar;
 
     private string messageBuffer;
     private Queue<string> pendingCommands;
@@ -28,9 +27,6 @@ public class LocalPlayer : Player
         healthBar = new StatusBar(StatusBarType.Health);
         healthBar.SetPos
             (0, Hardware.ScreenHeight - StatusBar.SPRITE_HEIGHT * 2);
-        ammoBar = new StatusBar(StatusBarType.Ammo);
-        ammoBar.SetPos
-            (0, Hardware.ScreenHeight - StatusBar.SPRITE_HEIGHT);
         //Asings the type of weapon the player will have
         switch (type)
         {
@@ -57,7 +53,6 @@ public class LocalPlayer : Player
 
         currentHealth = maxHealth;
         healthBar.Resize(currentHealth, maxHealth);
-        ammoBar.Resize(10, 10);
     }
 
     public void HandleEvents(SDL.SDL_Event e)
@@ -190,7 +185,6 @@ public class LocalPlayer : Player
     {
         base.Render(camera);
         healthBar.Render();
-        ammoBar.Render();
     }
 
     public void TakeDamage(short amount)
