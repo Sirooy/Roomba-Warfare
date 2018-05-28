@@ -72,17 +72,19 @@ public class PlayerCollection : IEnumerable<Player>
     public void SetPosition(string[] commandParts)
     {
         int id = int.Parse(commandParts[1]);
-        float posX = float.Parse(commandParts[2]);
-        float posY = float.Parse(commandParts[3]);
+        float PosXIncrement = float.Parse(commandParts[2]);
+        float PosYIncrement = float.Parse(commandParts[3]);
         uint commandNum = uint.Parse(commandParts[4]);
 
         lock (lockPlayers)
         {
-            players[id].SetPos(posX, posY);
+            players[id].Update(PosXIncrement, PosYIncrement);
             players[id].SetMovementStatus((int)ServerMessage.SetPlayerPosition
-                + " " + id + " " + posX.ToString("0.#") + " "
-                + posY.ToString("0.#") + ":", PlayerState.Position);
-            players[id].SetLastProcessedCommand(commandNum); 
+                + " " + id + " " + players[id].PosX.ToString("0.#") + " "
+                + players[id].PosY.ToString("0.#") + ":",PlayerState.Position);
+            players[id].SetLastProcessedCommand(commandNum);
+            System.Diagnostics.Debug.WriteLine(players[id].PosX.ToString("0.#") + " " //Remove later
+                + players[id].PosY.ToString("0.#"));
         }
     }
 
@@ -190,7 +192,8 @@ public class PlayerCollection : IEnumerable<Player>
             foreach(KeyValuePair<int,Player> player in players)
             {
                 string onwStatus = player.Value.GetOwnStatus();
-                player.Value.Send(onwStatus + gameState);
+                string lastCommand = player.Value.GetLastProcessedCommand();
+                player.Value.Send(lastCommand + onwStatus + gameState);
             }
         }
     }

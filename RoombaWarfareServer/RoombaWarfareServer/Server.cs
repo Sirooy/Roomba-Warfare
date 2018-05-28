@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.IO;
 
 public class Server
 {
@@ -32,9 +33,9 @@ public class Server
 
     private object lockGameState = new object();
     private object lockMessageQueue = new object();
-    private object lockBullets = new object();
-    private object lockPlayers = new object();
+    private object lockStreamWriter = new object();
 
+    private const string logFileName = "log.txt";
 
     public Server()
     {
@@ -46,6 +47,27 @@ public class Server
         physics = new Task(PhysicsLoop);
         broadcast = new Task(BroadcastGameStateLoop);
         gameState = "";
+
+        //Creates the log if it doesnt exists
+        if (!File.Exists(logFileName))
+        {
+            File.CreateText(logFileName);
+        }
+    }
+
+    public void WriteLog(string logText)
+    {
+        lock (lockStreamWriter)
+        {
+            try
+            {
+                using (StreamWriter writeFile = File.AppendText(logFileName))
+                {
+                    writeFile.WriteLine(DateTime.Now + " - " + logText);
+                }
+            }
+            catch (Exception) { }
+        }
     }
 
     //Starts all the server loops
@@ -239,12 +261,13 @@ public class Server
                 if(MaxPlayers != 0 && players.Count == MaxPlayers)
                 {
                     newPlayer.Send((int)ServerMessage.Disconnect + " "
-                        + "Server-is-full!");
+                        + "Server-is-full");
                 }
                 //Add the player to the server list
                 else
                 {
                     newPlayer.ID = currentID;
+                    WriteLog("Client connected : " + newClient.Client.LocalEndPoint);
                     Task listen = Task.Run(() => 
                         ListenClient(newPlayer));
                     currentID++;

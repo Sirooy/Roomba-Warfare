@@ -42,7 +42,6 @@ C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\resources\images\backgrounds\bck_test.png
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\resources\images\button_play.png
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\resources\images\crosshair.png
-C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\resources\images\spritesheet_test1.png
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\SDL2.dll
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\SDL2_image.dll
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\SDL2_ttf.dll
@@ -61,3 +60,4 @@ C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\resources\images\backgrounds\bck_test2.png
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\resources\images\backgrounds\bck_test3.png
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\resources\images\backgrounds\death_bck_test.png
+C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\resources\images\static_entity_sprite_sheet.png

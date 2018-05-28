@@ -41,7 +41,23 @@ public class PlayerCollection
     //Change this function later to interpolate the players positions
     public void SetPosition(int id, string[] parts)
     {
-        players[id].SetPos(parts);
+        players[id].Interpolation = true;
+
+        float newPosX = float.Parse(parts[2]);
+        float newPosY = float.Parse(parts[3]);
+
+        if (players[id].PosX < newPosX)
+            players[id].MultiplierX = 1;
+        else
+            players[id].MultiplierX = -1;
+
+        if (players[id].PosY < newPosY)
+            players[id].MultiplierY = 1;
+        else
+            players[id].MultiplierY = -1;
+
+        players[id].InterpolationPosX = newPosX;
+        players[id].InterpolationPosY = newPosY;
     }
 
     //Sets the angle of a player

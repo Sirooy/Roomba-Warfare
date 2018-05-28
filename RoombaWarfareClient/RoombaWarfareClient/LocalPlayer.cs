@@ -8,10 +8,6 @@ public class LocalPlayer : Player
 
     private float velX;
     private float velY;
-    private float centerX;
-    private float centerY;
-    private float lastPosX;
-    private float lastPosY;
 
     private readonly short maxHealth;
     private short currentHealth;
@@ -103,13 +99,39 @@ public class LocalPlayer : Player
                 " " + Angle.ToString("0.#") + ":";
     }
 
-    public override void Update(float deltaTime)
+    public void Update(float deltaTime, Hitbox[] hitboxes)
     {
-        lastPosX = PosX;
-        lastPosY = PosY;
+        float posXIncrement = (velX * deltaTime);
+        float posYIncrement = (velY * deltaTime);
 
-        PosX += (velX * deltaTime);
-        PosY += (velY * deltaTime);
+        PosX += posXIncrement;
+        //Checks collision on the X axis
+        if (CheckCollisions(hitboxes))
+        {
+            PosX -= posXIncrement;
+            posXIncrement = 0;
+        }
+
+        PosY += posYIncrement;
+        //Checks collision on the Y axis
+        if (CheckCollisions(hitboxes))
+        {
+            PosY -= posYIncrement;
+            posYIncrement = 0;
+        }
+
+        //If the player is moving send the data
+        if(posXIncrement != 0 || posYIncrement != 0)
+        {
+            lastCommandSent++;
+            messageBuffer += (int)ClientMessage.NewPos + " " + ID 
+                + " " + posXIncrement.ToString("0.#") 
+                + " " + posYIncrement.ToString("0.#") 
+                + " " + lastCommandSent + ":";
+            pendingCommands.Enqueue
+                (posXIncrement.ToString("0.#") + " " +
+                posYIncrement.ToString("0.#"));
+        }
     }
 
     public override void Respawn(string[] parts)
@@ -127,44 +149,33 @@ public class LocalPlayer : Player
     //Reconciles the player position with the server
     public void Reconcile()
     {
-        while (pendingCommands.Count > (LastCommandProccesed - lastCommandSent))
+        //Delete all the commands that have been processed by the server
+        while (pendingCommands.Count > (lastCommandSent - LastCommandProccesed))
             pendingCommands.Dequeue();
 
         foreach (string command in pendingCommands)
         {
             string[] parts = command.Split();
-            float posX = float.Parse(parts[0]);
-            float posY = float.Parse(parts[1]);
-            SetPos(posX, posY);
+            PosX += float.Parse(parts[0]);
+            PosY += float.Parse(parts[1]);
         }
     }
 
-    public void CheckCollisions(Hitbox[] hitboxes)
+    public bool CheckCollisions(Hitbox[] hitboxes)
     {
-        centerX = PosX + SPRITE_WIDTH / 2;
-        centerY = PosY + SPRITE_HEIGHT / 2;
+        float centerX = PosX + SPRITE_WIDTH / 2;
+        float centerY = PosY + SPRITE_HEIGHT / 2;
 
-        
-        foreach(Hitbox hitbox in hitboxes)
+        foreach (Hitbox hitbox in hitboxes)
         {
             if(CollisionHandler.CollidesWith
                 ((int)centerX,(int)centerY,RADIUS,hitbox))
             {
-                PosX = lastPosX;
-                PosY = lastPosY;
+                return true;
             }
         }
 
-        //Send the new position
-        if (velX != 0 || velY != 0)
-        {
-            messageBuffer += (int)ClientMessage.NewPos + " " + ID + " " +
-                PosX.ToString("0.#") + " " + PosY.ToString("0.#") + " " +
-                lastCommandSent + ":";
-            lastCommandSent++;
-            pendingCommands.Enqueue
-                (PosX.ToString("0.#") + " " + PosY.ToString("0.#"));
-        }
+        return false;
     }
 
     //Returns the player messages

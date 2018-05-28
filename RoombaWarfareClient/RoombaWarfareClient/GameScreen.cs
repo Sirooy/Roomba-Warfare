@@ -104,6 +104,13 @@ public class GameScreen : IScreen
                     }
                     break;
 
+                case ServerMessage.LastCommandProcessed:
+                    {
+                        localPlayer.LastCommandProccesed =
+                            uint.Parse(commandParts[1]);
+                        break;
+                    }
+
                 case ServerMessage.NewBullet:
                     //TO DO
                     break;
@@ -263,7 +270,7 @@ public class GameScreen : IScreen
         }
         //Update the players and bullet positions
         localPlayer.SetAngle(camera);
-        localPlayer.Update(deltaTime);
+        localPlayer.Update(deltaTime, map.Hitboxes);
         localPlayer.CheckCollisions(map.Hitboxes);
         camera.SetPos(localPlayer, Player.SPRITE_WIDTH, Player.SPRITE_HEIGHT);
         players.Update(deltaTime);

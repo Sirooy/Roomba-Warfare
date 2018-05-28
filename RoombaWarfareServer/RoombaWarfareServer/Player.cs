@@ -19,12 +19,14 @@ public class Player : Entity
     public PlayerTeam Team { get; set; }
     public PlayerType Type { get; set; }
 
-    //Saves the last movement status of the player(Angle and position)
+    //Saves the last movement state of the player(Angle and position)
     private string[] movementStatus;
     //Saves the commands that only need to be send to one player
     private string ownStatus;
     private string lastProcessedCommand;
 
+    private float lastPosX;
+    private float lastPosY;
     private readonly short maxHealth;
     private short currentHealth;
 
@@ -41,7 +43,7 @@ public class Player : Entity
     }
 
     //Gets the last processed movement command of the player and clears it
-    public string getLastProcessedCommand()
+    public string GetLastProcessedCommand()
     {
         string lastCommand = lastProcessedCommand;
         lastProcessedCommand = "";
@@ -93,6 +95,7 @@ public class Player : Entity
         client.NoDelay = true;
         sendSerializer = new BinaryFormatter();
         receiveSerializer = new BinaryFormatter();
+        Team = PlayerTeam.Spectator;
         IsAlive = false;
         ownStatus = "";
         movementStatus = new string[2];
@@ -124,6 +127,16 @@ public class Player : Entity
         return data;
     }
 
+    //Updates the player position
+    public void Update(float posXIncrement, float posYIncrement)
+    {
+        lastPosX = PosX;
+        lastPosY = PosY;
+        PosX += posXIncrement;
+        PosY += posYIncrement;
+    }
+
+    //Respawns the player in the given position
     public void Respawn(float posX, float posY)
     {
         IsAlive = true;

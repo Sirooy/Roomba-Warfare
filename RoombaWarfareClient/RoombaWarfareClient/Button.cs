@@ -36,37 +36,37 @@ public class Button : StaticEntity
         {
             //TO DO (Set the sprite positions)
             case ButtonType.StartButton:
-                spritesX[(byte)ButtonState.Normal] = 0;
+                spritesX[(byte)ButtonState.Normal] = 600;
                 spritesY[(byte)ButtonState.Normal] = 128;
-                spritesX[(byte)ButtonState.MouseOver] = 0;
+                spritesX[(byte)ButtonState.MouseOver] = 600;
                 spritesY[(byte)ButtonState.MouseOver] = 228;
-                spritesX[(byte)ButtonState.Clicked] = 0;
+                spritesX[(byte)ButtonState.Clicked] = 600;
                 spritesY[(byte)ButtonState.Clicked] = 328;
                 break;
 
             case ButtonType.SetAddressButton:
-                spritesX[(byte)ButtonState.Normal] = 0;
+                spritesX[(byte)ButtonState.Normal] = 800;
                 spritesY[(byte)ButtonState.Normal] = 128;
-                spritesX[(byte)ButtonState.MouseOver] = 0;
+                spritesX[(byte)ButtonState.MouseOver] = 800;
                 spritesY[(byte)ButtonState.MouseOver] = 228;
-                spritesX[(byte)ButtonState.Clicked] = 0;
+                spritesX[(byte)ButtonState.Clicked] = 600;
                 spritesY[(byte)ButtonState.Clicked] = 328;
                 break;
 
             case ButtonType.ExitButton:
-                spritesX[(byte)ButtonState.Normal] = 0;
-                spritesY[(byte)ButtonState.Normal] = 128;
-                spritesX[(byte)ButtonState.MouseOver] = 0;
-                spritesY[(byte)ButtonState.MouseOver] = 228;
-                spritesX[(byte)ButtonState.Clicked] = 0;
+                spritesX[(byte)ButtonState.Normal] = 800;
+                spritesY[(byte)ButtonState.Normal] = 428;
+                spritesX[(byte)ButtonState.MouseOver] = 800;
+                spritesY[(byte)ButtonState.MouseOver] = 528;
+                spritesX[(byte)ButtonState.Clicked] = 600;
                 spritesY[(byte)ButtonState.Clicked] = 328;
                 break;
 
             case ButtonType.SelectAssaultPlayer:
                 spritesX[(byte)ButtonState.Normal] = 0;
-                spritesY[(byte)ButtonState.Normal] = 128;
+                spritesY[(byte)ButtonState.Normal] = 428;
                 spritesX[(byte)ButtonState.MouseOver] = 0;
-                spritesY[(byte)ButtonState.MouseOver] = 228;
+                spritesY[(byte)ButtonState.MouseOver] = 528;
                 spritesX[(byte)ButtonState.Clicked] = 0;
                 spritesY[(byte)ButtonState.Clicked] = 328;
                 break;
