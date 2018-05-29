@@ -6,9 +6,6 @@ using SDL2;
 
 public class GameScreen : IScreen
 {
-    private static Image deathBackground = new Image
-        (@"resources\images\backgrounds\death_bck_test.png", 640, 480);
-
     private const byte RED_TEAM_BUTTON = 0;
     private const byte SPECTATOR_TEAM_BUTTON = 1;
     private const byte BLUE_TEAM_BUTTON = 2;
@@ -24,14 +21,11 @@ public class GameScreen : IScreen
     private BulletCollection bullets;
     private Button[] teamButtons;
     private Camera camera;
+    private SpectatorCameraController cameraController;
 
     private float deltaTime;
     private bool isChangingTeam;
     private string messageBuffer;
-
-    //REMOVE LATER
-    private Bullet redBullet;
-    private Bullet blueBullet;
 
     public GameScreen()
     {
@@ -44,6 +38,7 @@ public class GameScreen : IScreen
         players = new PlayerCollection();
         camera = new Camera((ushort)Hardware.ScreenWidth, 
             (ushort)Hardware.ScreenHeight);
+        cameraController = new SpectatorCameraController();
 
         teamButtons = new Button[3];
         teamButtons[RED_TEAM_BUTTON] = new Button(ButtonType.RedTeamButton);
@@ -61,15 +56,9 @@ public class GameScreen : IScreen
 
         isChangingTeam = true;
         messageBuffer = "";
-        CurrentUpdateGameFunction = UpdateGameStateDead;
+        CurrentUpdateGameFunction = UpdateGameStateSpectator;
         CurrentRenderGameFunction = RenderGameDead;
         deltaTime = 1;
-
-        //REMOVE LATER
-        redBullet = new Bullet(PlayerTeam.Red);
-        redBullet.SetPos(0, 0);
-        blueBullet = new Bullet(PlayerTeam.Blue);
-        blueBullet.SetPos(0, 32);
     }
 
     //Translate all the data send by the server
@@ -112,7 +101,9 @@ public class GameScreen : IScreen
                     }
 
                 case ServerMessage.NewBullet:
-                    //TO DO
+                    {
+                        bullets.Add(commandParts);
+                    }
                     break;
 
                 case ServerMessage.RemoveBullet:
@@ -159,6 +150,17 @@ public class GameScreen : IScreen
                         else
                         {
                             localPlayer.SetTeam(commandParts);
+
+                            if ((PlayerTeam)int.Parse(commandParts[2])
+                                == PlayerTeam.Spectator)
+                            {
+                                CurrentUpdateGameFunction
+                                    = UpdateGameStateSpectator;
+                            }
+                                
+                            else
+                                CurrentUpdateGameFunction
+                                    = UpdateGameStateDead;
                         }
                     }
                     break;
@@ -255,7 +257,6 @@ public class GameScreen : IScreen
         {
             //Remove the last :
             messageBuffer = messageBuffer.Remove(messageBuffer.Length - 1);
-            Console.WriteLine("Message sent: " + messageBuffer); //Remove later
             Game.GameSocket.Send(messageBuffer);
             messageBuffer = "";
         }
@@ -271,36 +272,21 @@ public class GameScreen : IScreen
         //Update the players and bullet positions
         localPlayer.SetAngle(camera);
         localPlayer.Update(deltaTime, map.Hitboxes);
-        localPlayer.CheckCollisions(map.Hitboxes);
+        localPlayer.Shoot(camera);
         camera.SetPos(localPlayer, Player.SPRITE_WIDTH, Player.SPRITE_HEIGHT);
         players.Update(deltaTime);
         bullets.Update(deltaTime);
     }
 
-    //Updates the game when the player is dead or in spectate mode.
-    public void UpdateGameStateDead()
+    public void HandleChangeTeamButtons()
     {
-        while (SDL.SDL_PollEvent(out SDL.SDL_Event e) != 0)
-        {
-            if (Hardware.IsKeyPressed(SDL.SDL_Keycode.SDLK_m, e))
-                isChangingTeam = !isChangingTeam;
-
-            if (isChangingTeam)
-            {
-                foreach(Button button in teamButtons)
-                {
-                    button.HandleEvents(e);
-                }
-            }
-        }
-
         //When the player press a team button sends to the server a change
         //team request or nothing if it tries to change to its current team
         if (isChangingTeam)
         {
             if (teamButtons[SPECTATOR_TEAM_BUTTON].IsClicked)
             {
-                if(localPlayer.Team != PlayerTeam.Spectator)
+                if (localPlayer.Team != PlayerTeam.Spectator)
                 {
                     messageBuffer += (int)ClientMessage.ChangeTeam + " " +
                         localPlayer.ID + " " + (int)PlayerTeam.Spectator + ":";
@@ -326,6 +312,62 @@ public class GameScreen : IScreen
                 isChangingTeam = false;
             }
         }
+    }
+
+    //Updates the game when the player is dead
+    public void UpdateGameStateDead()
+    {
+        while (SDL.SDL_PollEvent(out SDL.SDL_Event e) != 0)
+        {
+            if (Hardware.IsKeyPressed(SDL.SDL_Keycode.SDLK_m, e))
+                isChangingTeam = !isChangingTeam;
+
+            if (isChangingTeam)
+            {
+                foreach(Button button in teamButtons)
+                {
+                    button.HandleEvents(e);
+                }
+            }
+        }
+
+        HandleChangeTeamButtons();
+
+        players.Update(deltaTime);
+        bullets.Update(deltaTime);
+    }
+
+    //Updates the game when the player is in spectator mode.
+    public void UpdateGameStateSpectator()
+    {
+        while(SDL.SDL_PollEvent(out SDL.SDL_Event e) != 0)
+        {
+            if (Hardware.IsKeyPressed(SDL.SDL_Keycode.SDLK_m, e))
+                isChangingTeam = !isChangingTeam;
+
+            if (isChangingTeam)
+            {
+                foreach (Button button in teamButtons)
+                {
+                    button.HandleEvents(e);
+                }
+            }
+            if (Hardware.IsKeyPressed(SDL.SDL_Keycode.SDLK_f, e))
+                cameraController.IsActive =
+                    !cameraController.IsActive;
+        }
+
+        HandleChangeTeamButtons();
+
+        if (cameraController.IsActive)
+        {
+            cameraController.Update(deltaTime);
+            camera.SetPos(cameraController, 0, 0);
+        }
+        else
+        {
+            //TO DO
+        }
 
         players.Update(deltaTime);
         bullets.Update(deltaTime);
@@ -337,10 +379,6 @@ public class GameScreen : IScreen
         map.Render(camera);
         players.Render(camera);
         bullets.Render(camera);
-
-        //REMOVE LATER
-        blueBullet.Render(camera);
-        redBullet.Render(camera);
     }
 
     //Renders all the necessary things for a dead player
@@ -355,8 +393,6 @@ public class GameScreen : IScreen
                 button.Render();
             }
         }
-
-        Hardware.RenderBackground(deathBackground);
     }
 
     //Renders all the necessary things for an alive player

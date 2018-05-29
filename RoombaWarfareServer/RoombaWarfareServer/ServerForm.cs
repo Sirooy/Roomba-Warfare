@@ -39,7 +39,11 @@ namespace RoombaWarfareServer
                 server.Rounds = settings.NumRounds;
                 server.TickRate = settings.TickRate;
 
-                server.Start();
+                if (!server.Start())
+                {
+                    MessageBox.Show("Couldn't start the server", "Error"
+                        , MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             else
             {

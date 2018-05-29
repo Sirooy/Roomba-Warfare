@@ -22,5 +22,6 @@ public enum ClientMessage : byte
     Disconnect,
     NewPos,
     NewAngle,
+    Shoot,
     ChangeTeam,
 }

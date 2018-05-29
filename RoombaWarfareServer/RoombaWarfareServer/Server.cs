@@ -75,13 +75,14 @@ public class Server
     }
 
     //Starts all the server loops
-    public void Start()
+    public bool Start()
     {
         try
         {
-            IsOpen = true; 
+            IsOpen = true;
 
-            map.Create(MapPath);
+            if (!map.Create(MapPath))
+                return false;
 
             redPlayersWonRounds = 0;
             bluePlayersWonRounds = 0;
@@ -93,12 +94,13 @@ public class Server
             physics.Start();
             broadcast.Start();
             AcceptClients();
+
+            return true;
         }
         catch (Exception)
         {
-            MessageBox.Show("Could not start the server", "Error", 
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
             Close();
+            return false;
         }
     }
 
@@ -201,6 +203,18 @@ public class Server
                         players.SetPosition(commandParts, map.hitboxes);
                         break;
                     }
+
+                case ClientMessage.Shoot:
+                    {
+                        System.Diagnostics.Debug.WriteLine(command); //REmove later
+                        string state = bullets.Add(commandParts, players);
+                        
+                        lock (lockGameState)
+                        {
+                            gameState += state;
+                        }
+                    }
+                    break;
 
                 //Changes the team of a player
                 case ClientMessage.ChangeTeam:

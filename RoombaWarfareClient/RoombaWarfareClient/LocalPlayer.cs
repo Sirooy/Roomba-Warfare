@@ -13,6 +13,7 @@ public class LocalPlayer : Player
     private short currentHealth;
 
     private StatusBar healthBar;
+    private Weapon weapon;
 
     private string messageBuffer;
     private Queue<string> pendingCommands;
@@ -31,22 +32,22 @@ public class LocalPlayer : Player
         switch (type)
         {
             case PlayerType.Assault:
-                //TO DO
+                weapon = new MachineGun(30, 350, 1800);
                 maxHealth = 125;
                 break;
 
             case PlayerType.Commander:
-                //TO DO
+                weapon = new Gun(10, 800, 2000);
                 maxHealth = 150;
                 break;
 
             case PlayerType.Rusher:
-                //TO DO
+                weapon = new MachineGun(20, 100, 1000);
                 maxHealth = 75;
                 break;
 
             case PlayerType.Tank:
-                //TO DO
+                weapon = new Gun(15, 500, 1800);
                 maxHealth = 175;
                 break;
         }
@@ -55,8 +56,11 @@ public class LocalPlayer : Player
         healthBar.Resize(currentHealth, maxHealth);
     }
 
+    //Handles the key presses of the player
     public void HandleEvents(SDL.SDL_Event e)
     {
+        weapon.HandleEvents(e);
+
         if(e.type == SDL.SDL_EventType.SDL_KEYDOWN && e.key.repeat == 0)
         {
             switch (e.key.keysym.sym)
@@ -94,28 +98,37 @@ public class LocalPlayer : Player
                 " " + Angle.ToString("0.#") + ":";
     }
 
+    //Updates the player position and sends the new data to the server
     public void Update(float deltaTime, Hitbox[] hitboxes)
     {
         float posXIncrement = (velX * deltaTime);
         float posYIncrement = (velY * deltaTime);
-
+        
         PosX += posXIncrement;
-        //Checks collision on the X axis
-        if (CheckCollisions(hitboxes))
+        float centerX = PosX + SPRITE_WIDTH / 2;
+        float centerY = PosY + SPRITE_HEIGHT / 2;
+        //Checks collision on the X axis and the screen borders
+        if (CheckCollisions(hitboxes,centerX,centerY)
+            || centerX - RADIUS < 0 
+            || centerX + RADIUS > Map.Width)
         {
             PosX -= posXIncrement;
             posXIncrement = 0;
         }
 
         PosY += posYIncrement;
-        //Checks collision on the Y axis
-        if (CheckCollisions(hitboxes))
+        centerX = PosX + SPRITE_WIDTH / 2;
+        centerY = PosY + SPRITE_HEIGHT / 2;
+        //Checks collision on the Y axis and the screen borders
+        if (CheckCollisions(hitboxes, centerX, centerY)
+            || centerY - RADIUS < 0
+            || centerY + RADIUS > Map.Height)
         {
             PosY -= posYIncrement;
             posYIncrement = 0;
         }
 
-        //If the player is moving send the data
+        //If the player is moving send the data (Increment of the x and y)
         if(posXIncrement != 0 || posYIncrement != 0)
         {
             lastCommandSent++;
@@ -127,6 +140,13 @@ public class LocalPlayer : Player
                 (posXIncrement.ToString("0.#") + " " +
                 posYIncrement.ToString("0.#"));
         }
+    }
+
+    //
+    public void Shoot(Camera camera)
+    {
+        messageBuffer += 
+            weapon.Shoot(ID, PosX - camera.X, PosY - camera.Y);
     }
 
     public override void Respawn(string[] parts)
@@ -156,11 +176,8 @@ public class LocalPlayer : Player
         }
     }
 
-    public bool CheckCollisions(Hitbox[] hitboxes)
+    public bool CheckCollisions(Hitbox[] hitboxes,float centerX,float centerY)
     {
-        float centerX = PosX + SPRITE_WIDTH / 2;
-        float centerY = PosY + SPRITE_HEIGHT / 2;
-
         foreach (Hitbox hitbox in hitboxes)
         {
             if(CollisionHandler.CollidesWith
@@ -185,6 +202,7 @@ public class LocalPlayer : Player
     {
         base.Render(camera);
         healthBar.Render();
+        weapon.Render();
     }
 
     public void TakeDamage(short amount)

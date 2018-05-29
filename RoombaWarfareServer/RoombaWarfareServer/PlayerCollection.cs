@@ -32,6 +32,12 @@ public class PlayerCollection : IEnumerable<Player>
         players = new Dictionary<int, Player>();
     }
 
+    //Returns a player 
+    public Player this[int id]
+    {
+        get { lock (lockPlayers) return players[id]; }
+    }
+
     //Adds a player to the list
     public string Add(int id,Player player)
     {

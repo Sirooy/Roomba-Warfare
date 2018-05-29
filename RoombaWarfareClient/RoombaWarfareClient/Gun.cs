@@ -16,13 +16,15 @@ public class Gun : Weapon
         }
     }
 
-    public override string Shoot()
+    public override string Shoot(int id, float playerPosX, float playerPosY)
     {
         if (IsAbleToShoot())
         {
             isShooting = false;
             lastShootTime = SDL.SDL_GetTicks();
-            //TO DO
+            currentAmmo--;
+            ammoBar.Resize(currentAmmo, maxAmmo);
+            return CreateBullet(id, playerPosX, playerPosY);
         }
 
         return "";

@@ -51,17 +51,35 @@ public class SetAddressScreen : IScreen
     //Checks if the ip entered is valid
     public bool ValidateIPAddress(string address)
     {
-        if(Regex.IsMatch(address,
+        if (!Regex.IsMatch(address,
             @"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\-\d{3,5}$"))
         {
-            string port = address.Split('-')[1];
-            if(ushort.TryParse(port,out ushort result))
+            return false;
+        }
+        else
+        {
+            string[] ipParts = address.Split('-');
+            string port = ipParts[1];
+
+            if (!ushort.TryParse(port, out ushort result))
             {
-                return true;
+                return false;
+            }
+            if (result <= 1024)
+                return false;
+
+            string[] ipNums = ipParts[0].Split('.');
+
+            if (!byte.TryParse(ipNums[0], out byte n1) ||
+                !byte.TryParse(ipNums[1], out byte n2) ||
+                !byte.TryParse(ipNums[2], out byte n3) ||
+                !byte.TryParse(ipNums[3], out byte n4))
+            {
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     //Whenever the text changes, we render the new text on screen

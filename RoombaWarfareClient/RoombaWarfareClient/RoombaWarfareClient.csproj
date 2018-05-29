@@ -49,6 +49,7 @@
     <Compile Include="CollisionHandler.cs" />
     <Compile Include="Gun.cs" />
     <Compile Include="MachineGun.cs" />
+    <Compile Include="SpectatorCameraController.cs" />
     <Compile Include="StatusBar.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="Bullet.cs" />
