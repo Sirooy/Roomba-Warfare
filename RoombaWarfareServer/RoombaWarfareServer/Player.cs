@@ -31,7 +31,7 @@ public class Player : Entity
 
     private float lastPosX;
     private float lastPosY;
-    private readonly short maxHealth;
+    private short maxHealth;
     private short currentHealth;
 
     private TcpClient client;
@@ -107,6 +107,18 @@ public class Player : Entity
         movementStatus[(byte)PlayerState.Angle] = "";
     }
 
+    public void Create(PlayerType type)
+    {
+        Type = type;
+        switch (Type)
+        {
+            case PlayerType.Assault: maxHealth = 125; break;
+            case PlayerType.Commander: maxHealth = 150; break;
+            case PlayerType.Rusher: maxHealth = 75; break;
+            case PlayerType.Tank: maxHealth = 175; break;
+        }
+    }
+
     //Sends the given data to the player (Works Non-blocking)
     public void Send(string data)
     {
@@ -131,6 +143,17 @@ public class Player : Entity
         return data;
     }
 
+
+    public bool CheckDead()
+    {
+        if (currentHealth <= 0)
+        {
+            IsAlive = false;
+        }
+
+        return IsAlive;
+    }
+
     //Updates the player position
     public void Update(float posXIncrement, float posYIncrement
         ,Hitbox[] hitboxes)
@@ -145,6 +168,11 @@ public class Player : Entity
             PosX = lastPosX;
             PosY = lastPosY;
         }
+    }
+
+    public void TakeDamage(ushort amount)
+    {
+        currentHealth -= (short)amount;
     }
 
     //Checks if the players collides with any block

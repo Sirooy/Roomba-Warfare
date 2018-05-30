@@ -1,5 +1,6 @@
-﻿
+﻿using System;
 using System.Windows.Forms;
+using System.IO;
 
 namespace RoombaWarfareServer
 {
@@ -15,6 +16,32 @@ namespace RoombaWarfareServer
             settings = new ServerSettingsForm();
             server = new Server();
             mapPath = "";
+
+            //Tries to load the default map
+            try
+            {
+                if(!File.Exists(@"Maps\default.map"))
+                    MessageBox.Show("Default map not found", "Warning"
+                        , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                else
+                {
+                    if (Map.ValidateMap(@"Maps\default.map"))
+                    {
+                        mapPath = @"Maps\default.map";
+                    }
+                    else
+                    {
+                        MessageBox.Show("Default map is not valid", "Error"
+                        , MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Error", "Error"
+                        , MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         
         private void toolStripExit_Click(object sender, System.EventArgs e)

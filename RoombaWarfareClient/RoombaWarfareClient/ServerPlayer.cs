@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+
 public class ServerPlayer : Player
 {
     public sbyte MultiplierX { get; set; }
@@ -28,12 +29,12 @@ public class ServerPlayer : Player
     {
         if (Interpolation)
         {
-            if ((int)PosX != (int)InterpolationPosX
-                || (int)PosY != (int)InterpolationPosY)
+            if (Math.Floor(PosX) != Math.Floor(InterpolationPosX)
+                || Math.Floor(PosY) != Math.Floor(InterpolationPosY))
             {
-                if ((int)PosX != (int)InterpolationPosX)
+                if (Math.Floor(PosX) != Math.Floor(InterpolationPosX))
                     PosX += (MultiplierX * speed * deltaTime);
-                if ((int)PosY != (int)InterpolationPosY)
+                if (Math.Floor(PosY) != Math.Floor(InterpolationPosY))
                     PosY += (MultiplierY * speed * deltaTime);
             }
             else

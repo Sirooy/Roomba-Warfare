@@ -329,7 +329,7 @@ public class GameScreen : IScreen
     {
         while (SDL.SDL_PollEvent(out SDL.SDL_Event e) != 0)
         {
-            if (Hardware.IsKeyPressed(SDL.SDL_Keycode.SDLK_m, e))
+            if (Hardware.IsKeyPressed(SDL.SDL_Keycode.SDLK_t, e))
                 isChangingTeam = !isChangingTeam;
 
             if (isChangingTeam)
@@ -352,7 +352,7 @@ public class GameScreen : IScreen
     {
         while(SDL.SDL_PollEvent(out SDL.SDL_Event e) != 0)
         {
-            if (Hardware.IsKeyPressed(SDL.SDL_Keycode.SDLK_m, e))
+            if (Hardware.IsKeyPressed(SDL.SDL_Keycode.SDLK_t, e))
                 isChangingTeam = !isChangingTeam;
 
             if (isChangingTeam)

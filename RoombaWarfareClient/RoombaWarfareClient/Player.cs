@@ -28,22 +28,22 @@ public class Player : DynamicEntity
         switch (type)
         {
             case PlayerType.Assault:
-                speed = 3.5f;
+                speed = 3.2f;
                 spriteX = 0;
                 break;
 
             case PlayerType.Commander:
-                speed = 2.5f;
+                speed = 2.0f;
                 spriteX = 64;
                 break;
 
             case PlayerType.Rusher:
-                speed = 4.5f;
+                speed = 4.0f;
                 spriteX = 128;
                 break;
 
             case PlayerType.Tank:
-                speed = 1.5f;
+                speed = 1.6f;
                 spriteX = 192;
                 break;
         }

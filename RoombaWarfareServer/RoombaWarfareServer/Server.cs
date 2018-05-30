@@ -44,6 +44,7 @@ public class Server
         players = new PlayerCollection();
         players.OnPlayerDisconnectEvent += DisconnectPlayer;
         bullets = new BulletCollection();
+        bullets.OnPlayerKillEvent += CheckRoundStatus;
         physics = new Task(PhysicsLoop);
         broadcast = new Task(BroadcastGameStateLoop);
         gameState = "";
@@ -348,7 +349,7 @@ public class Server
         player.Send(initialData);
         player.Send(map.Seed);
         PlayerType type = (PlayerType)int.Parse(player.Receive());
-        player.Type = type;
+        player.Create(type);
 
         //Once we send all the data and receive the player type
         //Add the player to the list and send the data to the others

@@ -20,3 +20,5 @@ C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareServer\RoombaWarfareServer\obj\
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareServer\RoombaWarfareServer\obj\Debug\RoombaWarfareServer.csproj.CoreCompileInputs.cache
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareServer\RoombaWarfareServer\obj\Debug\RoombaWarfareServer.exe
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareServer\RoombaWarfareServer\obj\Debug\RoombaWarfareServer.pdb
+C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareServer\RoombaWarfareServer\bin\Debug\Message.cs
+C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareServer\RoombaWarfareServer\bin\Debug\Maps\default.map

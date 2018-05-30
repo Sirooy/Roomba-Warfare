@@ -57,6 +57,7 @@ public class Bullet : Entity
     //Checks if the bullet collides with a player
     public int CollidesWith(PlayerCollection players)
     {
+        
         float bulletCenterX = PosX + Bullet.WIDTH / 2;
         float bulletCenterY = PosY + Bullet.HEIGHT / 2;
 
@@ -73,7 +74,8 @@ public class Bullet : Entity
                     * (bulletCenterY - playerCenterY);
                 float distance = distanceX + distanceY;
 
-                if (distance < (RADIUS * RADIUS) + (Player.RADIUS * Player.RADIUS))
+                if (distance <= (RADIUS * RADIUS) + 
+                    (Player.RADIUS * Player.RADIUS))
                     return player.ID;
             }
         }
