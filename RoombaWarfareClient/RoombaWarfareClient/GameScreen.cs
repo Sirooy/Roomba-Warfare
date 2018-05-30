@@ -62,7 +62,7 @@ public class GameScreen : IScreen
     }
 
     //Translate all the data send by the server
-    public void TranslateData(string[] allCommands)
+    private void TranslateData(string[] allCommands)
     {
         foreach(string command in allCommands)
         {
@@ -126,6 +126,7 @@ public class GameScreen : IScreen
                             players.Respawn(id, commandParts);
                         else
                         {
+                            Console.WriteLine("Respawning...");
                             localPlayer.Respawn(commandParts);
                             CurrentUpdateGameFunction = UpdateGameStateAlive;
                             CurrentRenderGameFunction = RenderGameAlive;
@@ -142,6 +143,7 @@ public class GameScreen : IScreen
                             players.Kill(id);
                         else
                         {
+                            Console.WriteLine("Killing...");
                             localPlayer.Kill();
                             CurrentUpdateGameFunction = UpdateGameStateDead;
                             CurrentRenderGameFunction = RenderGameDead;
@@ -206,7 +208,7 @@ public class GameScreen : IScreen
         }
     }
 
-    public void ReceiveData()
+    private void ReceiveData()
     {
         if (Game.GameSocket.DataAvailable)
         {
@@ -233,7 +235,7 @@ public class GameScreen : IScreen
         return NextScreen;
     }
 
-    public void GameLoop()
+    private void GameLoop()
     {
         float maxFrameRate = (1f / 60f) * 1000f;
 
@@ -259,7 +261,7 @@ public class GameScreen : IScreen
         } while (NextScreen == ScreenType.None);
     }
 
-    public void SendData()
+    private void SendData()
     {
         messageBuffer += localPlayer.GetMessage();
 
@@ -273,7 +275,7 @@ public class GameScreen : IScreen
     }
 
     //Updates the game when the player is alive.
-    public void UpdateGameStateAlive()
+    private void UpdateGameStateAlive()
     {
         while (SDL.SDL_PollEvent(out SDL.SDL_Event e) != 0)
         {
@@ -288,7 +290,7 @@ public class GameScreen : IScreen
         bullets.Update(deltaTime);
     }
 
-    public void HandleChangeTeamButtons()
+    private void HandleChangeTeamButtons()
     {
         //When the player press a team button sends to the server a change
         //team request or nothing if it tries to change to its current team
@@ -325,7 +327,7 @@ public class GameScreen : IScreen
     }
 
     //Updates the game when the player is dead
-    public void UpdateGameStateDead()
+    private void UpdateGameStateDead()
     {
         while (SDL.SDL_PollEvent(out SDL.SDL_Event e) != 0)
         {
@@ -348,7 +350,7 @@ public class GameScreen : IScreen
     }
 
     //Updates the game when the player is in spectator mode.
-    public void UpdateGameStateSpectator()
+    private void UpdateGameStateSpectator()
     {
         while(SDL.SDL_PollEvent(out SDL.SDL_Event e) != 0)
         {
@@ -384,7 +386,7 @@ public class GameScreen : IScreen
     }
 
     //Render all the things that a player can see either if it is alive or dead
-    public void RenderBasics()
+    private void RenderBasics()
     {
         map.Render(camera);
         players.Render(camera);
@@ -392,7 +394,7 @@ public class GameScreen : IScreen
     }
 
     //Renders all the necessary things for a dead player
-    public void RenderGameDead()
+    private void RenderGameDead()
     {
         RenderBasics();
 
@@ -406,14 +408,14 @@ public class GameScreen : IScreen
     }
 
     //Renders all the necessary things for an alive player
-    public void RenderGameAlive()
+    private void RenderGameAlive()
     {
         RenderBasics();
         localPlayer.Render(camera);
     }
 
     //Disconnects the player from the server when an error occurs
-    public void Disconnect()
+    private void Disconnect()
     {
         Game.EndMessage = "Connection lost.";
         Game.GameSocket.Disconnect();

@@ -223,7 +223,7 @@ public class Player : Entity
             Angle.ToString("0.#");
     }
 
-    public void EndConnection()
+    public void Disconnect()
     {
         client.Close();
         stream.Close();

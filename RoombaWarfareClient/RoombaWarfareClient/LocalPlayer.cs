@@ -153,6 +153,7 @@ public class LocalPlayer : Player
     {
         base.Respawn(parts);
         currentHealth = maxHealth;
+        healthBar.Resize(currentHealth, maxHealth);
     }
 
     public override void Kill()

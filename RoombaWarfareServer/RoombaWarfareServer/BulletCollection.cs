@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class BulletCollection : IEnumerable<Bullet>
 {
-    public event Action OnPlayerKillEvent;
-
     private List<Bullet> bullets;
 
     private object lockBullets = new object();
@@ -42,7 +40,6 @@ public class BulletCollection : IEnumerable<Bullet>
 
         lock (lockBullets)
         {
-            System.Diagnostics.Debug.WriteLine(bullets.Count);
             for (int index = 0; index < bullets.Count; index++)
             {
                 bullets[index].Update(deltaTime);
@@ -68,11 +65,12 @@ public class BulletCollection : IEnumerable<Bullet>
                             + bullets[index].Damage + ":");
                         players[playerID].TakeDamage(bullets[index].Damage);
 
-                        if (players[playerID].CheckDead())
+                        if (!players[playerID].CheckDead())
                         {
+                            System.Diagnostics.Debug.WriteLine("Player dead: " + playerID);
                             ret += (int)ServerMessage.KillPlayer + " " +
                                 playerID + ":";
-                            OnPlayerKillEvent();
+                            players.CalculatePlayers();
                         }
 
                         bullets.RemoveAt(index);

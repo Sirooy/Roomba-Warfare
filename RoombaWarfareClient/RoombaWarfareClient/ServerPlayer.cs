@@ -27,7 +27,7 @@ public class ServerPlayer : Player
 
     public override void Update(float deltaTime)
     {
-        if (Interpolation)
+        /*if (Interpolation)
         {
             if (Math.Floor(PosX) != Math.Floor(InterpolationPosX)
                 || Math.Floor(PosY) != Math.Floor(InterpolationPosY))
@@ -36,6 +36,42 @@ public class ServerPlayer : Player
                     PosX += (MultiplierX * speed * deltaTime);
                 if (Math.Floor(PosY) != Math.Floor(InterpolationPosY))
                     PosY += (MultiplierY * speed * deltaTime);
+            }
+            else
+            {
+                Interpolation = false;
+            }
+        }*/
+        if (Interpolation)
+        {
+            if ((Math.Round(PosX) != Math.Round(InterpolationPosX))
+                || (Math.Round(PosY) != Math.Round(InterpolationPosY)))
+            {
+                if (Math.Round(PosX) < Math.Round(InterpolationPosX))
+                {
+                    PosX += speed * deltaTime;
+                    if (PosX > InterpolationPosX)
+                        PosX = InterpolationPosX;
+                }
+                else if (Math.Round(PosX) > Math.Round(InterpolationPosX))
+                {
+                    PosX -= speed * deltaTime;
+                    if (PosX < InterpolationPosX)
+                        PosX = InterpolationPosX;
+                }
+
+                if (Math.Round(PosY) < Math.Round(InterpolationPosY))
+                {
+                    PosY += speed * deltaTime;
+                    if (PosY > InterpolationPosY)
+                        PosY = InterpolationPosY;
+                }
+                else if (Math.Round(PosY) > Math.Round(InterpolationPosY))
+                {
+                    PosY -= speed * deltaTime;
+                    if (PosY < InterpolationPosY)
+                        PosY = InterpolationPosY;
+                }
             }
             else
             {

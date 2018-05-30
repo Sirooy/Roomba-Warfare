@@ -63,7 +63,7 @@ public abstract class Weapon
     }
 
     //Creates a bullet and returns it like a message for the server
-    public string CreateBullet(int id,float playerPosX, float playerPosY)
+    protected string CreateBullet(int id,float playerPosX, float playerPosY)
     {
         SDL.SDL_GetMouseState(out int mouseX, out int mouseY);
         //Get the center of the player

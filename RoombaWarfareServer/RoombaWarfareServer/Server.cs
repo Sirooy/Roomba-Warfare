@@ -44,7 +44,6 @@ public class Server
         players = new PlayerCollection();
         players.OnPlayerDisconnectEvent += DisconnectPlayer;
         bullets = new BulletCollection();
-        bullets.OnPlayerKillEvent += CheckRoundStatus;
         physics = new Task(PhysicsLoop);
         broadcast = new Task(BroadcastGameStateLoop);
         gameState = "";
@@ -175,7 +174,10 @@ public class Server
             Interlocked.Increment(ref currentRound);
             Interlocked.Increment(ref bluePlayersWonRounds);
         }
-            
+
+        if (currentRound == Rounds)
+            IsOpen = false;
+
         string state = players.GlobalRespawn(map);
 
         lock (lockGameState)
@@ -187,12 +189,9 @@ public class Server
     //Checks if a round has ended
     private void CheckRoundStatus()
     {
-        players.CalculatePlayers();
-
         if (players.RedAlivePlayersCount == 0 ||
             players.BlueAlivePlayersCount == 0)
         {
-            System.Diagnostics.Debug.WriteLine("0 players alive");
             if (players.RedPlayersCount > 0 &&
                 players.BluePlayersCount > 0)
                 ResetRound();
@@ -278,10 +277,14 @@ public class Server
             DequeueCommands();
 
             string state = bullets.Update(deltaTime,map.hitboxes,players);
+
             lock (lockGameState)
             {
                 gameState += state;
-            }           
+            }
+
+            if (state != "")
+                CheckRoundStatus();
 
             //Sleep the thread if the frame rate is higher than the max frame rate
             int frameTime = Environment.TickCount - startTime;
@@ -291,6 +294,8 @@ public class Server
             }
             deltaTime = (Environment.TickCount - startTime) / 10f;
         }
+
+        Close();
     }
 
     //Accept clients asynchronously
@@ -337,6 +342,8 @@ public class Server
         {
             gameState += state;
         }
+
+        players.CalculatePlayers();
 
         CheckRoundStatus();
     }
@@ -398,7 +405,28 @@ public class Server
     //Close the server
     public void Close()
     {
+        IsOpen = false;
         currentID = 0;
+        physics.Wait();
+        broadcast.Wait();
+        lock (lockGameState)
+        {
+            gameState = "";
+        }
+        
+
+        foreach (Player player in players)
+        {
+            System.Diagnostics.Debug.WriteLine("Disconnecting players...");
+            player.Send((int)ServerMessage.Disconnect + " "
+                        + "-Server closed-");
+        }
+
+        foreach (Player player in players)
+        {
+            player.Disconnect();
+        }
+
         //TO DO
     }
 }

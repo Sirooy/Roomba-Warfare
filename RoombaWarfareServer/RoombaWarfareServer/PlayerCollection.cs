@@ -68,7 +68,7 @@ public class PlayerCollection : IEnumerable<Player>
     {
         lock (lockPlayers)
         {
-            players[id].EndConnection();
+            players[id].Disconnect();
         }
         
         OnPlayerDisconnectEvent(id);
@@ -117,6 +117,8 @@ public class PlayerCollection : IEnumerable<Player>
         {
             players[id].Team = team;
         }
+
+        CalculatePlayers();
 
         return (int)ServerMessage.SetPlayerTeam + " " + id +
             " " + (int)team + ":";
