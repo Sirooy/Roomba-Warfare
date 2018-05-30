@@ -9,6 +9,7 @@ public enum ServerMessage : byte
     SetPlayerPosition,
     SetPlayerAngle,
     SetPlayerTeam,
+    DamagePlayer,
     RemovePlayer,
     KillPlayer,
     NewBullet,

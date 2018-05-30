@@ -118,9 +118,6 @@ public class PlayerCollection : IEnumerable<Player>
             players[id].Team = team;
         }
 
-        //Recalculate the players
-        CalculatePlayers();
-
         return (int)ServerMessage.SetPlayerTeam + " " + id +
             " " + (int)team + ":";
     }

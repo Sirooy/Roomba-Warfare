@@ -205,8 +205,10 @@ public class LocalPlayer : Player
         weapon.Render();
     }
 
-    public void TakeDamage(short amount)
+    public void TakeDamage(string[] parts)
     {
-        currentHealth -= amount;
+        ushort amount = ushort.Parse(parts[1]);
+        currentHealth -= (short)amount;
+        healthBar.Resize(currentHealth, maxHealth);
     }
 }

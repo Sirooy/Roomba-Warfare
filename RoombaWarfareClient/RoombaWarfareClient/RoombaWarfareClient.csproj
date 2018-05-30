@@ -108,6 +108,9 @@
     <Content Include="resources\images\backgrounds\death_bck_test.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\images\backgrounds\main_menu_background.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\images\button_play.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

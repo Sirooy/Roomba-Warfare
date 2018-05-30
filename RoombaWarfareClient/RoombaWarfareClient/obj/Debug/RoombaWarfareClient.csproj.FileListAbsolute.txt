@@ -61,3 +61,4 @@ C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\resources\images\backgrounds\bck_test3.png
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\resources\images\backgrounds\death_bck_test.png
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\resources\images\static_entity_sprite_sheet.png
+C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\resources\images\backgrounds\main_menu_background.png

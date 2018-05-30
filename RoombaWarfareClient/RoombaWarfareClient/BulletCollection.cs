@@ -22,6 +22,13 @@ public class BulletCollection
         bullets.Add(new Bullet(posX, posY, dirX, dirY, speed, team));
     }
 
+    public void Remove(string[] parts)
+    {
+        int index = int.Parse(parts[1]);
+        bullets.RemoveAt(index);
+    }
+
+    //Updates all the bullets positions
     public void Update(float deltaTime)
     {
         foreach(Bullet bullet in bullets)

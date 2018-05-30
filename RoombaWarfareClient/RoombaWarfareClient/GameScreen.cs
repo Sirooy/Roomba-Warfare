@@ -107,7 +107,15 @@ public class GameScreen : IScreen
                     break;
 
                 case ServerMessage.RemoveBullet:
-                    //TO DO
+                    {
+                        bullets.Remove(commandParts);
+                    }
+                    break;
+
+                case ServerMessage.DamagePlayer:
+                    {
+                        localPlayer.TakeDamage(commandParts);
+                    }
                     break;
 
                 //Respawns a player
@@ -185,7 +193,9 @@ public class GameScreen : IScreen
                 //Disconnects a player
                 case ServerMessage.Disconnect:
                     NextScreen = ScreenType.End;
-                    Game.EndMessage = commandParts[1];
+                    string message = string.Join(" ", commandParts);
+                    message = message.Substring(message.IndexOf("-"));
+                    Game.EndMessage = message;
                     break;
 
                 //Sets the id of the local player.
@@ -245,7 +255,7 @@ public class GameScreen : IScreen
                 Thread.Sleep((int)(maxFrameRate - frameTime));
             }
             //Get the total time of the frame
-            deltaTime = (SDL.SDL_GetTicks() - time) / 10;
+            deltaTime = (SDL.SDL_GetTicks() - time) / 10f;
         } while (NextScreen == ScreenType.None);
     }
 

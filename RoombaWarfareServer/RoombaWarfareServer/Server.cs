@@ -47,12 +47,24 @@ public class Server
         physics = new Task(PhysicsLoop);
         broadcast = new Task(BroadcastGameStateLoop);
         gameState = "";
+    }
 
+    public bool CreateLog()
+    {
         //Creates the log if it doesnt exists
-        if (!File.Exists(logFileName))
+        try
         {
-            File.CreateText(logFileName);
+            if (!File.Exists(logFileName))
+            {
+                File.CreateText(logFileName);
+            }
         }
+        catch (Exception)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     //Writes a message in the log file
@@ -82,6 +94,9 @@ public class Server
             IsOpen = true;
 
             if (!map.Create(MapPath))
+                return false;
+
+            if (!CreateLog())
                 return false;
 
             redPlayersWonRounds = 0;
@@ -171,6 +186,8 @@ public class Server
     //Checks if a round has ended
     private void CheckRoundStatus()
     {
+        players.CalculatePlayers();
+
         if (players.RedAlivePlayersCount == 0 ||
             players.BlueAlivePlayersCount == 0)
         {
@@ -204,6 +221,7 @@ public class Server
                         break;
                     }
 
+                //Shoots a bullet
                 case ClientMessage.Shoot:
                     {
                         System.Diagnostics.Debug.WriteLine(command); //REmove later
@@ -250,6 +268,7 @@ public class Server
     private void PhysicsLoop()
     {
         float maxFrameRate = (1f / 60f * 1000f);
+        float deltaTime = 1;
 
         while (IsOpen)
         {
@@ -257,10 +276,19 @@ public class Server
 
             DequeueCommands();
 
+            string state = bullets.Update(deltaTime,map.hitboxes,players);
+            lock (lockGameState)
+            {
+                gameState += state;
+            }           
+
             //Sleep the thread if the frame rate is higher than the max frame rate
             int frameTime = Environment.TickCount - startTime;
             if (frameTime < maxFrameRate)
+            {
                 Thread.Sleep((int)(maxFrameRate - frameTime));
+            }
+            deltaTime = (Environment.TickCount - startTime) / 10f;
         }
     }
 
@@ -279,7 +307,7 @@ public class Server
                 if(MaxPlayers != 0 && players.Count == MaxPlayers)
                 {
                     newPlayer.Send((int)ServerMessage.Disconnect + " "
-                        + "Server-is-full");
+                        + "-Server is full-");
                 }
                 //Add the player to the server list
                 else
@@ -309,7 +337,6 @@ public class Server
             gameState += state;
         }
 
-        players.CalculatePlayers();
         CheckRoundStatus();
     }
 

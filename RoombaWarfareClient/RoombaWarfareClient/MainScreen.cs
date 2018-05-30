@@ -8,8 +8,8 @@ public class MainScreen : IScreen
 
     public ScreenType NextScreen { get; set; }
 
-    private static Image background =
-        new Image(@"resources\images\backgrounds\bck_test.png", 640, 480);
+    private static Image background = new Image
+        (@"resources\images\backgrounds\main_menu_background.png", 800, 600);
     private Button[] buttons;
 
     public MainScreen()

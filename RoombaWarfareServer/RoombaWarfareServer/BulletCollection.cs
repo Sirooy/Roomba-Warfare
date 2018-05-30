@@ -32,6 +32,46 @@ public class BulletCollection : IEnumerable<Bullet>
         return (int)ServerMessage.NewBullet + " " + newBullet.ToString() + ":";
     }
 
+    public string Update(float deltaTime,Hitbox[] hitboxes
+        ,PlayerCollection players)
+    {
+        string ret = "";
+
+        lock (lockBullets)
+        {
+            for (int index = 0; index < bullets.Count; index++)
+            {
+                bullets[index].Update(deltaTime);
+                //Checks if the bullet collides with any wall and deletes it
+                if (bullets[index].CollidesWith(hitboxes))
+                {
+                    ret += (int)ServerMessage.RemoveBullet + " "
+                        + index + ":";
+                    bullets.RemoveAt(index);
+                    index--;
+                }
+                //Checks if the bullet collides with a player
+                else
+                {
+                    int playerID = bullets[index].CollidesWith(players);
+
+                    if(playerID != -1)
+                    {
+                        ret += (int)ServerMessage.RemoveBullet + " "
+                            + index + ":";
+                        players[playerID].AddOwnStatus(
+                            (int)ServerMessage.DamagePlayer + " " 
+                            + bullets[index].Damage);
+                        bullets.RemoveAt(index);
+                        index--;
+                    }
+                }
+            }
+        }
+
+        return ret;
+    }
+
     public IEnumerator<Bullet> GetEnumerator()
     {
         lock (lockBullets)
