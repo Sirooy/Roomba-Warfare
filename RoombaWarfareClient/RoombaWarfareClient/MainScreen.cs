@@ -19,7 +19,7 @@ public class MainScreen : IScreen
         buttons = new Button[3];
 
         //Creates all the buttons 
-        buttons[START_BUTTON] = new Button(ButtonType.StartButton);
+        buttons[START_BUTTON] = new Button(ButtonType.PlayButton);
         buttons[START_BUTTON].SetPos(0, 100);
         buttons[ADDRESS_BUTTON] = new Button(ButtonType.SetAddressButton);
         buttons[ADDRESS_BUTTON].SetPos

@@ -16,7 +16,8 @@ public class ConnectScreen : IScreen
         else
         {
             NextScreen = ScreenType.End;
-            Game.EndMessage = "Could not connect to the server.";
+            Game.EndMessage = 
+                Game.LanguageTranslation[Game.GameLanguage + "NoConnect"];
         }
 
         return NextScreen;

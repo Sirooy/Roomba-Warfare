@@ -71,14 +71,14 @@ public class Map
                             switch (mapParts[posX])
                             {
                                 //Blue spawnpoint
-                                case "BS":
+                                case "BSP":
                                     blueSpawn.Add
                                         (new SpawnPoint(
                                         (uint)posX * Hitbox.WIDTH,
                                         (uint)posY * Hitbox.HEIGHT));
                                     break;
                                 //Red spawnpoint
-                                case "RS":
+                                case "RSP":
                                     redSpawn.Add
                                         (new SpawnPoint(
                                         (uint)posX * Hitbox.WIDTH,
@@ -146,8 +146,8 @@ public class Map
                         {
                             switch (str)
                             {
-                                case "BS": blueSpawnPointsCount++; break;
-                                case "RS": redSpawnPointsCount++; break;
+                                case "BSP": blueSpawnPointsCount++; break;
+                                case "RSP": redSpawnPointsCount++; break;
                             }
                         }
 

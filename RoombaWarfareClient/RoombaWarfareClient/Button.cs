@@ -1,10 +1,11 @@
 ﻿using SDL2;
 
 public enum ButtonType : byte
-     {  StartButton, ExitButton , SetAddressButton
+     {  PlayButton, ExitButton , SetAddressButton
      , BlueTeamButton, RedTeamButton , SpectatorTeamButton
      , SelectAssaultPlayer, SelectCommanderPlayer
-     , SelectRusherPlayer, SelectTankPlayer }
+     , SelectRusherPlayer, SelectTankPlayer
+     , SelectLanguageEnglish, SelectLanguageSpanish}
 
 public enum ButtonState : byte
 {
@@ -35,7 +36,7 @@ public class Button : StaticEntity
         switch (type)
         {
             //TO DO (Set the sprite positions)
-            case ButtonType.StartButton:
+            case ButtonType.PlayButton:
                 spritesX[(byte)ButtonState.Normal] = 600;
                 spritesY[(byte)ButtonState.Normal] = 128;
                 spritesX[(byte)ButtonState.MouseOver] = 600;
@@ -122,6 +123,24 @@ public class Button : StaticEntity
                 spritesX[(byte)ButtonState.MouseOver] = 200;
                 spritesY[(byte)ButtonState.MouseOver] = 228;
                 spritesX[(byte)ButtonState.Clicked] = 200;
+                spritesY[(byte)ButtonState.Clicked] = 328;
+                break;
+
+            case ButtonType.SelectLanguageEnglish:
+                spritesX[(byte)ButtonState.Normal] = 600;
+                spritesY[(byte)ButtonState.Normal] = 128;
+                spritesX[(byte)ButtonState.MouseOver] = 600;
+                spritesY[(byte)ButtonState.MouseOver] = 228;
+                spritesX[(byte)ButtonState.Clicked] = 600;
+                spritesY[(byte)ButtonState.Clicked] = 328;
+                break;
+
+            case ButtonType.SelectLanguageSpanish:
+                spritesX[(byte)ButtonState.Normal] = 600;
+                spritesY[(byte)ButtonState.Normal] = 128;
+                spritesX[(byte)ButtonState.MouseOver] = 600;
+                spritesY[(byte)ButtonState.MouseOver] = 228;
+                spritesX[(byte)ButtonState.Clicked] = 600;
                 spritesY[(byte)ButtonState.Clicked] = 328;
                 break;
         }

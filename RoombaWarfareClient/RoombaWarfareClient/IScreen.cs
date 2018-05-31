@@ -2,8 +2,8 @@
 public enum ScreenType : byte
 {
     None, Main, SetAddress,
-    SelectPlayer, Connect, 
-    Game, End , Exit
+    SelectLanguage ,SelectPlayer,
+    Connect, Game, End , Exit
 }
 
 /* All screens must implement this interface. Whenever a screen

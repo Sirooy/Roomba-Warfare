@@ -4,11 +4,17 @@ public class EndScreen : IScreen
 {
     public ScreenType NextScreen { get; set; }
 
-    private static Image background =
-        new Image(@"resources\images\backgrounds\bck_test2.png", 640, 480);
+    private static Image background;
 
     private Font font;
     private Text text;
+
+    static EndScreen()
+    {
+        background = new Image
+            (Game.LanguageTranslation[Game.GameLanguage + "EndPath"], 
+            800, 600);
+    }
 
     public EndScreen()
     {

@@ -102,8 +102,8 @@ namespace RoombaWarfareServer
             }
         }
 
-        //Opens the settings 
-        private void toolStripOptions_Click(object sender, System.EventArgs e)
+        //Opens the settings
+        private void toolStripOptions_Click(object sender, EventArgs e)
         {
             settings.ShowDialog();
         }

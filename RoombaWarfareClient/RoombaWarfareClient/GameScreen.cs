@@ -126,7 +126,6 @@ public class GameScreen : IScreen
                             players.Respawn(id, commandParts);
                         else
                         {
-                            Console.WriteLine("Respawning...");
                             localPlayer.Respawn(commandParts);
                             CurrentUpdateGameFunction = UpdateGameStateAlive;
                             CurrentRenderGameFunction = RenderGameAlive;
@@ -143,7 +142,6 @@ public class GameScreen : IScreen
                             players.Kill(id);
                         else
                         {
-                            Console.WriteLine("Killing...");
                             localPlayer.Kill();
                             CurrentUpdateGameFunction = UpdateGameStateDead;
                             CurrentRenderGameFunction = RenderGameDead;
@@ -195,9 +193,8 @@ public class GameScreen : IScreen
                 //Disconnects a player
                 case ServerMessage.Disconnect:
                     NextScreen = ScreenType.End;
-                    string message = string.Join(" ", commandParts);
-                    message = message.Substring(message.IndexOf("-"));
-                    Game.EndMessage = message;
+                    Game.EndMessage = Game.LanguageTranslation
+                        [Game.LanguageTranslation + commandParts[1]];
                     break;
 
                 //Sets the id of the local player.
@@ -417,7 +414,8 @@ public class GameScreen : IScreen
     //Disconnects the player from the server when an error occurs
     private void Disconnect()
     {
-        Game.EndMessage = "Connection lost.";
+        Game.EndMessage = 
+            Game.LanguageTranslation[Game.GameLanguage + "LostConnection"];
         Game.GameSocket.Disconnect();
         NextScreen = ScreenType.End;
     }

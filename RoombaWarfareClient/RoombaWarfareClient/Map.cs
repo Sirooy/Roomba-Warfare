@@ -47,31 +47,36 @@ public class Map
 
             for(int posX= 0; posX < mapParts.Length; posX++)
             {
-                bool isHitbox = false;
                 TileType type;
 
                 switch (mapParts[posX])
                 {
-                    case "G1": type = TileType.Ground1; break;
-                    case "G2": type = TileType.Ground2; break;
-                    case "G3": type = TileType.Ground3; break;
-                    case "G4": type = TileType.Ground4; break;
+                    case "G01": type = TileType.Ground1; break;
+                    case "G02": type = TileType.Ground2; break;
+                    case "G03": type = TileType.Ground3; break;
+                    case "G04": type = TileType.Ground4; break;
+                    case "G05": type = TileType.Ground5; break;
 
-                    case "H1": type = TileType.Hitbox1;
-                        isHitbox = true;
-                        break;
-                    case "H2": type = TileType.Hitbox2;
-                        isHitbox = true;
-                        break;
-                    case "H3": type = TileType.Hitbox3;
-                        isHitbox = true;
-                        break;
-                    case "H4": type = TileType.Hitbox4;
-                        isHitbox = true;
-                        break;
+                    case "H01": type = TileType.Hitbox1; break;
+                    case "H02": type = TileType.Hitbox2; break;
+                    case "H03": type = TileType.Hitbox3; break;
+                    case "H04": type = TileType.Hitbox4; break;
+                    case "H05": type = TileType.Hitbox5; break;
+                    case "H06": type = TileType.Hitbox6; break;
+                    case "H07": type = TileType.Hitbox7; break;
+                    case "H08": type = TileType.Hitbox8; break;
+                    case "H09": type = TileType.Hitbox9; break;
+                    case "H10": type = TileType.Hitbox10; break;
+                    case "H11": type = TileType.Hitbox11; break;
+                    case "H12": type = TileType.Hitbox12; break;
+                    case "H13": type = TileType.Hitbox13; break;
+                    case "H14": type = TileType.Hitbox14; break;
+                    case "H15": type = TileType.Hitbox15; break;
+                    case "H16": type = TileType.Hitbox16; break;
+                    case "H17": type = TileType.Hitbox17; break;
 
-                    case "BS": type = TileType.BlueSpawnPoint; break;
-                    case "RS": type = TileType.RedSpawnPoint; break;
+                    case "BSP": type = TileType.BlueSpawnPoint; break;
+                    case "RSP": type = TileType.RedSpawnPoint; break;
 
                     default: type = TileType.MissingTexture; break;
                 }
@@ -81,7 +86,8 @@ public class Map
                     (posY - 1) * Tile.SPRITE_HEIGHT,
                     type));
 
-                if (isHitbox)
+                //Anything that contains a H is a hitbox
+                if (mapParts[posX].Contains("H"))
                 {
                     mapHitboxes.Add(new Hitbox(
                         (uint)posX * Tile.SPRITE_WIDTH,

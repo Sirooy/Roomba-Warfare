@@ -313,7 +313,7 @@ public class Server
                 if(MaxPlayers != 0 && players.Count == MaxPlayers)
                 {
                     newPlayer.Send((int)ServerMessage.Disconnect + " "
-                        + "-Server is full-");
+                        + "MaxPlayers");
                 }
                 //Add the player to the server list
                 else
@@ -419,7 +419,7 @@ public class Server
         {
             System.Diagnostics.Debug.WriteLine("Disconnecting players...");
             player.Send((int)ServerMessage.Disconnect + " "
-                        + "-Server closed-");
+                        + "ServerClosed");
         }
 
         foreach (Player player in players)

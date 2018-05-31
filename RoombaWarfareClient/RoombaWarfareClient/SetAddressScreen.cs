@@ -3,18 +3,28 @@
 //This screens allows the user to change the ip-port of the server
 public class SetAddressScreen : IScreen
 {
-    private static Image background =
-        new Image(@"resources\images\backgrounds\bck_test2.png", 640, 480);
-    private static Font font = 
-        new Font(@"resources\fonts\RWFont.ttf", 25);
-    private static Text validIPText =
-        new Text(font, "- Valid IP -", 0x00, 0xFF, 0x00);
-    private static Text invalidIPText = 
-        new Text(font,"- Invalid IP -",0xFF,0x00,0x00);
+    private static Image background;
+    private static Font font;
+    private static Text validIPText;
+    private static Text invalidIPText;
 
     private Keyboard keyboard;
 
     public ScreenType NextScreen { get; set; }
+
+    static SetAddressScreen()
+    {
+        font = new Font(@"resources\fonts\RWFont.ttf", 25);
+        background = new Image
+            (Game.LanguageTranslation[Game.GameLanguage + "SetAddressPath"], 
+            800, 600);
+        validIPText =
+            new Text(font,Game.LanguageTranslation[Game.GameLanguage + "VIP"]
+            , 0x00, 0xFF, 0x00);
+        invalidIPText =
+            new Text(font, Game.LanguageTranslation[Game.GameLanguage + "IIP"]
+            , 0xFF, 0x00, 0x00);
+    }
 
     public SetAddressScreen()
     {
