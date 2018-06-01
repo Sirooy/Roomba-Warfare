@@ -23,13 +23,30 @@ public class GameScreen : IScreen
     private Camera camera;
     private SpectatorCameraController cameraController;
 
+    private static Font font;
+    private static Text[] teamWonRoundText;
+    private uint winnerTextTimer;
+    private PlayerTeam winnerTeam;
+
+
     private float deltaTime;
     private bool isChangingTeam;
+    private bool isNewRound;
     private string messageBuffer;
+
+    static GameScreen()
+    {
+        font = new Font(@"resources\fonts\RWFont.ttf", 16);
+        teamWonRoundText = new Text[2];
+        teamWonRoundText[0] = 
+            new Text(font, "Red team won", 0xFF, 0x00, 0x00);
+        teamWonRoundText[1] = 
+            new Text(font, "Blue team won", 0x00, 0x00, 0xFF);
+    }
 
     public GameScreen()
     {
-        Game.GameSocket.OnDisconnectionEvent += Disconnect;
+        Game.GameSocket.OnDisconnectionEvent += DisconnectWhenError;
 
         NextScreen = ScreenType.None;
         map = new Map();
@@ -59,6 +76,7 @@ public class GameScreen : IScreen
         CurrentUpdateGameFunction = UpdateGameStateSpectator;
         CurrentRenderGameFunction = RenderGameDead;
         deltaTime = 1;
+
     }
 
     //Translate all the data send by the server
@@ -93,6 +111,7 @@ public class GameScreen : IScreen
                     }
                     break;
 
+                //Set the last command processed by the server
                 case ServerMessage.LastCommandProcessed:
                     {
                         localPlayer.LastCommandProccesed =
@@ -100,18 +119,21 @@ public class GameScreen : IScreen
                         break;
                     }
 
+                //Adds a new bullet
                 case ServerMessage.NewBullet:
                     {
                         bullets.Add(commandParts);
                     }
                     break;
 
+                //Removes a bullet
                 case ServerMessage.RemoveBullet:
                     {
                         bullets.Remove(commandParts);
                     }
                     break;
-
+                    
+                //Damages the local player
                 case ServerMessage.DamagePlayer:
                     {
                         localPlayer.TakeDamage(commandParts);
@@ -148,6 +170,18 @@ public class GameScreen : IScreen
                         }
                     }
                     break;
+
+                case ServerMessage.NewRound:
+                    {
+                        winnerTeam = (PlayerTeam)
+                            int.Parse(commandParts[1]);
+                        if(winnerTeam != PlayerTeam.Spectator)
+                        {
+                            isNewRound = true;
+                            winnerTextTimer = SDL.SDL_GetTicks();
+                        }
+                        break;
+                    }
 
                 //Changes the team of a player
                 case ServerMessage.SetPlayerTeam:
@@ -194,7 +228,8 @@ public class GameScreen : IScreen
                 case ServerMessage.Disconnect:
                     NextScreen = ScreenType.End;
                     Game.EndMessage = Game.LanguageTranslation
-                        [Game.LanguageTranslation + commandParts[1]];
+                        [Game.GameLanguage + commandParts[1]];
+                    Game.GameSocket.Disconnect();
                     break;
 
                 //Sets the id of the local player.
@@ -277,6 +312,9 @@ public class GameScreen : IScreen
         while (SDL.SDL_PollEvent(out SDL.SDL_Event e) != 0)
         {
             localPlayer.HandleEvents(e);
+
+            if (Hardware.IsKeyPressed(SDL.SDL_Keycode.SDLK_ESCAPE, e))
+                Disconnect();
         }
         //Update the players and bullet positions
         localPlayer.SetAngle(camera);
@@ -338,6 +376,9 @@ public class GameScreen : IScreen
                     button.HandleEvents(e);
                 }
             }
+
+            if (Hardware.IsKeyPressed(SDL.SDL_Keycode.SDLK_ESCAPE, e))
+                Disconnect();
         }
 
         HandleChangeTeamButtons();
@@ -364,6 +405,9 @@ public class GameScreen : IScreen
             if (Hardware.IsKeyPressed(SDL.SDL_Keycode.SDLK_f, e))
                 cameraController.IsActive =
                     !cameraController.IsActive;
+
+            if (Hardware.IsKeyPressed(SDL.SDL_Keycode.SDLK_ESCAPE, e))
+                Disconnect();
         }
 
         HandleChangeTeamButtons();
@@ -375,7 +419,7 @@ public class GameScreen : IScreen
         }
         else
         {
-            //TO DO
+            //TO DO 
         }
 
         players.Update(deltaTime);
@@ -386,8 +430,22 @@ public class GameScreen : IScreen
     private void RenderBasics()
     {
         map.Render(camera);
+
         players.Render(camera);
         bullets.Render(camera);
+
+        //Whenever a round starts prints the winner of the last round for 2 seconds
+        if (isNewRound)
+        {
+            teamWonRoundText[(int)winnerTeam].Render
+                (Hardware.ScreenWidth / 2 -
+                teamWonRoundText[(int)winnerTeam].Width / 2,
+                Hardware.ScreenHeight / 2 -
+                teamWonRoundText[(int)winnerTeam].Height / 2);
+
+            if (SDL.SDL_GetTicks() - winnerTextTimer >= 2000)
+                isNewRound = false;
+        }
     }
 
     //Renders all the necessary things for a dead player
@@ -411,11 +469,20 @@ public class GameScreen : IScreen
         localPlayer.Render(camera);
     }
 
-    //Disconnects the player from the server when an error occurs
+    //Disconnects the player from the server
     private void Disconnect()
     {
-        Game.EndMessage = 
-            Game.LanguageTranslation[Game.GameLanguage + "LostConnection"];
+        NextScreen = ScreenType.End;
+        Game.EndMessage = "";
+        Game.GameSocket.Send((int)ClientMessage.Disconnect +
+            " " + localPlayer.ID);
+        Game.GameSocket.Disconnect();
+    }
+
+    private void DisconnectWhenError()
+    {
+        Game.EndMessage = Game.LanguageTranslation
+            [Game.GameLanguage + "LostConnection"];
         Game.GameSocket.Disconnect();
         NextScreen = ScreenType.End;
     }

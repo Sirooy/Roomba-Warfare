@@ -272,3 +272,205 @@
 31/05/2018 15:58:57 - Client connected - ID : 1 : 127.0.0.1:23000
 31/05/2018 15:59:44 - Client connected - ID : 0 : 127.0.0.1:23000
 31/05/2018 15:59:50 - Client connected - ID : 1 : 127.0.0.1:23000
+31/05/2018 16:52:27 - Client connected - ID : 0 : 127.0.0.1:23000
+31/05/2018 16:52:31 - Client connected - ID : 1 : 192.168.0.64:23000
+31/05/2018 16:54:26 - Cliend disconnected - ID : 0
+31/05/2018 16:54:37 - Cliend disconnected - ID : 1
+31/05/2018 16:58:20 - Client connected - ID : 0 : 127.0.0.1:23000
+31/05/2018 16:58:27 - Client connected - ID : 1 : 192.168.0.64:23000
+31/05/2018 17:02:16 - Client connected - ID : 2 : 192.168.0.64:23000
+31/05/2018 17:04:48 - Cliend disconnected - ID : 2
+31/05/2018 17:05:14 - Cliend disconnected - ID : 0
+31/05/2018 17:05:23 - Client connected - ID : 3 : 192.168.0.64:23000
+31/05/2018 17:05:39 - Client connected - ID : 4 : 127.0.0.1:23000
+31/05/2018 17:10:00 - Cliend disconnected - ID : 1
+31/05/2018 17:11:06 - Client connected - ID : 5 : 192.168.0.64:23000
+31/05/2018 17:12:09 - Client connected - ID : 0 : 192.168.0.64:23000
+31/05/2018 17:12:22 - Client connected - ID : 1 : 127.0.0.1:23000
+31/05/2018 17:12:43 - Client connected - ID : 2 : 192.168.0.64:23000
+31/05/2018 17:13:48 - Cliend disconnected - ID : 1
+31/05/2018 17:14:23 - Client connected - ID : 3 : 127.0.0.1:23000
+31/05/2018 17:14:45 - Cliend disconnected - ID : 3
+31/05/2018 17:15:11 - Cliend disconnected - ID : 0
+31/05/2018 17:15:18 - Client connected - ID : 4 : 127.0.0.1:23000
+31/05/2018 17:15:27 - Client connected - ID : 5 : 192.168.0.64:23000
+31/05/2018 17:17:54 - Cliend disconnected - ID : 5
+31/05/2018 17:18:15 - Client connected - ID : 6 : 192.168.0.64:23000
+31/05/2018 17:18:43 - Cliend disconnected - ID : 4
+31/05/2018 17:18:57 - Cliend disconnected - ID : 2
+31/05/2018 17:19:02 - Cliend disconnected - ID : 6
+31/05/2018 17:19:18 - Client connected - ID : 7 : 192.168.0.64:23000
+31/05/2018 17:19:43 - Cliend disconnected - ID : 7
+31/05/2018 17:23:07 - Client connected - ID : 0 : 127.0.0.1:23000
+31/05/2018 17:23:55 - Client connected - ID : 1 : 192.168.0.64:23000
+31/05/2018 17:24:29 - Cliend disconnected - ID : 0
+31/05/2018 17:24:39 - Cliend disconnected - ID : 1
+31/05/2018 17:30:06 - Client connected - ID : 0 : 127.0.0.1:23000
+31/05/2018 17:30:33 - Client connected - ID : 1 : 192.168.0.64:23000
+31/05/2018 17:36:40 - Client connected - ID : 0 : 127.0.0.1:23000
+31/05/2018 17:38:33 - Client connected - ID : 0 : 127.0.0.1:23000
+31/05/2018 17:38:49 - Client connected - ID : 1 : 192.168.0.64:23000
+31/05/2018 17:44:59 - Cliend disconnected - ID : 0
+31/05/2018 17:45:05 - Client connected - ID : 2 : 127.0.0.1:23000
+31/05/2018 17:45:30 - Cliend disconnected - ID : 2
+31/05/2018 17:45:31 - Cliend disconnected - ID : 1
+31/05/2018 18:00:22 - Client connected - ID : 0 : 127.0.0.1:23000
+31/05/2018 18:00:57 - Cliend disconnected - ID : 0
+01/06/2018 10:07:53 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 10:08:00 - Cliend disconnected - ID : 0
+01/06/2018 10:10:40 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 10:10:56 - Cliend disconnected - ID : 0
+01/06/2018 10:20:50 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 10:21:10 - Cliend disconnected - ID : 0
+01/06/2018 12:22:41 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 12:29:24 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 12:29:25 - Cliend disconnected - ID : 0
+01/06/2018 12:29:30 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 12:29:32 - Cliend disconnected - ID : 1
+01/06/2018 12:30:16 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 12:30:18 - Cliend disconnected - ID : 0
+01/06/2018 12:30:23 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 12:30:25 - Cliend disconnected - ID : 1
+01/06/2018 12:30:33 - Client connected - ID : 2 : 127.0.0.1:23000
+01/06/2018 12:30:35 - Cliend disconnected - ID : 2
+01/06/2018 12:31:28 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 12:31:30 - Cliend disconnected - ID : 0
+01/06/2018 12:31:36 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 12:31:37 - Cliend disconnected - ID : 1
+01/06/2018 12:32:53 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 12:32:57 - Cliend disconnected - ID : 0
+01/06/2018 12:34:46 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 12:34:54 - Cliend disconnected - ID : 0
+01/06/2018 12:35:48 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 12:35:50 - Cliend disconnected - ID : 0
+01/06/2018 12:35:53 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 12:35:55 - Cliend disconnected - ID : 1
+01/06/2018 12:36:01 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 12:36:26 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 12:36:43 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 12:37:17 - Cliend disconnected - ID : 0
+01/06/2018 12:37:33 - Client connected - ID : 2 : 127.0.0.1:23000
+01/06/2018 12:37:57 - Cliend disconnected - ID : 2
+01/06/2018 12:37:58 - Cliend disconnected - ID : 1
+01/06/2018 12:38:00 - Client connected - ID : 3 : 127.0.0.1:23000
+01/06/2018 12:38:03 - Client connected - ID : 4 : 127.0.0.1:23000
+01/06/2018 12:38:11 - Client connected - ID : 5 : 127.0.0.1:23000
+01/06/2018 12:38:36 - Cliend disconnected - ID : 5
+01/06/2018 12:38:50 - Client connected - ID : 6 : 127.0.0.1:23000
+01/06/2018 12:39:31 - Cliend disconnected - ID : 3
+01/06/2018 12:39:31 - Cliend disconnected - ID : 6
+01/06/2018 12:39:31 - Cliend disconnected - ID : 4
+01/06/2018 12:39:36 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 12:39:39 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 12:39:43 - Client connected - ID : 2 : 127.0.0.1:23000
+01/06/2018 12:40:21 - Cliend disconnected - ID : 2
+01/06/2018 12:41:29 - Cliend disconnected - ID : 0
+01/06/2018 12:41:39 - Client connected - ID : 3 : 127.0.0.1:23000
+01/06/2018 12:41:53 - Cliend disconnected - ID : 3
+01/06/2018 12:41:55 - Cliend disconnected - ID : 1
+01/06/2018 12:51:00 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 12:51:07 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 12:51:31 - Cliend disconnected - ID : 0
+01/06/2018 12:54:23 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 12:54:27 - Cliend disconnected - ID : 0
+01/06/2018 12:54:45 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 12:54:53 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 13:02:09 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 13:02:17 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 13:02:29 - Cliend disconnected - ID : 0
+01/06/2018 13:02:29 - Cliend disconnected - ID : 1
+01/06/2018 13:02:33 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 13:02:38 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 16:52:44 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 16:53:02 - Cliend disconnected - ID : 0
+01/06/2018 16:53:10 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 16:53:35 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 16:56:28 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 16:56:33 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 16:56:37 - Cliend disconnected - ID : 0
+01/06/2018 16:58:30 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 16:59:15 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 17:07:09 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 17:07:13 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 17:07:19 - Cliend disconnected - ID : 1
+01/06/2018 17:07:19 - Cliend disconnected - ID : 0
+01/06/2018 17:07:32 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 17:07:36 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 17:07:53 - Cliend disconnected - ID : 0
+01/06/2018 17:07:53 - Cliend disconnected - ID : 1
+01/06/2018 17:16:33 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 17:16:43 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 17:17:04 - Cliend disconnected - ID : 0
+01/06/2018 17:17:07 - Cliend disconnected - ID : 1
+01/06/2018 17:17:17 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 17:17:21 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 17:17:40 - Cliend disconnected - ID : 1
+01/06/2018 17:17:40 - Cliend disconnected - ID : 0
+01/06/2018 17:19:14 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 17:19:18 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 17:19:40 - Cliend disconnected - ID : 0
+01/06/2018 17:20:28 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 17:20:35 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 17:23:11 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 17:23:21 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 17:23:27 - Cliend disconnected - ID : 0
+01/06/2018 17:23:27 - Cliend disconnected - ID : 1
+01/06/2018 17:23:36 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 17:23:38 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 17:24:07 - Cliend disconnected - ID : 0
+01/06/2018 17:25:29 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 17:25:33 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 17:25:37 - Cliend disconnected - ID : 0
+01/06/2018 17:25:37 - Cliend disconnected - ID : 1
+01/06/2018 17:25:44 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 17:25:48 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 17:26:23 - Cliend disconnected - ID : 0
+01/06/2018 17:30:36 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 17:30:40 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 17:44:48 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 17:44:52 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 17:45:00 - Cliend disconnected - ID : 1
+01/06/2018 17:45:00 - Cliend disconnected - ID : 0
+01/06/2018 17:49:32 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 17:49:36 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 17:49:42 - Cliend disconnected - ID : 1
+01/06/2018 17:49:42 - Cliend disconnected - ID : 0
+01/06/2018 17:50:30 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 17:50:35 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 17:50:41 - Cliend disconnected - ID : 0
+01/06/2018 17:50:41 - Cliend disconnected - ID : 1
+01/06/2018 17:51:53 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 17:51:58 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 17:52:07 - Cliend disconnected - ID : 1
+01/06/2018 17:52:07 - Cliend disconnected - ID : 0
+01/06/2018 17:54:50 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 17:54:54 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 17:54:58 - Cliend disconnected - ID : 0
+01/06/2018 17:54:58 - Cliend disconnected - ID : 1
+01/06/2018 18:09:10 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 18:09:14 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 18:09:38 - Cliend disconnected - ID : 1
+01/06/2018 18:09:40 - Cliend disconnected - ID : 0
+01/06/2018 18:20:53 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 18:20:58 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 18:21:15 - Cliend disconnected - ID : 1
+01/06/2018 18:21:17 - Cliend disconnected - ID : 0
+01/06/2018 18:22:10 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 18:22:14 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 18:22:23 - Cliend disconnected - ID : 1
+01/06/2018 18:23:58 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 18:24:03 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 18:24:26 - Cliend disconnected - ID : 1
+01/06/2018 18:24:32 - Client connected - ID : 2 : 127.0.0.1:23000
+01/06/2018 18:24:34 - Cliend disconnected - ID : 2
+01/06/2018 18:24:36 - Cliend disconnected - ID : 0
+01/06/2018 18:25:34 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 18:25:37 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 18:25:56 - Cliend disconnected - ID : 1
+01/06/2018 18:25:57 - Cliend disconnected - ID : 0
+01/06/2018 18:27:48 - Client connected - ID : 0 : 127.0.0.1:23000
+01/06/2018 18:27:58 - Client connected - ID : 1 : 127.0.0.1:23000
+01/06/2018 18:28:37 - Client connected - ID : 2 : 127.0.0.1:23000
+01/06/2018 18:28:55 - Cliend disconnected - ID : 1
+01/06/2018 18:28:55 - Cliend disconnected - ID : 2
+01/06/2018 18:28:57 - Cliend disconnected - ID : 0

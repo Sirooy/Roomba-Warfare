@@ -20,7 +20,7 @@ public class EndScreen : IScreen
     {
         NextScreen = ScreenType.None;
         font = new Font(@"resources\fonts\RWFont.ttf", 16);
-        text = new Text(font, Game.EndMessage, 0, 255, 0);
+        text = new Text(font, Game.EndMessage, 0xFF, 0xFF, 0xFF);
     }
 
     public ScreenType Run()

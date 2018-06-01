@@ -32,7 +32,7 @@ public class LocalPlayer : Player
         switch (type)
         {
             case PlayerType.Assault:
-                weapon = new MachineGun(30, 350, 1800);
+                weapon = new MachineGun(30, 250, 1800);
                 maxHealth = 125;
                 break;
 
@@ -154,6 +154,7 @@ public class LocalPlayer : Player
         base.Respawn(parts);
         currentHealth = maxHealth;
         healthBar.Resize(currentHealth, maxHealth);
+        weapon.InstaReload();
     }
 
     public override void Kill()

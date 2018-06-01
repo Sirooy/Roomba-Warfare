@@ -29,6 +29,13 @@ public abstract class Weapon
         ammoBar.Resize(currentAmmo, maxAmmo);
     }
 
+    public void InstaReload()
+    {
+        isReloading = false;
+        currentAmmo = maxAmmo;
+        ammoBar.Resize(currentAmmo, maxAmmo);
+    }
+
     //Handles the events of the weapon
     public virtual void HandleEvents(SDL.SDL_Event e)
     {

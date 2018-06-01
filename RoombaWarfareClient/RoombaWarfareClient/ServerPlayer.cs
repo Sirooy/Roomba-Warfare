@@ -27,21 +27,6 @@ public class ServerPlayer : Player
 
     public override void Update(float deltaTime)
     {
-        /*if (Interpolation)
-        {
-            if (Math.Floor(PosX) != Math.Floor(InterpolationPosX)
-                || Math.Floor(PosY) != Math.Floor(InterpolationPosY))
-            {
-                if (Math.Floor(PosX) != Math.Floor(InterpolationPosX))
-                    PosX += (MultiplierX * speed * deltaTime);
-                if (Math.Floor(PosY) != Math.Floor(InterpolationPosY))
-                    PosY += (MultiplierY * speed * deltaTime);
-            }
-            else
-            {
-                Interpolation = false;
-            }
-        }*/
         if (Interpolation)
         {
             if ((Math.Round(PosX) != Math.Round(InterpolationPosX))

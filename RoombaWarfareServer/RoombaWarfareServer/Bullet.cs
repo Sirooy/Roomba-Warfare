@@ -23,10 +23,10 @@ public class Bullet : Entity
 
         switch (type)
         {
-            case PlayerType.Assault: speed = 8; damage = 25; break;
-            case PlayerType.Commander: speed = 12; damage = 100; break;
+            case PlayerType.Assault: speed = 11; damage = 25; break;
+            case PlayerType.Commander: speed = 15; damage = 100; break;
             case PlayerType.Rusher: speed = 8; damage = 15; break;
-            case PlayerType.Tank: speed = 9; damage = 45; break;
+            case PlayerType.Tank: speed = 11; damage = 45; break;
         }
 
         PosX = playerPosX + (Player.WIDTH / 2 - WIDTH / 2);

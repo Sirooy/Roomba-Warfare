@@ -6,6 +6,9 @@ namespace RoombaWarfareServer
 {
     public partial class ServerForm : Form
     {
+        private delegate void SetStopButtonCallback(bool isVisible);
+        private delegate void SetStartButtonCallback(bool isEnabled);
+
         private ServerSettingsForm settings;
         private Server server;
         private string mapPath;
@@ -15,6 +18,7 @@ namespace RoombaWarfareServer
             InitializeComponent();
             settings = new ServerSettingsForm();
             server = new Server();
+            server.OnCloseEvent += CloseServer;
             mapPath = "";
 
             //Tries to load the default map
@@ -54,8 +58,8 @@ namespace RoombaWarfareServer
         {
             if(mapPath != "")
             {
-                btnStop.Visible = true;
-                btnStart.Enabled = false;
+                SetStartButton(false);
+                SetStopButton(true);
 
                 server.MapPath = mapPath;
                 server.Port = settings.Port;
@@ -82,8 +86,41 @@ namespace RoombaWarfareServer
         //Stops the server
         private void btnStop_Click(object sender, System.EventArgs e)
         {
-            btnStop.Visible = false;
-            btnStart.Enabled = true;
+            server.Close(CloseType.ForceClose);
+        }
+
+        private void SetStopButton(bool isVisible)
+        {
+            if (btnStop.InvokeRequired)
+            {
+                SetStopButtonCallback callback =
+                    new SetStopButtonCallback(SetStopButton);
+                this.Invoke(callback, new object[] { isVisible });
+            }
+            else
+            {
+                btnStop.Visible = isVisible;
+            }
+        }
+
+        private void SetStartButton(bool isEnabled)
+        {
+            if (btnStart.InvokeRequired)
+            {
+                SetStartButtonCallback callback = 
+                    new SetStartButtonCallback(SetStartButton);
+                this.Invoke(callback, new object[] { isEnabled });
+            }
+            else
+            {
+                btnStart.Enabled = isEnabled;
+            }
+        }
+
+        private void CloseServer()
+        {
+            SetStopButton(false);
+            SetStartButton(true);
         }
 
         //Get the map path and checks if it is valid

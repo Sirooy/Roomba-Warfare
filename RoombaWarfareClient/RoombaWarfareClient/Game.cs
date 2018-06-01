@@ -29,6 +29,12 @@ public class Game
             "Server is full");
         LanguageTranslation.Add(Language.English + "ServerClosed",
             "Server has closed");
+        LanguageTranslation.Add(Language.English + "RedWon",
+            "Red team won");
+        LanguageTranslation.Add(Language.English + "BlueWon",
+            "Blue team won");
+        LanguageTranslation.Add(Language.English + "Draw",
+            "Draw");
         LanguageTranslation.Add(Language.English + "SetAddressPath",
             @"resources\images\backgrounds\set_address_background_english.png");
         LanguageTranslation.Add(Language.English + "EndPath",
@@ -48,6 +54,12 @@ public class Game
             @"resources\images\backgrounds\set_address_background_spanish.png");
         LanguageTranslation.Add(Language.Spanish + "EndPath",
             @"resources\images\backgrounds\end_background_spanish.png");
+        LanguageTranslation.Add(Language.Spanish + "RedWon",
+            "El equipo rojo ha ganado");
+        LanguageTranslation.Add(Language.Spanish + "BlueWon",
+            "El equipo azul ha ganado");
+        LanguageTranslation.Add(Language.Spanish + "Draw",
+            "Empate");
     }
 
     //Creates the next screen 

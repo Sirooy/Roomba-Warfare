@@ -39,7 +39,6 @@ C:\Users\carco\Desktop\RoombaWarfareClient\RoombaWarfareClient\obj\Debug\RoombaW
 C:\Users\carco\Desktop\RoombaWarfareClient\RoombaWarfareClient\obj\Debug\RoombaWarfareClient.pdb
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\libfreetype-6.dll
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\libpng16-16.dll
-C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\resources\images\button_play.png
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\resources\images\crosshair.png
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\SDL2.dll
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\SDL2_image.dll
@@ -56,7 +55,6 @@ C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\obj\
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\obj\Debug\RoombaWarfareClient.exe
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\obj\Debug\RoombaWarfareClient.pdb
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\resources\images\dynamic_entity_sprite_sheet.png
-C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\resources\images\backgrounds\death_bck_test.png
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\resources\images\static_entity_sprite_sheet.png
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\resources\images\backgrounds\main_menu_background.png
 C:\Users\victo\Desktop\DAM\Proyecto\RoombaWarfareClient\RoombaWarfareClient\bin\Debug\resources\images\backgrounds\select_character_background.png

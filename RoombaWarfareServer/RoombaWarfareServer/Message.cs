@@ -15,6 +15,7 @@ public enum ServerMessage : byte
     NewBullet,
     RemoveBullet,
     Respawn,
+    NewRound,
 }
 
 //Type of messages that the client sends to the server

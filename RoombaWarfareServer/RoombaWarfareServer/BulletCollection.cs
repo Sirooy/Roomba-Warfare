@@ -67,7 +67,6 @@ public class BulletCollection : IEnumerable<Bullet>
 
                         if (!players[playerID].CheckDead())
                         {
-                            System.Diagnostics.Debug.WriteLine("Player dead: " + playerID);
                             ret += (int)ServerMessage.KillPlayer + " " +
                                 playerID + ":";
                             players.CalculatePlayers();

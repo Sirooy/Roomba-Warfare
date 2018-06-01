@@ -4,11 +4,14 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using System.IO;
+
+public enum CloseType { ForceClose, AllRoundsEnd }
 
 public class Server
 {
+    public event Action OnCloseEvent;
+
     public bool IsOpen { get; set; }
     public ushort Port { get; set; }
     public byte TickRate { get; set; }
@@ -44,8 +47,6 @@ public class Server
         players = new PlayerCollection();
         players.OnPlayerDisconnectEvent += DisconnectPlayer;
         bullets = new BulletCollection();
-        physics = new Task(PhysicsLoop);
-        broadcast = new Task(BroadcastGameStateLoop);
         gameState = "";
     }
 
@@ -106,15 +107,19 @@ public class Server
             listener = new TcpListener(address);
 
             listener.Start();
+
+            physics = new Task(PhysicsLoop);
+            broadcast = new Task(BroadcastGameStateLoop);
             physics.Start();
             broadcast.Start();
+
             AcceptClients();
 
             return true;
         }
         catch (Exception)
         {
-            Close();
+            Close(CloseType.ForceClose);
             return false;
         }
     }
@@ -162,28 +167,32 @@ public class Server
     //Resets the round and adds a point to the winner
     private void ResetRound()
     {
-        System.Diagnostics.Debug.WriteLine("Reseting round...");
+        PlayerTeam winnerTeam = PlayerTeam.Spectator;
 
         if (players.RedAlivePlayersCount != 0)
         {
             Interlocked.Increment(ref currentRound);
             Interlocked.Increment(ref redPlayersWonRounds);
+            winnerTeam = PlayerTeam.Red;
         }
         else if (players.BlueAlivePlayersCount != 0)
         {
             Interlocked.Increment(ref currentRound);
             Interlocked.Increment(ref bluePlayersWonRounds);
+            winnerTeam = PlayerTeam.Blue;
         }
 
-        if (currentRound == Rounds)
-            IsOpen = false;
-
         string state = players.GlobalRespawn(map);
+        state += (int)ServerMessage.NewRound + " " +
+            (int)winnerTeam + ":";
 
         lock (lockGameState)
         {
             gameState += state;
         }
+
+        if (currentRound == Rounds)
+            IsOpen = false;
     }
 
     //Checks if a round has ended
@@ -224,7 +233,6 @@ public class Server
                 //Shoots a bullet
                 case ClientMessage.Shoot:
                     {
-                        System.Diagnostics.Debug.WriteLine(command); //REmove later
                         string state = bullets.Add(commandParts, players);
                         
                         lock (lockGameState)
@@ -295,7 +303,10 @@ public class Server
             deltaTime = (Environment.TickCount - startTime) / 10f;
         }
 
-        Close();
+        if (currentRound == Rounds)
+        {
+            Close(CloseType.AllRoundsEnd);
+        }
     }
 
     //Accept clients asynchronously
@@ -336,7 +347,6 @@ public class Server
     {
         WriteLog("Cliend disconnected - ID : " + id);
         string state = players.Remove(id);
-        System.Diagnostics.Debug.WriteLine("Client disconnected " + state); //Remove Later
 
         lock (lockGameState)
         {
@@ -351,7 +361,6 @@ public class Server
     //Receives all the data send by a client
     private void ListenClient(Player player)
     {
-        System.Diagnostics.Debug.WriteLine("Client connected"); //Remove Later
         string initialData = GetInitialData(player.ID);
         player.Send(initialData);
         player.Send(map.Seed);
@@ -403,31 +412,47 @@ public class Server
     }
 
     //Close the server
-    public void Close()
+    public void Close(CloseType type)
     {
-        IsOpen = false;
+        string serverMessage = "";
         currentID = 0;
-        physics.Wait();
+        IsOpen = false;
         broadcast.Wait();
+
+        if (type == CloseType.ForceClose)
+        {
+            physics.Wait();
+            serverMessage = "ServerClosed";
+        }
+        else if (type == CloseType.AllRoundsEnd)
+        {
+            if (redPlayersWonRounds > bluePlayersWonRounds)
+                serverMessage = "RedWon";
+            else if (bluePlayersWonRounds > redPlayersWonRounds)
+                serverMessage = "BlueWon";
+            else
+                serverMessage = "Draw";
+        }
         lock (lockGameState)
         {
             gameState = "";
         }
-        
 
+        //Sends a disconnection message to the players
         foreach (Player player in players)
         {
-            System.Diagnostics.Debug.WriteLine("Disconnecting players...");
             player.Send((int)ServerMessage.Disconnect + " "
-                        + "ServerClosed");
+                        + serverMessage);
         }
 
+        //Disconnects all the players
         foreach (Player player in players)
         {
             player.Disconnect();
         }
+        if (listener != null) listener.Stop();
 
-        //TO DO
+        OnCloseEvent();
     }
 }
 

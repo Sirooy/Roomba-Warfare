@@ -54,7 +54,8 @@ public class SocketClient
     {
         try
         {
-            serializer.Serialize(stream, data);
+            if(client.Connected)
+                serializer.Serialize(stream, data);
         }
         catch (Exception) { OnDisconnectionEvent(); }
     }
@@ -66,7 +67,8 @@ public class SocketClient
 
         try
         {
-            ret = (string)serializer.Deserialize(stream);
+            if (client.Connected)
+                ret = (string)serializer.Deserialize(stream);
         }
         catch (Exception) { OnDisconnectionEvent(); }
 
@@ -76,8 +78,11 @@ public class SocketClient
     //Disconnects the client
     public void Disconnect()
     {
-        client.Close();
-        stream.Close();
-        OnDisconnectionEvent = null;
+        if (client.Connected)
+        {
+            client.Close();
+            stream.Close();
+            OnDisconnectionEvent = null;
+        }
     }
 }
